@@ -19,7 +19,7 @@ const StyledContent = styled("div")(({ theme }) => ({
 	display: "flex",
 	justifyContent: "center",
 	flexDirection: "column",
-	padding: theme.spacing(12, 0),
+	padding: theme.spacing(12, 5, 15, 5),
 }));
 
 // ----------------------------------------------------------------------
