@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./assets/css/index.css";
 
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
