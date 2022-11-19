@@ -14,6 +14,34 @@ Read more [here](project-description.pdf).
 
 The application uses MySQL for the database. The frontend is built using React and the backend is made using Node.js and Express.
 
+## Getting Started
+
+### Prerequisites
+
+Install Node JS : Refer to https://nodejs.org/en/ to install nodejs
+
+### Cloning and Running the Application in local
+
+Clone the project into local
+
+```bash
+git clone https://github.com/HRM-Solutions/jupiter-hrm-fe.git
+```
+
+Install all the npm packages. Go into the project folder and type the following command to install all npm packages
+
+```bash
+npm install
+```
+
+In order to run the application type the following command
+
+```bash
+npm start
+```
+
+The application runs on **localhost:3000**
+
 ## Contribution
 
 Group 10 members:
