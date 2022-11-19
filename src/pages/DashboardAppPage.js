@@ -39,7 +39,7 @@ export default function DashboardAppPage() {
 						<AppWidgetSummary
 							title="Branches"
 							total={16}
-							icon={"ant-design:android-filled"}
+							icon={"ant-design:cluster-outlined"}
 						/>
 					</Grid>
 
@@ -48,7 +48,7 @@ export default function DashboardAppPage() {
 							title="Departments"
 							total={10}
 							color="info"
-							icon={"ant-design:apple-filled"}
+							icon={"ant-design:appstore-outlined"}
 						/>
 					</Grid>
 
@@ -57,7 +57,7 @@ export default function DashboardAppPage() {
 							title="Employees"
 							total={1256}
 							color="warning"
-							icon={"ant-design:windows-filled"}
+							icon={"ant-design:team-outlined"}
 						/>
 					</Grid>
 
@@ -66,13 +66,13 @@ export default function DashboardAppPage() {
 							title="Users"
 							total={134}
 							color="error"
-							icon={"ant-design:user-filled"}
+							icon={"ant-design:user-outlined"}
 						/>
 					</Grid>
 
 					<Grid item xs={12} md={6} lg={8}>
 						<AppWebsiteVisits
-							title="Website Visits"
+							title="System Usage"
 							subheader="(+43%) than last year"
 							chartLabels={[
 								"01/01/2003",
@@ -112,7 +112,7 @@ export default function DashboardAppPage() {
 
 					<Grid item xs={12} md={6} lg={4}>
 						<AppCurrentVisits
-							title="Current Visits"
+							title="Current Usage"
 							chartData={[
 								{ label: "America", value: 4344 },
 								{ label: "Asia", value: 5435 },
