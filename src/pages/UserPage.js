@@ -8,7 +8,6 @@ import {
 	Table,
 	Stack,
 	Paper,
-	Avatar,
 	Button,
 	Popover,
 	Checkbox,
@@ -35,9 +34,9 @@ import USERLIST from "../_mock/user";
 
 const TABLE_HEAD = [
 	{ id: "name", label: "Name", alignRight: false },
-	{ id: "company", label: "Company", alignRight: false },
-	{ id: "role", label: "Role", alignRight: false },
-	{ id: "isVerified", label: "Verified", alignRight: false },
+	{ id: "company", label: "Branch", alignRight: false },
+	{ id: "role", label: "Title", alignRight: false },
+	{ id: "email", label: "Email", alignRight: false },
 	{ id: "status", label: "Status", alignRight: false },
 	{ id: "" },
 ];
@@ -89,7 +88,7 @@ export default function UserPage() {
 
 	const [filterName, setFilterName] = useState("");
 
-	const [rowsPerPage, setRowsPerPage] = useState(5);
+	const [rowsPerPage, setRowsPerPage] = useState(25);
 
 	const handleOpenMenu = (event) => {
 		setOpen(event.currentTarget);
@@ -204,15 +203,7 @@ export default function UserPage() {
 									{filteredUsers
 										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 										.map((row) => {
-											const {
-												id,
-												name,
-												role,
-												status,
-												company,
-												avatarUrl,
-												isVerified,
-											} = row;
+											const { id, name, role, status, company, email } = row;
 											const selectedUser = selected.indexOf(name) !== -1;
 
 											return (
@@ -231,30 +222,21 @@ export default function UserPage() {
 													</TableCell>
 
 													<TableCell component="th" scope="row" padding="none">
-														<Stack
-															direction="row"
-															alignItems="center"
-															spacing={2}
-														>
-															<Avatar alt={name} src={avatarUrl} />
-															<Typography variant="subtitle2" noWrap>
-																{name}
-															</Typography>
-														</Stack>
+														<Typography variant="subtitle2" noWrap>
+															{name}
+														</Typography>
 													</TableCell>
 
 													<TableCell align="left">{company}</TableCell>
 
 													<TableCell align="left">{role}</TableCell>
 
-													<TableCell align="left">
-														{isVerified ? "Yes" : "No"}
-													</TableCell>
+													<TableCell align="left">{email}</TableCell>
 
 													<TableCell align="left">
 														<Label
 															color={
-																(status === "banned" && "error") || "success"
+																(status === "inactive" && "error") || "success"
 															}
 														>
 															{sentenceCase(status)}
@@ -309,7 +291,7 @@ export default function UserPage() {
 					</Scrollbar>
 
 					<TablePagination
-						rowsPerPageOptions={[5, 10, 25]}
+						rowsPerPageOptions={[25, 50, 100]}
 						component="div"
 						count={USERLIST.length}
 						rowsPerPage={rowsPerPage}

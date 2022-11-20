@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
 import App from "./App";
+import "./theme/overrides.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
