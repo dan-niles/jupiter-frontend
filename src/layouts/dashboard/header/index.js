@@ -58,7 +58,6 @@ export default function Header({ onOpenNav }) {
 				</IconButton>
 
 				<Searchbar />
-				<Logo sx={{ mx: 2 }} />
 				<Box sx={{ flexGrow: 1 }} />
 
 				<Stack

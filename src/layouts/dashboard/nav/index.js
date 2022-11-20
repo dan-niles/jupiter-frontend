@@ -65,7 +65,20 @@ export default function Nav({ openNav, onCloseNav }) {
 				},
 			}}
 		>
-			<Box sx={{ mb: 5, pb: 3, pt: 5, mx: 2.5 }}>
+			<Box
+				sx={{
+					mb: 1,
+					pb: 2,
+					pt: 3,
+					mx: 2.5,
+					display: "flex",
+					justifyContent: "center",
+				}}
+			>
+				<Logo sx={{ mx: 2 }} />
+			</Box>
+
+			<Box sx={{ mb: 3, py: 1, mx: 2.5 }}>
 				<Link underline="none">
 					<StyledAccount>
 						<Avatar src={account.photoURL} alt="photoURL" />
