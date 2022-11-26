@@ -5,6 +5,7 @@ import DashboardLayout from "./layouts/dashboard";
 import LoginPage from "./pages/LoginPage";
 import DashboardAppPage from "./pages/DashboardAppPage";
 import UserPage from "./pages/UserPage";
+import PrivateRoutes from "./utils/PrivateRoutes";
 
 export default function Router() {
 	const routes = useRoutes([
@@ -14,14 +15,20 @@ export default function Router() {
 			index: true,
 		},
 		{
-			path: "/dashboard",
-			element: <DashboardLayout />,
+			element: <PrivateRoutes />,
 			children: [
-				{ element: <Navigate to="/dashboard/app" />, index: true },
-				{ path: "app", element: <DashboardAppPage /> },
-				{ path: "user", element: <UserPage /> },
+				{
+					path: "/dashboard",
+					element: <DashboardLayout />,
+					children: [
+						{ element: <Navigate to="/dashboard/app" />, index: true },
+						{ path: "app", element: <DashboardAppPage /> },
+						{ path: "user", element: <UserPage /> },
+					],
+				},
 			],
 		},
+
 		{
 			path: "login",
 			element: <LoginPage />,
