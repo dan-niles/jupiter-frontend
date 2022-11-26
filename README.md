@@ -42,6 +42,13 @@ npm start
 
 The application runs on **localhost:3000**
 
+### Environment Variables
+Create a `.env` file inside the cloned directory and define the following variable
+
+```
+REACT_APP_BACKEND_URL=url_for_backend
+```
+
 ## Contribution
 
 Group 10 members:
