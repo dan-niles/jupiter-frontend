@@ -17,6 +17,12 @@ import Iconify from "../../../components/iconify";
 
 // ----------------------------------------------------------------------
 
+const setAuthToken = (token) => {
+	if (token) {
+		axios.defaults.headers.common["access-token"] = `Bearer ${token}`;
+	} else delete axios.defaults.headers.common["access-token"];
+};
+
 export default function LoginForm() {
 	const navigate = useNavigate();
 
@@ -34,8 +40,9 @@ export default function LoginForm() {
 				password: password,
 			})
 			.then((response) => {
-				console.log(response);
 				if (response.data.username == username) {
+					sessionStorage.setItem("access-token", response.data.token);
+					setAuthToken(response.data.token);
 					navigate("/dashboard", { replace: true });
 				}
 			})
