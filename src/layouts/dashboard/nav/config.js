@@ -1,50 +1,49 @@
 // component
-import SvgColor from "../../../components/svg-color";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import GroupIcon from "@mui/icons-material/Group";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import InfoIcon from "@mui/icons-material/Info";
+import BusinessIcon from "@mui/icons-material/Business";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
+import AssessmentIcon from "@mui/icons-material/Assessment";
 
 // ----------------------------------------------------------------------
-
-const icon = (name) => (
-	<SvgColor
-		src={`/assets/icons/navbar/${name}.svg`}
-		sx={{ width: 1, height: 1 }}
-	/>
-);
 
 const navConfig = [
 	{
 		title: "dashboard",
 		path: "/dashboard/app",
-		icon: icon("ic_analytics"),
+		icon: <DashboardIcon />,
 	},
 	{
 		title: "users",
 		path: "/dashboard/user",
-		icon: icon("ic_user"),
+		icon: <GroupIcon />,
 	},
 	{
 		title: "employees",
 		path: "/dashboard/employee",
-		icon: icon("ic_cart"),
+		icon: <AssignmentIndIcon />,
 	},
 	{
 		title: "organization info",
 		path: "/dashboard/organization",
-		icon: icon("ic_blog"),
+		icon: <InfoIcon />,
 	},
 	{
 		title: "branches",
 		path: "/dashboard/branch",
-		icon: icon("ic_blog"),
+		icon: <BusinessIcon />,
 	},
 	{
 		title: "departments",
 		path: "/dashboard/department",
-		icon: icon("ic_blog"),
+		icon: <ViewModuleIcon />,
 	},
 	{
 		title: "reports",
 		path: "/dashboard/reports",
-		icon: icon("ic_blog"),
+		icon: <AssessmentIcon />,
 	},
 ];
 

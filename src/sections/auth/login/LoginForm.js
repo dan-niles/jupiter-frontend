@@ -35,7 +35,7 @@ export default function LoginForm() {
 		e.preventDefault();
 
 		axios
-			.post("http://localhost:8080/api/login/", {
+			.post(process.env.REACT_APP_BACKEND_URL + "api/login/", {
 				username: username,
 				password: password,
 			})
