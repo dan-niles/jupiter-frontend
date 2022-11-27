@@ -5,6 +5,8 @@ import DashboardLayout from "./layouts/dashboard";
 import LoginPage from "./pages/LoginPage";
 import DashboardAppPage from "./pages/DashboardAppPage";
 import UserPage from "./pages/UserPage";
+import EmployeePage from "./pages/EmployeePage";
+
 import PrivateRoutes from "./utils/PrivateRoutes";
 
 export default function Router() {
@@ -24,6 +26,7 @@ export default function Router() {
 						{ element: <Navigate to="/dashboard/app" />, index: true },
 						{ path: "app", element: <DashboardAppPage /> },
 						{ path: "user", element: <UserPage /> },
+						{ path: "employee", element: <EmployeePage /> },
 					],
 				},
 			],
