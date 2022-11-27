@@ -15,6 +15,17 @@ const users = [...Array(24)].map((_, index) => ({
 		"Nepal",
 		"Maldives",
 	]),
+	department: sample([
+		"ICT",
+		"HR",
+		"Finance",
+		"Warehouse",
+		"Sales",
+		"Marketing",
+		"Admin",
+		"Management",
+		"Production",
+	]),
 	email: faker.internet.email(
 		faker.name.firstName(),
 		faker.name.lastName(),
