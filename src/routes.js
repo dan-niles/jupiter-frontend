@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage";
 import DashboardAppPage from "./pages/DashboardAppPage";
 import UserPage from "./pages/UserPage";
 import EmployeePage from "./pages/EmployeePage";
+import EmployeeAddPage from "./pages/EmployeeAddPage";
+import EmployeeEditPage from "./pages/EmployeeEditPage";
 
 import PrivateRoutes from "./utils/PrivateRoutes";
 
@@ -27,6 +29,8 @@ export default function Router() {
 						{ path: "app", element: <DashboardAppPage /> },
 						{ path: "user", element: <UserPage /> },
 						{ path: "employee", element: <EmployeePage /> },
+						{ path: "employee/add", element: <EmployeeAddPage /> },
+						{ path: "employee/edit/:id", element: <EmployeeEditPage /> },
 					],
 				},
 			],

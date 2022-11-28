@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
-import { sentenceCase } from "change-case";
+import { NavLink as RouterLink } from "react-router-dom";
 import { useState } from "react";
 // @mui
 import {
@@ -22,7 +22,6 @@ import {
 	TablePagination,
 } from "@mui/material";
 // components
-import Label from "../components/label";
 import Iconify from "../components/iconify";
 import Scrollbar from "../components/scrollbar";
 // sections
@@ -76,7 +75,7 @@ function applySortFilter(array, comparator, query) {
 	return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UserPage() {
+export default function EmployeePage() {
 	const [open, setOpen] = useState(null);
 
 	const [page, setPage] = useState(0);
@@ -91,7 +90,10 @@ export default function UserPage() {
 
 	const [rowsPerPage, setRowsPerPage] = useState(25);
 
-	const handleOpenMenu = (event) => {
+	const [editId, setEditId] = useState(null);
+
+	const handleOpenMenu = (id, event) => {
+		setEditId(id);
 		setOpen(event.currentTarget);
 	};
 
@@ -176,6 +178,8 @@ export default function UserPage() {
 					<Button
 						variant="contained"
 						startIcon={<Iconify icon="eva:plus-fill" />}
+						component={RouterLink}
+						to="add"
 					>
 						New Employee
 					</Button>
@@ -241,7 +245,7 @@ export default function UserPage() {
 														<IconButton
 															size="large"
 															color="inherit"
-															onClick={handleOpenMenu}
+															onClick={handleOpenMenu.bind(this, id)}
 														>
 															<Iconify icon={"eva:more-vertical-fill"} />
 														</IconButton>
@@ -314,7 +318,7 @@ export default function UserPage() {
 					},
 				}}
 			>
-				<MenuItem>
+				<MenuItem component={RouterLink} to={"edit/" + editId}>
 					<Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
 					Edit
 				</MenuItem>
