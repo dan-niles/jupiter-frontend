@@ -11,6 +11,7 @@ import {
 	Typography,
 	TextField,
 	MenuItem,
+	Grid,
 } from "@mui/material";
 // components
 import Iconify from "../components/iconify";
@@ -40,7 +41,7 @@ export default function EmployeeAddPage() {
 					mb={5}
 				>
 					<Typography variant="h4" gutterBottom>
-						Add New Employee
+						Employees
 					</Typography>
 
 					<Button
@@ -63,173 +64,194 @@ export default function EmployeeAddPage() {
 						noValidate
 						autoComplete="off"
 					>
+						<Stack
+							direction="row"
+							alignItems="center"
+							justifyContent="space-between"
+							mb={3}
+						>
+							<Typography variant="h4" gutterBottom>
+								Add New Employee
+							</Typography>
+						</Stack>
 						<form>
-							<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
-								<TextField
-									required
-									id="emp_id"
-									label="Employee ID"
-									// value={name}
-									// onChange={handleChange}
-								/>
-							</Stack>
-							<Stack direction="row" spacing={2} sx={{ mb: 1 }}>
-								<TextField
-									required
-									id="full_name"
-									label="Full Name"
-									sx={{ width: "50ch" }}
-									// value={name}
-									// onChange={handleChange}
-								/>
-							</Stack>
-							<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
-								<TextField
-									required
-									id="first_name"
-									label="First Name"
-									// value={name}
-									// onChange={handleChange}
-								/>
-								<TextField
-									required
-									id="last_name"
-									label="Last Name"
-									// value={name}
-									// onChange={handleChange}
-								/>
-							</Stack>
+							<Grid container spacing={2}>
+								<Grid item xs={6}>
+									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+										<TextField
+											required
+											id="emp_id"
+											label="Employee ID"
+											// value={name}
+											// onChange={handleChange}
+										/>
+									</Stack>
+									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+										<TextField
+											required
+											id="full_name"
+											label="Full Name"
+											sx={{ width: "50ch" }}
+											// value={name}
+											// onChange={handleChange}
+										/>
+									</Stack>
+									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+										<TextField
+											required
+											id="first_name"
+											label="First Name"
+											sx={{ width: "24ch" }}
+											// value={name}
+											// onChange={handleChange}
+										/>
+										<TextField
+											required
+											id="last_name"
+											label="Last Name"
+											sx={{ width: "24ch" }}
+											// value={name}
+											// onChange={handleChange}
+										/>
+									</Stack>
+									<Stack direction="row" spacing={3} sx={{ mb: 2 }}>
+										<LocalizationProvider dateAdapter={AdapterDateFns}>
+											<DatePicker
+												label="Birthdate"
+												value={value}
+												onChange={(newValue) => {
+													setValue(newValue);
+												}}
+												renderInput={(params) => <TextField {...params} />}
+											/>
+										</LocalizationProvider>
+										<TextField
+											required
+											id="email"
+											label="Email"
+											sx={{ width: "25ch" }}
+											// value={name}
+											// onChange={handleChange}
+										/>
+									</Stack>
+									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+										<TextField
+											required
+											id="nic"
+											label="NIC"
+											sx={{ width: "25ch" }}
+											// value={name}
+											// onChange={handleChange}
+										/>
+										<TextField
+											id="marital_status"
+											select
+											label="Marital Status"
+											sx={{ width: "25ch" }}
+											// value={currency}
+											// onChange={handleChange}
+										>
+											<MenuItem key="Single" value="Single">
+												Single
+											</MenuItem>
+											<MenuItem key="Married" value="Married">
+												Married
+											</MenuItem>
+										</TextField>
+									</Stack>
+								</Grid>
+								<Grid item xs={6}>
+									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+										<TextField
+											id="title"
+											select
+											label="Title"
+											sx={{ width: "25ch" }}
+											// value={currency}
+											// onChange={handleChange}
+										>
+											<MenuItem
+												key="Software Engineer"
+												value="Software Engineer"
+											>
+												Software Engineer
+											</MenuItem>
+										</TextField>
+									</Stack>
+									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+										<TextField
+											id="department"
+											select
+											label="Department"
+											sx={{ width: "25ch" }}
+											// value={currency}
+											// onChange={handleChange}
+										>
+											<MenuItem key="ICT" value="ICT">
+												ICT
+											</MenuItem>
+										</TextField>
 
-							<Stack direction="row" spacing={2} sx={{ mb: 3 }}>
-								<TextField
-									id="title"
-									select
-									label="Title"
-									sx={{ width: "30ch" }}
-									// value={currency}
-									// onChange={handleChange}
-								>
-									<MenuItem key="Software Engineer" value="Software Engineer">
-										Software Engineer
-									</MenuItem>
-								</TextField>
-							</Stack>
+										<TextField
+											id="paygrade"
+											select
+											label="Paygrade"
+											sx={{ width: "25ch" }}
+											// value={currency}
+											// onChange={handleChange}
+										>
+											<MenuItem key="Level 1" value="Level 1">
+												Level 1
+											</MenuItem>
+											<MenuItem key="Level 2" value="Level 2">
+												Level 2
+											</MenuItem>
+										</TextField>
+									</Stack>
+									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+										<TextField
+											id="status"
+											select
+											label="Status"
+											sx={{ width: "25ch" }}
+											// value={currency}
+											// onChange={handleChange}
+										>
+											<MenuItem key="Fulltime" value="Fulltime">
+												Full-time
+											</MenuItem>
+										</TextField>
 
-							<Stack direction="row" spacing={3} sx={{ mb: 3 }}>
-								<LocalizationProvider dateAdapter={AdapterDateFns}>
-									<DatePicker
-										label="Birthdate"
-										value={value}
-										onChange={(newValue) => {
-											setValue(newValue);
-										}}
-										renderInput={(params) => <TextField {...params} />}
-									/>
-								</LocalizationProvider>
-								<TextField
-									required
-									id="email"
-									label="Email"
-									sx={{ width: "25ch" }}
-									// value={name}
-									// onChange={handleChange}
-								/>
-								<TextField
-									required
-									id="nic"
-									label="NIC"
-									sx={{ width: "20ch" }}
-									// value={name}
-									// onChange={handleChange}
-								/>
-							</Stack>
-							<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
-								<TextField
-									id="department"
-									select
-									label="Department"
-									sx={{ width: "25ch" }}
-									// value={currency}
-									// onChange={handleChange}
-								>
-									<MenuItem key="ICT" value="ICT">
-										ICT
-									</MenuItem>
-								</TextField>
+										<TextField
+											id="contract"
+											select
+											label="Contract"
+											sx={{ width: "25ch" }}
+											// value={currency}
+											// onChange={handleChange}
+										>
+											<MenuItem key="Fulltime" value="Fulltime">
+												Full-time
+											</MenuItem>
+										</TextField>
+									</Stack>
+									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+										<TextField
+											id="supervisor_id"
+											select
+											label="Supervisor"
+											sx={{ width: "30ch" }}
+											// value={currency}
+											// onChange={handleChange}
+										>
+											<MenuItem key="John Doe" value="John Doe">
+												John Doe
+											</MenuItem>
+										</TextField>
+									</Stack>
+								</Grid>
+							</Grid>
 
-								<TextField
-									id="marital_status"
-									select
-									label="Marital Status"
-									sx={{ width: "25ch" }}
-									// value={currency}
-									// onChange={handleChange}
-								>
-									<MenuItem key="Single" value="Single">
-										Single
-									</MenuItem>
-									<MenuItem key="Married" value="Married">
-										Married
-									</MenuItem>
-								</TextField>
-							</Stack>
-							<Stack direction="row" spacing={2} sx={{ mb: 3 }}>
-								<TextField
-									id="status"
-									select
-									label="Status"
-									sx={{ width: "25ch" }}
-									// value={currency}
-									// onChange={handleChange}
-								>
-									<MenuItem key="Fulltime" value="Fulltime">
-										Full-time
-									</MenuItem>
-								</TextField>
-
-								<TextField
-									id="contract"
-									select
-									label="Contract"
-									sx={{ width: "25ch" }}
-									// value={currency}
-									// onChange={handleChange}
-								>
-									<MenuItem key="Fulltime" value="Fulltime">
-										Full-time
-									</MenuItem>
-								</TextField>
-
-								<TextField
-									id="paygrade"
-									select
-									label="Paygrade"
-									sx={{ width: "25ch" }}
-									// value={currency}
-									// onChange={handleChange}
-								>
-									<MenuItem key="Level 1" value="Level 1">
-										Level 1
-									</MenuItem>
-									<MenuItem key="Level 2" value="Level 2">
-										Level 2
-									</MenuItem>
-								</TextField>
-							</Stack>
-							<Stack direction="row" spacing={2} sx={{ mb: 3 }}>
-								<TextField
-									id="supervisor_id"
-									select
-									label="Supervisor"
-									sx={{ width: "30ch" }}
-									// value={currency}
-									// onChange={handleChange}
-								>
-									<MenuItem key="John Doe" value="John Doe">
-										John Doe
-									</MenuItem>
-								</TextField>
-							</Stack>
 							<Stack alignItems="end">
 								<Button type="submit" variant="contained">
 									Create Employee
