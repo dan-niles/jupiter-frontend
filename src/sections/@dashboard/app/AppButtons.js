@@ -1,5 +1,6 @@
 // @mui
 import PropTypes from "prop-types";
+import { NavLink as RouterLink } from "react-router-dom";
 import {
 	Box,
 	Card,
@@ -30,6 +31,8 @@ export default function AppButtons({ title, subheader, ...other }) {
 						variant="outlined"
 						size="large"
 						endIcon={<EventIcon />}
+						component={RouterLink}
+						to="/dashboard/leave/apply"
 						fullWidth
 					>
 						Apply Leave
