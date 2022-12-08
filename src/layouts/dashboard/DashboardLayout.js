@@ -6,6 +6,9 @@ import { styled } from "@mui/material/styles";
 import Header from "./header";
 import Nav from "./nav";
 
+import { useContext } from "react";
+import UserContext from "../../context/user-context";
+
 // ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 64;
@@ -34,12 +37,17 @@ const Main = styled("div")(({ theme }) => ({
 
 export default function DashboardLayout() {
 	const [open, setOpen] = useState(false);
+	const userContext = useContext(UserContext);
 
 	return (
 		<StyledRoot>
-			<Header onOpenNav={() => setOpen(true)} />
+			<Header userData={userContext.userData} onOpenNav={() => setOpen(true)} />
 
-			<Nav openNav={open} onCloseNav={() => setOpen(false)} />
+			<Nav
+				userData={userContext.userData}
+				openNav={open}
+				onCloseNav={() => setOpen(false)}
+			/>
 
 			<Main>
 				<Outlet />

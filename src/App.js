@@ -1,11 +1,14 @@
+import { UserContextProvider } from "./context/user-context";
 import Router from "./routes";
 import ThemeProvider from "./theme";
 
 function App() {
 	return (
-		<ThemeProvider>
-			<Router />
-		</ThemeProvider>
+		<UserContextProvider>
+			<ThemeProvider>
+				<Router />
+			</ThemeProvider>
+		</UserContextProvider>
 	);
 }
 

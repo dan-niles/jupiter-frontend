@@ -13,7 +13,7 @@ import {
 	Stack,
 } from "@mui/material";
 // mock
-import account from "../../../_mock/account";
+import account_temp from "../../../_mock/account";
 // hooks
 import useResponsive from "../../../hooks/useResponsive";
 // components
@@ -42,10 +42,24 @@ Nav.propTypes = {
 	onCloseNav: PropTypes.func,
 };
 
-export default function Nav({ openNav, onCloseNav }) {
+export default function Nav({ userData, openNav, onCloseNav }) {
 	const { pathname } = useLocation();
 
 	const isDesktop = useResponsive("up", "lg");
+
+	const user_data = userData;
+	let account = {};
+
+	if (user_data != null) {
+		account = {
+			displayName: user_data.first_name + " " + user_data.last_name,
+			email: user_data.email,
+			photoURL: "/assets/images/avatars/avatar_default.png",
+			role: user_data.job_title,
+		};
+	} else {
+		account = account_temp;
+	}
 
 	useEffect(() => {
 		if (openNav) {
