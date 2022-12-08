@@ -42,6 +42,7 @@ export default function AccountPopover() {
 	};
 
 	const handleClose = () => {
+		sessionStorage.removeItem("user-data");
 		sessionStorage.removeItem("access-token");
 		setOpen(null);
 	};

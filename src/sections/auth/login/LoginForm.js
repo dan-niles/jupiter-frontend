@@ -41,6 +41,8 @@ export default function LoginForm() {
 			})
 			.then((response) => {
 				if (response.data.username == username) {
+					delete response.data.password;
+					sessionStorage.setItem("user-data", JSON.stringify(response.data));
 					sessionStorage.setItem("access-token", response.data.token);
 					setAuthToken(response.data.token);
 					navigate("/dashboard", { replace: true });
