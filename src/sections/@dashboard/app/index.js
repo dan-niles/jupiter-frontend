@@ -8,3 +8,5 @@ export { default as AppWidgetSummary } from "./AppWidgetSummary";
 export { default as AppCurrentSubject } from "./AppCurrentSubject";
 export { default as AppConversionRates } from "./AppConversionRates";
 export { default as AppLeaveSummary } from "./AppLeaveSummary";
+export { default as AppNotifications } from "./AppNotifications";
+export { default as AppButtons } from "./AppButtons";
