@@ -57,6 +57,10 @@ export default function Nav({ userData, openNav, onCloseNav }) {
 			photoURL: "/assets/images/avatars/avatar_default.png",
 			role: user_data.job_title,
 		};
+
+		if (user_data.role === "admin") {
+			account.role = "Administrator";
+		}
 	} else {
 		account = account_temp;
 	}
