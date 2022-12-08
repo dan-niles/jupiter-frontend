@@ -13,7 +13,7 @@ import {
 	Popover,
 } from "@mui/material";
 // mocks_
-import account from "../../../_mock/account";
+import account_temp from "../../../_mock/account";
 
 // ----------------------------------------------------------------------
 
@@ -34,14 +34,29 @@ const MENU_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function AccountPopover() {
+export default function AccountPopover({ userData }) {
 	const [open, setOpen] = useState(null);
+
+	const user_data = userData;
+	let account = {};
+
+	if (user_data != null) {
+		account = {
+			displayName: user_data.first_name + " " + user_data.last_name,
+			email: user_data.email,
+			photoURL: "/assets/images/avatars/avatar_default.png",
+			role: user_data.job_title,
+		};
+	} else {
+		account = account_temp;
+	}
 
 	const handleOpen = (event) => {
 		setOpen(event.currentTarget);
 	};
 
 	const handleClose = () => {
+		sessionStorage.removeItem("user-data");
 		sessionStorage.removeItem("access-token");
 		setOpen(null);
 	};

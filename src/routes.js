@@ -5,9 +5,12 @@ import DashboardLayout from "./layouts/dashboard";
 import LoginPage from "./pages/LoginPage";
 import DashboardAppPage from "./pages/DashboardAppPage";
 import UserPage from "./pages/UserPage";
+
 import EmployeePage from "./pages/EmployeePage";
 import EmployeeAddPage from "./pages/EmployeeAddPage";
 import EmployeeEditPage from "./pages/EmployeeEditPage";
+
+import LeaveApplyPage from "./pages/LeaveApplyPage";
 
 import PrivateRoutes from "./utils/PrivateRoutes";
 
@@ -31,6 +34,7 @@ export default function Router() {
 						{ path: "employee", element: <EmployeePage /> },
 						{ path: "employee/add", element: <EmployeeAddPage /> },
 						{ path: "employee/edit/:id", element: <EmployeeEditPage /> },
+						{ path: "leave/apply", element: <LeaveApplyPage /> },
 					],
 				},
 			],

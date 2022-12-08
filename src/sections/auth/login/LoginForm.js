@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import { useContext } from "react";
+import UserContext from "../../../context/user-context";
+
 // @mui
 import {
 	Link,
@@ -25,6 +28,7 @@ const setAuthToken = (token) => {
 
 export default function LoginForm() {
 	const navigate = useNavigate();
+	const userContext = useContext(UserContext);
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -41,8 +45,11 @@ export default function LoginForm() {
 			})
 			.then((response) => {
 				if (response.data.username == username) {
+					delete response.data.password;
+					sessionStorage.setItem("user-data", JSON.stringify(response.data));
 					sessionStorage.setItem("access-token", response.data.token);
 					setAuthToken(response.data.token);
+					userContext.setData(response.data);
 					navigate("/dashboard", { replace: true });
 				}
 			})
