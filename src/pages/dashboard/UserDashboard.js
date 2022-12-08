@@ -5,7 +5,7 @@ import { Grid, Container, Typography } from "@mui/material";
 // sections
 import {
 	AppWebsiteVisits,
-	AppWidgetSummary,
+	AppLeaveSummary,
 	AppCurrentSubject,
 } from "../../sections/@dashboard/app";
 
@@ -22,42 +22,46 @@ export default function UserDashboard() {
 
 			<Container maxWidth="xl">
 				<Typography variant="h4" sx={{ mb: 5 }}>
-					User Dashboard
+					Dashboard
 				</Typography>
 
 				<Grid container spacing={3}>
 					<Grid item xs={12} sm={6} md={3}>
-						<AppWidgetSummary
-							title="Branches"
-							total={16}
-							icon={"ant-design:cluster-outlined"}
+						<AppLeaveSummary
+							title="Annual"
+							balance={10}
+							total={14}
+							color="warning"
+							icon={"ant-design:calendar-outlined"}
 						/>
 					</Grid>
 
 					<Grid item xs={12} sm={6} md={3}>
-						<AppWidgetSummary
-							title="Departments"
+						<AppLeaveSummary
+							title="Casual"
+							balance={8}
+							total={12}
+							color="success"
+							icon={"ant-design:home-outlined"}
+						/>
+					</Grid>
+
+					<Grid item xs={12} sm={6} md={3}>
+						<AppLeaveSummary
+							title="Maternity"
+							balance={10}
 							total={10}
 							color="info"
-							icon={"ant-design:appstore-outlined"}
+							icon={"ant-design:usergroup-add-outlined"}
 						/>
 					</Grid>
 
 					<Grid item xs={12} sm={6} md={3}>
-						<AppWidgetSummary
-							title="Employees"
-							total={1256}
-							color="success"
-							icon={"ant-design:team-outlined"}
-						/>
-					</Grid>
-
-					<Grid item xs={12} sm={6} md={3}>
-						<AppWidgetSummary
-							title="Users"
-							total={134}
-							color="warning"
-							icon={"ant-design:user-outlined"}
+						<AppLeaveSummary
+							title="No Pay"
+							balance={32}
+							total={50}
+							icon={"ant-design:fullscreen-exit-outlined"}
 						/>
 					</Grid>
 
