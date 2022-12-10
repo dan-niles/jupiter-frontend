@@ -6,18 +6,18 @@ import {
 	TableRow,
 	TableBody,
 	TableCell,
+	IconButton,
 	TableContainer,
+	TextField,
 	TableHead,
 	Grid,
+	MenuItem,
 } from "@mui/material";
 
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-
 import Scrollbar from "../../components/scrollbar";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import { Box } from "@mui/system";
 
 // ----------------------------------------------------------------------
@@ -33,7 +33,7 @@ const rows = [
 	createData("Level 4", 14, 12, 10, 50),
 ];
 
-const GroupedEmp = () => {
+const CustomReport = () => {
 	return (
 		<>
 			<Card sx={{ mb: 3 }}>
@@ -47,44 +47,40 @@ const GroupedEmp = () => {
 				>
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
-							<Stack direction="row" spacing={2}>
-								<FormControl>
-									<FormLabel id="demo-row-radio-buttons-group-label">
-										Group By
-									</FormLabel>
-									<RadioGroup
-										row
-										aria-labelledby="demo-row-radio-buttons-group-label"
-										name="row-radio-buttons-group"
-										defaultValue="job_title"
-									>
+							<Stack direction="row" spacing={2} alignItems="center">
+								<TextField
+									id="department"
+									select
+									label="Department"
+									sx={{ width: "25ch" }}
+									value={"All"}
+								>
+									<MenuItem key="All" value="All">
+										All
+									</MenuItem>
+									<MenuItem key="ICT" value="ICT">
+										ICT
+									</MenuItem>
+									<MenuItem key="HR" value="HR">
+										HR
+									</MenuItem>
+									<MenuItem key="Finance" value="Finance">
+										Finance
+									</MenuItem>
+								</TextField>
+								<FormGroup>
+									<Stack direction="row" spacing={1}>
 										<FormControlLabel
-											value="job_title"
-											control={<Radio />}
-											label="Job Title"
+											control={<Checkbox defaultChecked />}
+											label="Nationality"
 										/>
+										<FormControlLabel control={<Checkbox />} label="Religion" />
 										<FormControlLabel
-											value="department"
-											control={<Radio />}
-											label="Department"
+											control={<Checkbox />}
+											label="Blood Group"
 										/>
-										<FormControlLabel
-											value="pay_grade"
-											control={<Radio />}
-											label="Pay Grade"
-										/>
-										<FormControlLabel
-											value="status"
-											control={<Radio />}
-											label="Status"
-										/>
-										<FormControlLabel
-											value="contract"
-											control={<Radio />}
-											label="Contract"
-										/>
-									</RadioGroup>
-								</FormControl>
+									</Stack>
+								</FormGroup>
 								<Button type="submit" variant="contained" color="secondary">
 									Generate
 								</Button>
@@ -100,11 +96,11 @@ const GroupedEmp = () => {
 						<Table sx={{ minWidth: 650 }} aria-label="simple table">
 							<TableHead>
 								<TableRow>
+									<TableCell>Department</TableCell>
 									<TableCell>Employee</TableCell>
-									<TableCell align="right">Title</TableCell>
-									<TableCell align="right">Department</TableCell>
-									<TableCell align="right">Status</TableCell>
-									<TableCell align="right">Contract</TableCell>
+									<TableCell align="right">Nationality</TableCell>
+									<TableCell align="right">Religion</TableCell>
+									<TableCell align="right">Blood Group</TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
@@ -116,7 +112,7 @@ const GroupedEmp = () => {
 										<TableCell component="th" scope="row">
 											{row.paygrade}
 										</TableCell>
-										<TableCell align="right">{row.annual}</TableCell>
+										<TableCell>{row.annual}</TableCell>
 										<TableCell align="right">{row.casual}</TableCell>
 										<TableCell align="right">{row.maternity}</TableCell>
 										<TableCell align="right">{row.nopay}</TableCell>
@@ -131,4 +127,4 @@ const GroupedEmp = () => {
 	);
 };
 
-export default GroupedEmp;
+export default CustomReport;

@@ -16,6 +16,7 @@ import PrintIcon from "@mui/icons-material/Print";
 import EmpByDept from "./reports/EmpByDept";
 import LeavesByDept from "./reports/LeavesByDept";
 import GroupedEmp from "./reports/GroupedEmp";
+import CustomReport from "./reports/CustomReport";
 
 // ----------------------------------------------------------------------
 
@@ -88,7 +89,7 @@ export default function ReportsPage() {
 						<GroupedEmp />
 					</TabPanel>
 					<TabPanel value={value} index={3}>
-						Item Four
+						<CustomReport />
 					</TabPanel>
 				</Box>
 			</Container>
