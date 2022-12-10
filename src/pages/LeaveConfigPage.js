@@ -1,5 +1,4 @@
 import { Helmet } from "react-helmet-async";
-import { filter } from "lodash";
 import { NavLink as RouterLink } from "react-router-dom";
 import { useState } from "react";
 // @mui
@@ -7,19 +6,14 @@ import {
 	Card,
 	Table,
 	Stack,
-	Paper,
 	Button,
-	Popover,
-	Checkbox,
 	TableRow,
-	MenuItem,
 	TableBody,
 	TableCell,
 	Container,
 	Typography,
 	IconButton,
 	TableContainer,
-	TablePagination,
 	TextField,
 	TableHead,
 } from "@mui/material";
@@ -27,6 +21,11 @@ import {
 import Scrollbar from "../components/scrollbar";
 import EditIcon from "@mui/icons-material/Edit";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 // ----------------------------------------------------------------------
 
@@ -42,6 +41,16 @@ const rows = [
 ];
 
 export default function EmployeePage() {
+	const [open, setOpen] = useState(false);
+
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
 	return (
 		<>
 			<Helmet>
@@ -94,7 +103,7 @@ export default function EmployeePage() {
 											<TableCell align="right">{row.maternity}</TableCell>
 											<TableCell align="right">{row.nopay}</TableCell>
 											<TableCell align="center">
-												<IconButton aria-label="edit">
+												<IconButton aria-label="edit" onClick={handleClickOpen}>
 													<EditIcon />
 												</IconButton>
 											</TableCell>
@@ -107,28 +116,52 @@ export default function EmployeePage() {
 				</Card>
 			</Container>
 
-			{/* <Dialog open={open} onClose={handleClose}>
-				<DialogTitle>Subscribe</DialogTitle>
+			<Dialog open={open} onClose={handleClose}>
+				<DialogTitle>Edit</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						To subscribe to this website, please enter your email address here.
-						We will send updates occasionally.
+						Enter the number of days for each leave type
 					</DialogContentText>
-					<TextField
-						autoFocus
-						margin="dense"
-						id="name"
-						label="Email Address"
-						type="number"
-						fullWidth
-						variant="standard"
-					/>
+					<Stack spacing={1} direction="column" sx={{ mt: 2 }}>
+						<TextField
+							id="annual"
+							label="Annual Leave"
+							type="number"
+							fullWidth
+							variant="standard"
+							value={14}
+						/>
+						<TextField
+							id="casual"
+							label="Casual Leave"
+							type="number"
+							fullWidth
+							variant="standard"
+							value={12}
+						/>
+						<TextField
+							id="maternity"
+							label="Maternity Leave"
+							type="number"
+							fullWidth
+							variant="standard"
+							value={10}
+						/>
+						<TextField
+							id="annual"
+							label="No Pay"
+							type="number"
+							fullWidth
+							variant="standard"
+							value={50}
+						/>
+					</Stack>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>
-					<Button onClick={handleClose}>Subscribe</Button>
+					<Button onClick={handleClose}>Save</Button>
 				</DialogActions>
-			</Dialog> */}
+			</Dialog>
 		</>
 	);
 }
