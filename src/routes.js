@@ -17,6 +17,7 @@ import CustomAttributesPage from "./pages/CustomAttributesPage";
 import ReportsPage from "./pages/ReportsPage";
 
 import PrivateRoutes from "./utils/PrivateRoutes";
+import DepartmentPage from "./pages/DepartmentPage";
 
 export default function Router() {
 	const routes = useRoutes([
@@ -42,6 +43,8 @@ export default function Router() {
 						{ path: "leave/apply", element: <LeaveApplyPage /> },
 						{ path: "custom-attributes", element: <CustomAttributesPage /> },
 						{ path: "reports", element: <ReportsPage /> },
+						{ path: "department", element: <DepartmentPage /> },
+						{ path: "organization", element: <DepartmentPage /> },
 					],
 				},
 			],
