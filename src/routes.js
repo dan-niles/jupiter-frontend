@@ -12,6 +12,8 @@ import EmployeeEditPage from "./pages/EmployeeEditPage";
 
 import LeaveApplyPage from "./pages/LeaveApplyPage";
 
+import LeaveConfigPage from "./pages/LeaveConfigPage";
+
 import PrivateRoutes from "./utils/PrivateRoutes";
 
 export default function Router() {
@@ -34,6 +36,7 @@ export default function Router() {
 						{ path: "employee", element: <EmployeePage /> },
 						{ path: "employee/add", element: <EmployeeAddPage /> },
 						{ path: "employee/edit/:id", element: <EmployeeEditPage /> },
+						{ path: "leave-config", element: <LeaveConfigPage /> },
 						{ path: "leave/apply", element: <LeaveApplyPage /> },
 					],
 				},
