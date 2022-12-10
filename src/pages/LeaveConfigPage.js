@@ -19,13 +19,14 @@ import {
 } from "@mui/material";
 // components
 import Scrollbar from "../components/scrollbar";
-import EditIcon from "@mui/icons-material/Edit";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+
+import Iconify from "../components/iconify";
 
 // ----------------------------------------------------------------------
 
@@ -104,7 +105,7 @@ export default function EmployeePage() {
 											<TableCell align="right">{row.nopay}</TableCell>
 											<TableCell align="center">
 												<IconButton aria-label="edit" onClick={handleClickOpen}>
-													<EditIcon />
+													<Iconify icon={"eva:edit-fill"} />
 												</IconButton>
 											</TableCell>
 										</TableRow>
@@ -117,7 +118,7 @@ export default function EmployeePage() {
 			</Container>
 
 			<Dialog open={open} onClose={handleClose}>
-				<DialogTitle>Edit</DialogTitle>
+				<DialogTitle>Edit Leave Allocation</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
 						Enter the number of days for each leave type
