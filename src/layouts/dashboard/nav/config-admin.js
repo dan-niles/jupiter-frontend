@@ -32,11 +32,11 @@ const navConfig = [
 		path: "/dashboard/organization",
 		icon: <InfoIcon />,
 	},
-	{
-		title: "branches",
-		path: "/dashboard/branch",
-		icon: <BusinessIcon />,
-	},
+	// {
+	// 	title: "branches",
+	// 	path: "/dashboard/branch",
+	// 	icon: <BusinessIcon />,
+	// },
 	{
 		title: "departments",
 		path: "/dashboard/department",
