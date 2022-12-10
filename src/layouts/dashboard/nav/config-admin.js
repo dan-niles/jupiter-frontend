@@ -7,6 +7,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
+import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +41,11 @@ const navConfig = [
 		title: "departments",
 		path: "/dashboard/department",
 		icon: <ViewModuleIcon />,
+	},
+	{
+		title: "custom attributes",
+		path: "/dashboard/custom-attributes",
+		icon: <DynamicFeedIcon />,
 	},
 	{
 		title: "leave config",
