@@ -18,6 +18,7 @@ import ReportsPage from "./pages/ReportsPage";
 
 import PrivateRoutes from "./utils/PrivateRoutes";
 import DepartmentPage from "./pages/DepartmentPage";
+import OrganizationInfoPage from "./pages/OrganizationInfoPage";
 
 export default function Router() {
 	const routes = useRoutes([
@@ -44,7 +45,7 @@ export default function Router() {
 						{ path: "custom-attributes", element: <CustomAttributesPage /> },
 						{ path: "reports", element: <ReportsPage /> },
 						{ path: "department", element: <DepartmentPage /> },
-						{ path: "organization", element: <DepartmentPage /> },
+						{ path: "organization", element: <OrganizationInfoPage /> },
 					],
 				},
 			],
