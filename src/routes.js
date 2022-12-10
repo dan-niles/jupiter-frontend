@@ -12,7 +12,13 @@ import EmployeeEditPage from "./pages/EmployeeEditPage";
 
 import LeaveApplyPage from "./pages/LeaveApplyPage";
 
+import LeaveConfigPage from "./pages/LeaveConfigPage";
+import CustomAttributesPage from "./pages/CustomAttributesPage";
+import ReportsPage from "./pages/ReportsPage";
+
 import PrivateRoutes from "./utils/PrivateRoutes";
+import DepartmentPage from "./pages/DepartmentPage";
+import OrganizationInfoPage from "./pages/OrganizationInfoPage";
 
 export default function Router() {
 	const routes = useRoutes([
@@ -34,7 +40,12 @@ export default function Router() {
 						{ path: "employee", element: <EmployeePage /> },
 						{ path: "employee/add", element: <EmployeeAddPage /> },
 						{ path: "employee/edit/:id", element: <EmployeeEditPage /> },
+						{ path: "leave-config", element: <LeaveConfigPage /> },
 						{ path: "leave/apply", element: <LeaveApplyPage /> },
+						{ path: "custom-attributes", element: <CustomAttributesPage /> },
+						{ path: "reports", element: <ReportsPage /> },
+						{ path: "department", element: <DepartmentPage /> },
+						{ path: "organization", element: <OrganizationInfoPage /> },
 					],
 				},
 			],
