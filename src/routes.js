@@ -19,6 +19,7 @@ import ReportsPage from "./pages/ReportsPage";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import DepartmentPage from "./pages/DepartmentPage";
 import OrganizationInfoPage from "./pages/OrganizationInfoPage";
+import ChangePassword from "./pages/ChangePassword";
 
 export default function Router() {
 	const routes = useRoutes([
@@ -46,6 +47,7 @@ export default function Router() {
 						{ path: "reports", element: <ReportsPage /> },
 						{ path: "department", element: <DepartmentPage /> },
 						{ path: "organization", element: <OrganizationInfoPage /> },
+						{ path: "change-password", element: <ChangePassword /> },
 					],
 				},
 			],
