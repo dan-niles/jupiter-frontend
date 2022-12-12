@@ -23,7 +23,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 
 // ----------------------------------------------------------------------
 
-export default function ChangePassword() {
+export default function ChangePasswordPage() {
 	return (
 		<>
 			<Helmet>

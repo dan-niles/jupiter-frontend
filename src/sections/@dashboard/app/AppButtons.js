@@ -50,6 +50,8 @@ export default function AppButtons({ title, subheader, ...other }) {
 						variant="outlined"
 						size="large"
 						color="info"
+						component={RouterLink}
+						to="/dashboard/personal-info"
 						endIcon={<InfoIcon />}
 					>
 						Personal Info

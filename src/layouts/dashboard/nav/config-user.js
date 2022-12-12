@@ -2,6 +2,7 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import InfoIcon from "@mui/icons-material/Info";
 import KeyIcon from "@mui/icons-material/Key";
+import HistoryIcon from "@mui/icons-material/History";
 
 // ----------------------------------------------------------------------
 
@@ -15,6 +16,11 @@ const navConfig = [
 		title: "personal info",
 		path: "/dashboard/personal-info",
 		icon: <InfoIcon />,
+	},
+	{
+		title: "leave history",
+		path: "/dashboard/leave-history",
+		icon: <HistoryIcon />,
 	},
 	{
 		title: "change password",
