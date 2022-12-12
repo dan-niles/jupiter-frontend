@@ -31,7 +31,7 @@ export default function ChangePassword() {
 			</Helmet>
 
 			<Container>
-				<Stack
+				{/* <Stack
 					direction="row"
 					alignItems="center"
 					justifyContent="space-between"
@@ -50,7 +50,7 @@ export default function ChangePassword() {
 					>
 						Go Back
 					</Button>
-				</Stack>
+				</Stack> */}
 
 				<Card>
 					<Box
@@ -67,9 +67,9 @@ export default function ChangePassword() {
 							justifyContent="space-between"
 							mb={3}
 						>
-							{/* <Typography variant="h4" gutterBottom>
+							<Typography variant="h4" gutterBottom>
 								Change Password
-							</Typography> */}
+							</Typography>
 						</Stack>
 						<form>
 							<Grid container spacing={2}>
