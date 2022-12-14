@@ -68,6 +68,8 @@ export default function AppLeaveSummary({
 						variant="determinate"
 						value={(balance / total) * 100}
 						color={color}
+						size="lg"
+						sx={{ width: "60px", height: "60px" }}
 					/>
 					<Box
 						sx={{
@@ -81,7 +83,7 @@ export default function AppLeaveSummary({
 							justifyContent: "center",
 						}}
 					>
-						<Iconify icon={icon} width={14} height={14} />
+						<Iconify icon={icon} />
 					</Box>
 				</Box>
 			</StyledIcon>
