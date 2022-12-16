@@ -29,18 +29,19 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import Iconify from "../components/iconify";
+import Label from "../components/label";
 
 // ----------------------------------------------------------------------
 
-function createData(name, type, alias) {
-	return { name, type, alias };
+function createData(date, type, reason, status) {
+	return { date, type, reason, status };
 }
 
 const rows = [
-	createData("nationality", "VARCHAR", "Nationality"),
-	createData("religion", "VARCHAR", "Religion"),
-	createData("blood_type", "VARCHAR", "Blood Type"),
-	createData("date_joined", "DATE", "Date Joined"),
+	createData("23-12-2022", "Annual", "Christmas Holidays", "Pending"),
+	createData("12-11-2022", "Casual", "Vacation", "Declined"),
+	createData("06-11-2022", "Casual", "Vacation", "Approved"),
+	createData("07-08-2022", "No Pay", "Personal Reasons", "Approved"),
 ];
 
 export default function LeaveHistoryPage() {
@@ -84,9 +85,10 @@ export default function LeaveHistoryPage() {
 							<Table sx={{ minWidth: 650 }} aria-label="simple table">
 								<TableHead>
 									<TableRow>
-										<TableCell>Column Name</TableCell>
-										<TableCell align="center">Type</TableCell>
-										<TableCell align="center">Alias</TableCell>
+										<TableCell>Leave Date</TableCell>
+										<TableCell align="left">Type</TableCell>
+										<TableCell align="left">Reason</TableCell>
+										<TableCell align="center">Status</TableCell>
 										<TableCell align="center">Actions</TableCell>
 									</TableRow>
 								</TableHead>
@@ -97,21 +99,33 @@ export default function LeaveHistoryPage() {
 											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 										>
 											<TableCell component="th" scope="row">
-												{row.name}
+												{row.date}
 											</TableCell>
-											<TableCell align="center">{row.type}</TableCell>
-											<TableCell align="center">{row.alias}</TableCell>
+											<TableCell align="left">{row.type}</TableCell>
+											<TableCell align="left">{row.reason}</TableCell>
 											<TableCell align="center">
-												<IconButton aria-label="edit" onClick={handleClickOpen}>
-													<Iconify icon={"eva:edit-fill"} />
-												</IconButton>
-												<IconButton
-													sx={{ color: "error.main" }}
-													aria-label="delete"
-													onClick={handleClickOpen}
+												<Label
+													color={
+														row.status === "Pending"
+															? "warning"
+															: row.status === "Declined"
+															? "error"
+															: "success"
+													}
 												>
-													<Iconify icon={"eva:trash-2-outline"} />
-												</IconButton>
+													{row.status}
+												</Label>
+											</TableCell>
+											<TableCell align="center">
+												{row.status === "Pending" ? (
+													<IconButton
+														sx={{ color: "error.main" }}
+														aria-label="delete"
+														onClick={handleClickOpen}
+													>
+														<Iconify icon={"eva:trash-2-outline"} />
+													</IconButton>
+												) : null}
 											</TableCell>
 										</TableRow>
 									))}
