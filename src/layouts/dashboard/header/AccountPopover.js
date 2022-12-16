@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // @mui
 import { alpha } from "@mui/material/styles";
 import {
@@ -36,6 +36,7 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover({ userData }) {
 	const [open, setOpen] = useState(null);
+	const navigate = useNavigate();
 
 	const user_data = userData;
 	let account = {};
@@ -56,9 +57,14 @@ export default function AccountPopover({ userData }) {
 	};
 
 	const handleClose = () => {
+		setOpen(null);
+	};
+
+	const handleLogout = () => {
+		handleClose();
 		sessionStorage.removeItem("user-data");
 		sessionStorage.removeItem("access-token");
-		setOpen(null);
+		navigate("/login");
 	};
 
 	return (
@@ -123,12 +129,7 @@ export default function AccountPopover({ userData }) {
 
 				<Divider sx={{ borderStyle: "dashed" }} />
 
-				<MenuItem
-					component={RouterLink}
-					to="/login"
-					onClick={handleClose}
-					sx={{ m: 1 }}
-				>
+				<MenuItem onClick={handleLogout} sx={{ m: 1 }}>
 					Logout
 				</MenuItem>
 			</Popover>
