@@ -22,6 +22,7 @@ import OrganizationInfoPage from "./pages/OrganizationInfoPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
 import PersonalInfoPage from "./pages/PersonalInfoPage";
 import LeaveHistoryPage from "./pages/LeaveHistoryPage";
+import UserAddPage from "./pages/UserAddPage";
 
 export default function Router() {
 	const routes = useRoutes([
@@ -40,6 +41,7 @@ export default function Router() {
 						{ element: <Navigate to="/dashboard/app" />, index: true },
 						{ path: "app", element: <DashboardAppPage /> },
 						{ path: "user", element: <UserPage /> },
+						{ path: "user/add", element: <UserAddPage /> },
 						{ path: "employee", element: <EmployeePage /> },
 						{ path: "employee/add", element: <EmployeeAddPage /> },
 						{ path: "employee/edit/:id", element: <EmployeeEditPage /> },

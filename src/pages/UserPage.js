@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
 import { sentenceCase } from "change-case";
 import { useState } from "react";
+import { NavLink as RouterLink } from "react-router-dom";
 // @mui
 import {
 	Card,
@@ -170,11 +171,13 @@ export default function UserPage() {
 					mb={5}
 				>
 					<Typography variant="h4" gutterBottom>
-						User
+						Users
 					</Typography>
 					<Button
 						variant="contained"
 						startIcon={<Iconify icon="eva:plus-fill" />}
+						component={RouterLink}
+						to="add"
 					>
 						New User
 					</Button>
