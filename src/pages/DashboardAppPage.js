@@ -11,6 +11,8 @@ export default function DashboardAppPage({ userData }) {
 	let toRender = null;
 	if (userContext.userData.role === "admin") {
 		toRender = <AdminDashboard />;
+	} else if (userContext.userData.role === "manager") {
+		toRender = <UserDashboard />;
 	} else {
 		toRender = <UserDashboard />;
 	}

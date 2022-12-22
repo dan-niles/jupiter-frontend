@@ -23,6 +23,7 @@ import NavSection from "../../../components/nav-section";
 //
 import navAdminConfig from "./config-admin";
 import navUserConfig from "./config-user";
+import navManagerConfig from "./config-manager";
 
 // ----------------------------------------------------------------------
 
@@ -119,7 +120,13 @@ export default function Nav({ userData, openNav, onCloseNav }) {
 			</Box>
 
 			<NavSection
-				data={user_data.role === "admin" ? navAdminConfig : navUserConfig}
+				data={
+					user_data.role === "admin"
+						? navAdminConfig
+						: user_data.role === "manager"
+						? navManagerConfig
+						: navUserConfig
+				}
 			/>
 
 			<Box sx={{ flexGrow: 1 }} />
