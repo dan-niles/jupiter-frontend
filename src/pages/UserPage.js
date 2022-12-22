@@ -1,8 +1,9 @@
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
 import { sentenceCase } from "change-case";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink as RouterLink } from "react-router-dom";
+import axios from "axios";
 // @mui
 import {
 	Card,
@@ -29,16 +30,17 @@ import Scrollbar from "../components/scrollbar";
 // sections
 import { UserListHead, UserListToolbar } from "../sections/@dashboard/user";
 // mock
-import USERLIST from "../_mock/user";
+// import USERLIST from "../_mock/user";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-	{ id: "name", label: "Name", alignRight: false },
-	{ id: "company", label: "Branch", alignRight: false },
-	{ id: "role", label: "Title", alignRight: false },
-	{ id: "email", label: "Email", alignRight: false },
-	{ id: "status", label: "Status", alignRight: false },
+	{ id: "emp_id", label: "Employee ID", alignRight: false },
+	{ id: "name", label: "Employee Name", alignRight: false },
+	{ id: "username", label: "Username", alignRight: false },
+	{ id: "role", label: "Role", alignRight: false },
+	// { id: "last_login", label: "Last Login", alignRight: false },
+	{ id: "status", label: "Status", alignRight: false, alignCenter: true },
 	{ id: "" },
 ];
 
@@ -70,14 +72,21 @@ function applySortFilter(array, comparator, query) {
 	if (query) {
 		return filter(
 			array,
-			(_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+			(_user) =>
+				(_user.first_name.toLowerCase().indexOf(query.toLowerCase()) &&
+					_user.last_name.toLowerCase().indexOf(query.toLowerCase()) &&
+					_user.emp_id.toLowerCase().indexOf(query.toLowerCase())) !== -1
 		);
 	}
 	return stabilizedThis.map((el) => el[0]);
 }
 
+const accessToken = sessionStorage.getItem("access-token");
+
 export default function UserPage() {
 	const [open, setOpen] = useState(null);
+
+	const [users, setUsers] = useState([]);
 
 	const [page, setPage] = useState(0);
 
@@ -90,6 +99,23 @@ export default function UserPage() {
 	const [filterName, setFilterName] = useState("");
 
 	const [rowsPerPage, setRowsPerPage] = useState(25);
+
+	useEffect(() => {
+		getUsers();
+	}, []);
+
+	const getUsers = () => {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + "/api/user/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data);
+				setUsers(res.data);
+			});
+	};
 
 	const handleOpenMenu = (event) => {
 		setOpen(event.currentTarget);
@@ -107,7 +133,7 @@ export default function UserPage() {
 
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
-			const newSelecteds = USERLIST.map((n) => n.name);
+			const newSelecteds = users.map((n) => n.name);
 			setSelected(newSelecteds);
 			return;
 		}
@@ -147,10 +173,10 @@ export default function UserPage() {
 	};
 
 	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
 	const filteredUsers = applySortFilter(
-		USERLIST,
+		users,
 		getComparator(order, orderBy),
 		filterName
 	);
@@ -197,7 +223,7 @@ export default function UserPage() {
 									order={order}
 									orderBy={orderBy}
 									headLabel={TABLE_HEAD}
-									rowCount={USERLIST.length}
+									rowCount={users.length}
 									numSelected={selected.length}
 									onRequestSort={handleRequestSort}
 									onSelectAllClick={handleSelectAllClick}
@@ -206,13 +232,21 @@ export default function UserPage() {
 									{filteredUsers
 										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 										.map((row) => {
-											const { id, name, role, status, company, email } = row;
+											const {
+												emp_id,
+												first_name,
+												last_name,
+												username,
+												role,
+												is_active,
+											} = row;
+											const name = `${first_name} ${last_name}`;
 											const selectedUser = selected.indexOf(name) !== -1;
 
 											return (
 												<TableRow
 													hover
-													key={id}
+													key={emp_id}
 													tabIndex={-1}
 													role="checkbox"
 													selected={selectedUser}
@@ -224,25 +258,29 @@ export default function UserPage() {
 														/>
 													</TableCell>
 
-													<TableCell component="th" scope="row" padding="none">
-														<Typography variant="subtitle2" noWrap>
-															{name}
-														</Typography>
+													<TableCell align="left">{emp_id}</TableCell>
+
+													<TableCell component="th" scope="row">
+														<Typography variant="subtitle2">{name}</Typography>
 													</TableCell>
 
-													<TableCell align="left">{company}</TableCell>
-
-													<TableCell align="left">{role}</TableCell>
-
-													<TableCell align="left">{email}</TableCell>
+													<TableCell align="left">{username}</TableCell>
 
 													<TableCell align="left">
+														{role === "admin"
+															? "Administrator"
+															: role === "manager"
+															? "HR-Manager"
+															: "User"}
+													</TableCell>
+
+													<TableCell align="center">
 														<Label
-															color={
-																(status === "inactive" && "error") || "success"
-															}
+															color={(is_active === 1 && "success") || "error"}
 														>
-															{sentenceCase(status)}
+															{sentenceCase(
+																is_active === 1 ? "active" : "inacative"
+															)}
 														</Label>
 													</TableCell>
 
@@ -296,7 +334,7 @@ export default function UserPage() {
 					<TablePagination
 						rowsPerPageOptions={[25, 50, 100]}
 						component="div"
-						count={USERLIST.length}
+						count={users.length}
 						rowsPerPage={rowsPerPage}
 						page={page}
 						onPageChange={handleChangePage}
