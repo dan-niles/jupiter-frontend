@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
-import { NavLink as RouterLink } from "react-router-dom";
+import { NavLink as RouterLink, useNavigate } from "react-router-dom";
+import axios from "axios";
 // @mui
 import {
 	Card,
@@ -18,14 +19,44 @@ import Iconify from "../components/iconify";
 import Scrollbar from "../components/scrollbar";
 import { Box } from "@mui/system";
 
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
 // ----------------------------------------------------------------------
 
+const accessToken = sessionStorage.getItem("access-token");
+
 export default function UserAddPage() {
-	const [value, setValue] = useState(null);
+	const [empID, setEmpID] = useState("");
+	const [role, setRole] = useState("");
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+
+	const navigate = useNavigate();
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		console.log(accessToken);
+		axios
+			.post(process.env.REACT_APP_BACKEND_URL + "/api/user/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+				data: {
+					emp_id: empID,
+					role: role,
+					username: username,
+					password: password,
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				navigate("/dashboard/user/", {
+					state: {
+						showToast: true,
+						toastMessage: "User created successfully!",
+					},
+				});
+			});
+	};
 
 	return (
 		<>
@@ -74,7 +105,7 @@ export default function UserAddPage() {
 								Add New User
 							</Typography>
 						</Stack>
-						<form>
+						<form onSubmit={handleSubmit}>
 							<Grid container spacing={2}>
 								<Grid item xs={12}>
 									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -83,14 +114,16 @@ export default function UserAddPage() {
 											select
 											label="User Role"
 											sx={{ width: "25ch" }}
-											// value={currency}
-											// onChange={handleChange}
+											value={role}
+											onChange={(e) => {
+												setRole(e.target.value);
+											}}
 										>
 											<MenuItem key="admin" value="admin">
 												Administrator
 											</MenuItem>
 											<MenuItem key="manager" value="manager">
-												Manager
+												HR-Manager
 											</MenuItem>
 											<MenuItem key="user" value="user">
 												User
@@ -106,10 +139,10 @@ export default function UserAddPage() {
 											// value={currency}
 											// onChange={handleChange}
 										>
-											<MenuItem key="ICT" value="ICT">
+											<MenuItem key="1" value="1">
 												ICT
 											</MenuItem>
-											<MenuItem key="HR" value="HR">
+											<MenuItem key="2" value="2">
 												HR
 											</MenuItem>
 										</TextField>
@@ -119,16 +152,18 @@ export default function UserAddPage() {
 											select
 											label="Employee"
 											sx={{ width: "50ch" }}
-											// value={currency}
-											// onChange={handleChange}
+											value={empID}
+											onChange={(e) => {
+												setEmpID(e.target.value);
+											}}
 										>
-											<MenuItem key="admin" value="admin">
+											<MenuItem key="00001" value="00001">
 												00001 - John Doe
 											</MenuItem>
-											<MenuItem key="manager" value="manager">
+											<MenuItem key="00002" value="00002">
 												00002 - Tim Allen
 											</MenuItem>
-											<MenuItem key="user" value="user">
+											<MenuItem key="00003" value="00003">
 												00003 - Paul Blake
 											</MenuItem>
 										</TextField>
@@ -139,8 +174,10 @@ export default function UserAddPage() {
 											id="username"
 											label="Username"
 											sx={{ width: "25ch" }}
-											// value={name}
-											// onChange={handleChange}
+											value={username}
+											onChange={(e) => {
+												setUsername(e.target.value);
+											}}
 										/>
 									</Stack>
 									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -150,8 +187,10 @@ export default function UserAddPage() {
 											label="Pasword"
 											sx={{ width: "25ch" }}
 											type="password"
-											// value={name}
-											// onChange={handleChange}
+											value={password}
+											onChange={(e) => {
+												setPassword(e.target.value);
+											}}
 										/>
 										<TextField
 											required
@@ -159,8 +198,10 @@ export default function UserAddPage() {
 											label="Confirm Pasword"
 											sx={{ width: "25ch" }}
 											type="password"
-											// value={name}
-											// onChange={handleChange}
+											value={confirmPassword}
+											onChange={(e) => {
+												setConfirmPassword(e.target.value);
+											}}
 										/>
 									</Stack>
 								</Grid>

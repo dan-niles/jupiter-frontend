@@ -23,6 +23,7 @@ import ChangePasswordPage from "./pages/ChangePasswordPage";
 import PersonalInfoPage from "./pages/PersonalInfoPage";
 import LeaveHistoryPage from "./pages/LeaveHistoryPage";
 import UserAddPage from "./pages/UserAddPage";
+import ApproveLeavesPage from "./pages/ApproveLeavesPage";
 
 export default function Router() {
 	const routes = useRoutes([
@@ -54,6 +55,7 @@ export default function Router() {
 						{ path: "change-password", element: <ChangePasswordPage /> },
 						{ path: "personal-info", element: <PersonalInfoPage /> },
 						{ path: "leave-history", element: <LeaveHistoryPage /> },
+						{ path: "approve-leaves", element: <ApproveLeavesPage /> },
 					],
 				},
 			],

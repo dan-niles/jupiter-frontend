@@ -3,6 +3,8 @@ import { filter } from "lodash";
 import { sentenceCase } from "change-case";
 import { useEffect, useState } from "react";
 import { NavLink as RouterLink } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 // @mui
 import {
@@ -83,7 +85,7 @@ function applySortFilter(array, comparator, query) {
 
 const accessToken = sessionStorage.getItem("access-token");
 
-export default function UserPage() {
+export default function UserPage(props) {
 	const [open, setOpen] = useState(null);
 
 	const [users, setUsers] = useState([]);
@@ -100,8 +102,18 @@ export default function UserPage() {
 
 	const [rowsPerPage, setRowsPerPage] = useState(25);
 
+	const { state } = useLocation();
+
 	useEffect(() => {
 		getUsers();
+
+		if (
+			state != null &&
+			state.showToast !== undefined &&
+			state.showToast === true
+		) {
+			toast.success(state.toastMessage);
+		}
 	}, []);
 
 	const getUsers = () => {
@@ -186,8 +198,10 @@ export default function UserPage() {
 	return (
 		<>
 			<Helmet>
-				<title> User | Jupiter HRM </title>
+				<title> Users | Jupiter HRM </title>
 			</Helmet>
+
+			<Toaster position="top-right" reverseOrder={true} />
 
 			<Container>
 				<Stack
@@ -231,7 +245,7 @@ export default function UserPage() {
 								<TableBody>
 									{filteredUsers
 										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-										.map((row) => {
+										.map((row, index) => {
 											const {
 												emp_id,
 												first_name,
@@ -246,7 +260,7 @@ export default function UserPage() {
 											return (
 												<TableRow
 													hover
-													key={emp_id}
+													key={index}
 													tabIndex={-1}
 													role="checkbox"
 													selected={selectedUser}
