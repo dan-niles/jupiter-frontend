@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { NavLink as RouterLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 // @mui
 import {
 	Card,
@@ -30,32 +31,46 @@ export default function UserAddPage() {
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 
+	const [usrnameConflictError, setUsrnameConflictError] = useState(false);
+
 	const navigate = useNavigate();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(accessToken);
-		axios
-			.post(process.env.REACT_APP_BACKEND_URL + "/api/user/", {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-				data: {
-					emp_id: empID,
-					role: role,
-					username: username,
-					password: password,
-				},
-			})
-			.then((res) => {
-				console.log(res);
-				navigate("/dashboard/user/", {
-					state: {
-						showToast: true,
-						toastMessage: "User created successfully!",
+		setUsrnameConflictError(false);
+		if (password !== confirmPassword) {
+			toast.error("Passwords do not match!");
+		} else {
+			axios
+				.post(process.env.REACT_APP_BACKEND_URL + "/api/user/", {
+					headers: {
+						"access-token": `${accessToken}`,
 					},
+					data: {
+						emp_id: empID,
+						role: role,
+						username: username,
+						password: password,
+					},
+				})
+				.then((res) => {
+					// console.log(res);
+					navigate("/dashboard/user/", {
+						state: {
+							showToast: true,
+							toastMessage: "User created successfully!",
+						},
+					});
+				})
+				.catch((err) => {
+					if (err.response.status === 409) {
+						setUsrnameConflictError(true);
+						toast.error("Username already exists!");
+					} else {
+						toast.error("Error creating user!");
+					}
 				});
-			});
+		}
 	};
 
 	return (
@@ -63,6 +78,8 @@ export default function UserAddPage() {
 			<Helmet>
 				<title> Add User | Jupiter HRM </title>
 			</Helmet>
+
+			<Toaster position="top-right" reverseOrder={true} />
 
 			<Container>
 				<Stack
@@ -110,6 +127,7 @@ export default function UserAddPage() {
 								<Grid item xs={12}>
 									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
 										<TextField
+											required
 											id="role"
 											select
 											label="User Role"
@@ -132,6 +150,7 @@ export default function UserAddPage() {
 									</Stack>
 									<Stack direction="row" spacing={2} sx={{ mb: 3 }}>
 										<TextField
+											required
 											id="department"
 											select
 											label="Department"
@@ -148,6 +167,7 @@ export default function UserAddPage() {
 										</TextField>
 
 										<TextField
+											required
 											id="emp_id"
 											select
 											label="Employee"
@@ -170,6 +190,10 @@ export default function UserAddPage() {
 									</Stack>
 									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
 										<TextField
+											error={usrnameConflictError}
+											helperText={
+												usrnameConflictError ? "Username already exists" : ""
+											}
 											required
 											id="username"
 											label="Username"
@@ -193,6 +217,12 @@ export default function UserAddPage() {
 											}}
 										/>
 										<TextField
+											error={password !== confirmPassword}
+											helperText={
+												password !== confirmPassword
+													? "Passwords do not match"
+													: ""
+											}
 											required
 											id="confirm_password"
 											label="Confirm Pasword"
