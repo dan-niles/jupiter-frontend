@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { NavLink as RouterLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // @mui
 import {
 	Card,
@@ -29,6 +29,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Iconify from "../components/iconify";
 import BusinessIcon from "@mui/icons-material/Business";
 
+import axios from "axios";
+
 // ----------------------------------------------------------------------
 
 function createData(id, name, code) {
@@ -42,8 +44,11 @@ const rows = [
 	createData(4, "Logo URL", "public/assets/images/logo.png"),
 ];
 
+const accessToken = sessionStorage.getItem("access-token");
+
 export default function OrganizationInfoPage() {
 	const [open, setOpen] = useState(false);
+	const [orgRecords, setOrgRecords] = useState([]);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -51,6 +56,23 @@ export default function OrganizationInfoPage() {
 
 	const handleClose = () => {
 		setOpen(false);
+	};
+
+	useEffect(() => {
+		getOrgRecords();
+	}, []);
+
+	const getOrgRecords = () => {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + "/api/org_info/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data);
+				setOrgRecords(res.data);
+			});
 	};
 
 	return (
@@ -69,7 +91,12 @@ export default function OrganizationInfoPage() {
 					<Typography variant="h4" gutterBottom>
 						Organization Info
 					</Typography>
-					<Button variant="contained" startIcon={<BusinessIcon />}>
+					<Button
+						variant="contained"
+						startIcon={<BusinessIcon />}
+						component={RouterLink}
+						to="/dashboard/branches"
+					>
 						Show Branches
 					</Button>
 				</Stack>
@@ -87,16 +114,16 @@ export default function OrganizationInfoPage() {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{rows.map((row) => (
+									{orgRecords.map((record, index) => (
 										<TableRow
-											key={row.name}
+											key={record.id}
 											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 										>
-											<TableCell>{row.id}</TableCell>
+											<TableCell>{index + 1}</TableCell>
 											<TableCell component="th" scope="row">
-												{row.name}
+												{record.alias}
 											</TableCell>
-											<TableCell>{row.code}</TableCell>
+											<TableCell>{record.value}</TableCell>
 											<TableCell align="center">
 												<IconButton aria-label="edit" onClick={handleClickOpen}>
 													<Iconify icon={"eva:edit-fill"} />
