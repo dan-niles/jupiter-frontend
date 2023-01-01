@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { NavLink as RouterLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 // @mui
 import {
 	Card,
@@ -41,8 +42,12 @@ const rows = [
 	createData("Level 4", 14, 12, 10, 50),
 ];
 
+const accessToken = sessionStorage.getItem("access-token");
+
 export default function EmployeePage() {
 	const [open, setOpen] = useState(false);
+
+	const [paygradeRecords, setPaygradeRecords] = useState([]);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -50,6 +55,23 @@ export default function EmployeePage() {
 
 	const handleClose = () => {
 		setOpen(false);
+	};
+
+	useEffect(() => {
+		getPaygradeRecords();
+	}, []);
+
+	const getPaygradeRecords = () => {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + "/api/paygrade/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data);
+				setPaygradeRecords(res.data);
+			});
 	};
 
 	return (
@@ -91,18 +113,18 @@ export default function EmployeePage() {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{rows.map((row) => (
+									{paygradeRecords.map((row, index) => (
 										<TableRow
-											key={row.name}
+											key={index}
 											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 										>
 											<TableCell component="th" scope="row">
-												{row.paygrade}
+												{row.level}
 											</TableCell>
 											<TableCell align="right">{row.annual}</TableCell>
 											<TableCell align="right">{row.casual}</TableCell>
 											<TableCell align="right">{row.maternity}</TableCell>
-											<TableCell align="right">{row.nopay}</TableCell>
+											<TableCell align="right">{row.no_pay}</TableCell>
 											<TableCell align="center">
 												<IconButton aria-label="edit" onClick={handleClickOpen}>
 													<Iconify icon={"eva:edit-fill"} />
