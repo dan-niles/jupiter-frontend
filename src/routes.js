@@ -19,6 +19,7 @@ import ReportsPage from "./pages/ReportsPage";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import DepartmentPage from "./pages/DepartmentPage";
 import OrganizationInfoPage from "./pages/OrganizationInfoPage";
+import BranchesPage from "./pages/BranchesPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
 import PersonalInfoPage from "./pages/PersonalInfoPage";
 import LeaveHistoryPage from "./pages/LeaveHistoryPage";
@@ -52,6 +53,7 @@ export default function Router() {
 						{ path: "reports", element: <ReportsPage /> },
 						{ path: "department", element: <DepartmentPage /> },
 						{ path: "organization", element: <OrganizationInfoPage /> },
+						{ path: "branches", element: <BranchesPage /> },
 						{ path: "change-password", element: <ChangePasswordPage /> },
 						{ path: "personal-info", element: <PersonalInfoPage /> },
 						{ path: "leave-history", element: <LeaveHistoryPage /> },
