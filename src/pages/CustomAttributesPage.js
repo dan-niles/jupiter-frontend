@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { NavLink as RouterLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 // @mui
 import {
 	Card,
@@ -20,8 +21,6 @@ import {
 } from "@mui/material";
 // components
 import Scrollbar from "../components/scrollbar";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -43,8 +42,12 @@ const rows = [
 	createData("date_joined", "DATE", "Date Joined"),
 ];
 
+const accessToken = sessionStorage.getItem("access-token");
+
 export default function CustomAttributesPage() {
 	const [open, setOpen] = useState(false);
+
+	const [customAttributes, setCustomAttributes] = useState([]);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -52,6 +55,23 @@ export default function CustomAttributesPage() {
 
 	const handleClose = () => {
 		setOpen(false);
+	};
+
+	useEffect(() => {
+		getCustomAttributes();
+	}, []);
+
+	const getCustomAttributes = () => {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data);
+				setCustomAttributes(res.data);
+			});
 	};
 
 	return (
@@ -91,15 +111,15 @@ export default function CustomAttributesPage() {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{rows.map((row) => (
+									{customAttributes.map((row, index) => (
 										<TableRow
-											key={row.name}
+											key={index}
 											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 										>
 											<TableCell component="th" scope="row">
-												{row.name}
+												{row.attr_name}
 											</TableCell>
-											<TableCell align="center">{row.type}</TableCell>
+											<TableCell align="center">{row.data_type}</TableCell>
 											<TableCell align="center">{row.alias}</TableCell>
 											<TableCell align="center">
 												<IconButton aria-label="edit" onClick={handleClickOpen}>
