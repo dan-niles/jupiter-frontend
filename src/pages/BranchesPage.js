@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { NavLink as RouterLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 // @mui
 import {
 	Card,
@@ -27,25 +28,13 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import Iconify from "../components/iconify";
-import BusinessIcon from "@mui/icons-material/Business";
-
 // ----------------------------------------------------------------------
-
-function createData(id, name, address, country) {
-	return { id, name, address, country };
-}
-
-const rows = [
-	createData(
-		1,
-		"Katubedda",
-		"26 Piliyandala Road, Katubedda, Colombo",
-		"Sri Lanka"
-	),
-];
+const accessToken = sessionStorage.getItem("access-token");
 
 export default function BranchesPage() {
 	const [open, setOpen] = useState(false);
+
+	const [branches, setBranches] = useState([]);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -53,6 +42,23 @@ export default function BranchesPage() {
 
 	const handleClose = () => {
 		setOpen(false);
+	};
+
+	useEffect(() => {
+		getBranches();
+	}, []);
+
+	const getBranches = () => {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + "/api/branch/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data);
+				setBranches(res.data);
+			});
 	};
 
 	return (
@@ -96,14 +102,14 @@ export default function BranchesPage() {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{rows.map((row) => (
+									{branches.map((row, index) => (
 										<TableRow
-											key={row.name}
+											key={index}
 											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 										>
-											<TableCell>{row.id}</TableCell>
+											<TableCell>{row.branch_id}</TableCell>
 											<TableCell component="th" scope="row">
-												{row.name}
+												{row.branch_name}
 											</TableCell>
 											<TableCell>{row.address}</TableCell>
 											<TableCell>{row.country}</TableCell>
