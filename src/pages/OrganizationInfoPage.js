@@ -76,7 +76,7 @@ export default function OrganizationInfoPage() {
 				},
 			})
 			.then((res) => {
-				console.log(res);
+				toast.success("Edited successfully!");
 			})
 			.catch((err) => {
 				toast.error("Error editing value!");
@@ -97,7 +97,6 @@ export default function OrganizationInfoPage() {
 				},
 			})
 			.then((res) => {
-				console.log(res.data);
 				setOrgRecords(res.data);
 			});
 	};
@@ -107,6 +106,8 @@ export default function OrganizationInfoPage() {
 			<Helmet>
 				<title> Organization Info | Jupiter HRM </title>
 			</Helmet>
+
+			<Toaster position="top-right" reverseOrder={true} />
 
 			<Container>
 				<Stack
