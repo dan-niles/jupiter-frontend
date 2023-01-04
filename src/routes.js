@@ -14,6 +14,7 @@ import LeaveApplyPage from "./pages/LeaveApplyPage";
 
 import LeaveConfigPage from "./pages/LeaveConfigPage";
 import CustomAttributesPage from "./pages/CustomAttributesPage";
+import CustomAttributesAddPage from "./pages/CustomAttributesAddPage";
 import ReportsPage from "./pages/ReportsPage";
 
 import PrivateRoutes from "./utils/PrivateRoutes";
@@ -50,6 +51,10 @@ export default function Router() {
 						{ path: "leave-config", element: <LeaveConfigPage /> },
 						{ path: "leave/apply", element: <LeaveApplyPage /> },
 						{ path: "custom-attributes", element: <CustomAttributesPage /> },
+						{
+							path: "custom-attributes/add",
+							element: <CustomAttributesAddPage />,
+						},
 						{ path: "reports", element: <ReportsPage /> },
 						{ path: "department", element: <DepartmentPage /> },
 						{ path: "organization", element: <OrganizationInfoPage /> },

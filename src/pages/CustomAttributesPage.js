@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { NavLink as RouterLink } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -52,6 +53,8 @@ export default function CustomAttributesPage() {
 	const [editId, setEditId] = useState(null);
 	const [editAlias, setEditAlias] = useState("");
 
+	const { state } = useLocation();
+
 	const handleClickOpen = (id, idx) => {
 		setEditAlias(customAttributes[idx].alias);
 		setEditId(id);
@@ -89,6 +92,13 @@ export default function CustomAttributesPage() {
 
 	useEffect(() => {
 		getCustomAttributes();
+		if (
+			state != null &&
+			state.showToast !== undefined &&
+			state.showToast === true
+		) {
+			toast.success(state.toastMessage);
+		}
 	}, []);
 
 	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -122,14 +132,15 @@ export default function CustomAttributesPage() {
 		e.preventDefault();
 		axios
 			.delete(
-				process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/" + editId,
+				process.env.REACT_APP_BACKEND_URL +
+					"/api/custom_attributes/" +
+					deleteId,
 				{
 					headers: {
 						"access-token": `${accessToken}`,
 					},
 					data: {
-						attr_id: editId,
-						alias: editAlias,
+						attr_id: deleteId,
 					},
 				}
 			)
@@ -164,6 +175,8 @@ export default function CustomAttributesPage() {
 					<Button
 						variant="contained"
 						startIcon={<Iconify icon="eva:plus-fill" />}
+						component={RouterLink}
+						to="add"
 					>
 						Add New Attribute
 					</Button>
