@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { NavLink as RouterLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 // @mui
 import {
 	Card,
@@ -31,17 +32,6 @@ import Iconify from "../components/iconify";
 
 // ----------------------------------------------------------------------
 
-function createData(paygrade, annual, casual, maternity, nopay) {
-	return { paygrade, annual, casual, maternity, nopay };
-}
-
-const rows = [
-	createData("Level 1", 14, 12, 10, 50),
-	createData("Level 2", 14, 12, 10, 50),
-	createData("Level 3", 14, 12, 10, 50),
-	createData("Level 4", 14, 12, 10, 50),
-];
-
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function EmployeePage() {
@@ -49,8 +39,45 @@ export default function EmployeePage() {
 
 	const [paygradeRecords, setPaygradeRecords] = useState([]);
 
-	const handleClickOpen = () => {
+	const [editId, setEditId] = useState(null);
+	const [editAnnual, setEditAnnual] = useState(0);
+	const [editCasual, setEditCasual] = useState(0);
+	const [editMaternity, setEditMaternity] = useState(0);
+	const [editNoPay, setEditNoPay] = useState(0);
+
+	const handleClickOpen = (id, idx) => {
+		setEditAnnual(paygradeRecords[idx].annual);
+		setEditCasual(paygradeRecords[idx].casual);
+		setEditMaternity(paygradeRecords[idx].maternity);
+		setEditNoPay(paygradeRecords[idx].no_pay);
+		setEditId(id);
 		setOpen(true);
+	};
+
+	const handleEdit = (e) => {
+		e.preventDefault();
+		console.log(editAnnual, editCasual, editMaternity, editNoPay, editId);
+		axios
+			.put(process.env.REACT_APP_BACKEND_URL + "/api/paygrade/" + editId, {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+				data: {
+					paygrade_id: editId,
+					annual: editAnnual,
+					casual: editCasual,
+					maternity: editMaternity,
+					no_pay: editNoPay,
+				},
+			})
+			.then((res) => {
+				toast.success("Edited successfully!");
+			})
+			.catch((err) => {
+				toast.error("Error editing value!");
+			});
+		handleClose();
+		getPaygradeRecords();
 	};
 
 	const handleClose = () => {
@@ -79,6 +106,8 @@ export default function EmployeePage() {
 			<Helmet>
 				<title> Leave Configuration | Jupiter HRM </title>
 			</Helmet>
+
+			<Toaster position="top-right" reverseOrder={true} />
 
 			<Container>
 				<Stack
@@ -126,7 +155,14 @@ export default function EmployeePage() {
 											<TableCell align="right">{row.maternity}</TableCell>
 											<TableCell align="right">{row.no_pay}</TableCell>
 											<TableCell align="center">
-												<IconButton aria-label="edit" onClick={handleClickOpen}>
+												<IconButton
+													aria-label="edit"
+													onClick={handleClickOpen.bind(
+														this,
+														row.paygrade_id,
+														index
+													)}
+												>
 													<Iconify icon={"eva:edit-fill"} />
 												</IconButton>
 											</TableCell>
@@ -141,49 +177,63 @@ export default function EmployeePage() {
 
 			<Dialog open={open} onClose={handleClose}>
 				<DialogTitle>Edit Leave Allocation</DialogTitle>
-				<DialogContent>
-					<DialogContentText>
-						Enter the number of days for each leave type
-					</DialogContentText>
-					<Stack spacing={1} direction="column" sx={{ mt: 2 }}>
-						<TextField
-							id="annual"
-							label="Annual Leave"
-							type="number"
-							fullWidth
-							variant="standard"
-							value={14}
-						/>
-						<TextField
-							id="casual"
-							label="Casual Leave"
-							type="number"
-							fullWidth
-							variant="standard"
-							value={12}
-						/>
-						<TextField
-							id="maternity"
-							label="Maternity Leave"
-							type="number"
-							fullWidth
-							variant="standard"
-							value={10}
-						/>
-						<TextField
-							id="annual"
-							label="No Pay"
-							type="number"
-							fullWidth
-							variant="standard"
-							value={50}
-						/>
-					</Stack>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClose}>Cancel</Button>
-					<Button onClick={handleClose}>Save</Button>
-				</DialogActions>
+				<form onSubmit={handleEdit}>
+					<DialogContent>
+						<DialogContentText>
+							Enter the number of days for each leave type
+						</DialogContentText>
+						<Stack spacing={1} direction="column" sx={{ mt: 2 }}>
+							<TextField
+								id="annual"
+								label="Annual Leave"
+								type="number"
+								fullWidth
+								variant="standard"
+								value={editAnnual}
+								onChange={(e) => {
+									setEditAnnual(e.target.value);
+								}}
+							/>
+							<TextField
+								id="casual"
+								label="Casual Leave"
+								type="number"
+								fullWidth
+								variant="standard"
+								value={editCasual}
+								onChange={(e) => {
+									setEditCasual(e.target.value);
+								}}
+							/>
+							<TextField
+								id="maternity"
+								label="Maternity Leave"
+								type="number"
+								fullWidth
+								variant="standard"
+								value={editMaternity}
+								onChange={(e) => {
+									setEditMaternity(e.target.value);
+								}}
+							/>
+							<TextField
+								id="annual"
+								label="No Pay"
+								type="number"
+								fullWidth
+								variant="standard"
+								value={editNoPay}
+								onChange={(e) => {
+									setEditNoPay(e.target.value);
+								}}
+							/>
+						</Stack>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose}>Cancel</Button>
+						<Button type="submit">Save</Button>
+					</DialogActions>
+				</form>
 			</Dialog>
 		</>
 	);
