@@ -91,6 +91,20 @@ export default function CustomAttributesPage() {
 		getCustomAttributes();
 	}, []);
 
+	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+	const [deleteId, setDeleteId] = useState(null);
+	const [deleteAlias, setDeleteAlias] = useState(null);
+
+	const handleDeleteOpen = (id, idx) => {
+		setDeleteAlias(customAttributes[idx].alias);
+		setDeleteId(id);
+		setOpenDeleteDialog(true);
+	};
+
+	const handleDeleteClose = () => {
+		setOpenDeleteDialog(false);
+	};
+
 	const getCustomAttributes = () => {
 		axios
 			.get(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
@@ -102,6 +116,31 @@ export default function CustomAttributesPage() {
 				console.log(res.data);
 				setCustomAttributes(res.data);
 			});
+	};
+
+	const handleDelete = (e) => {
+		e.preventDefault();
+		axios
+			.delete(
+				process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/" + editId,
+				{
+					headers: {
+						"access-token": `${accessToken}`,
+					},
+					data: {
+						attr_id: editId,
+						alias: editAlias,
+					},
+				}
+			)
+			.then((res) => {
+				toast.success("Deleted successfully!");
+			})
+			.catch((err) => {
+				toast.error("Error deleting attribute!");
+			});
+		handleDeleteClose();
+		getCustomAttributes();
 	};
 
 	return (
@@ -167,7 +206,11 @@ export default function CustomAttributesPage() {
 												<IconButton
 													sx={{ color: "error.main" }}
 													aria-label="delete"
-													onClick={handleClickOpen}
+													onClick={handleDeleteOpen.bind(
+														this,
+														row.attr_id,
+														index
+													)}
 												>
 													<Iconify icon={"eva:trash-2-outline"} />
 												</IconButton>
@@ -181,6 +224,7 @@ export default function CustomAttributesPage() {
 				</Card>
 			</Container>
 
+			{/* Edit attributes dialog */}
 			<Dialog open={open} onClose={handleClose}>
 				<DialogTitle>Edit</DialogTitle>
 				<form onSubmit={handleEdit}>
@@ -207,6 +251,32 @@ export default function CustomAttributesPage() {
 						<Button type="submit">Save</Button>
 					</DialogActions>
 				</form>
+			</Dialog>
+
+			{/* Delete confirmation dialog */}
+			<Dialog
+				open={openDeleteDialog}
+				onClose={handleDeleteClose}
+				aria-labelledby="alert-dialog-title"
+				aria-describedby="alert-dialog-description"
+			>
+				<DialogTitle id="alert-dialog-title">
+					{"Delete this attribute?"}
+				</DialogTitle>
+				<DialogContent>
+					<DialogContentText id="alert-dialog-description">
+						Are you sure you want to delete the attribute with alias "
+						<b>{deleteAlias}</b>"?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<form onSubmit={handleDelete}>
+						<Button onClick={handleDeleteClose}>Cancel</Button>
+						<Button color="error" type="submit">
+							Confirm
+						</Button>
+					</form>
+				</DialogActions>
 			</Dialog>
 		</>
 	);
