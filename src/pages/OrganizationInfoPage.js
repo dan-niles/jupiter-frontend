@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { NavLink as RouterLink } from "react-router-dom";
 import { useState, useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
 // @mui
 import {
 	Card,
@@ -49,13 +50,39 @@ const accessToken = sessionStorage.getItem("access-token");
 export default function OrganizationInfoPage() {
 	const [open, setOpen] = useState(false);
 	const [orgRecords, setOrgRecords] = useState([]);
+	const [editId, setEditId] = useState(null);
+	const [editValue, setEditValue] = useState("");
 
-	const handleClickOpen = () => {
+	const handleClickOpen = (id, idx) => {
+		setEditValue(orgRecords[idx].value);
+		setEditId(id);
 		setOpen(true);
 	};
 
 	const handleClose = () => {
 		setOpen(false);
+	};
+
+	const handleEdit = (e) => {
+		e.preventDefault();
+		axios
+			.put(process.env.REACT_APP_BACKEND_URL + "/api/org_info/" + editId, {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+				data: {
+					id: editId,
+					value: editValue,
+				},
+			})
+			.then((res) => {
+				console.log(res);
+			})
+			.catch((err) => {
+				toast.error("Error editing value!");
+			});
+		handleClose();
+		getOrgRecords();
 	};
 
 	useEffect(() => {
@@ -125,7 +152,10 @@ export default function OrganizationInfoPage() {
 											</TableCell>
 											<TableCell>{record.value}</TableCell>
 											<TableCell align="center">
-												<IconButton aria-label="edit" onClick={handleClickOpen}>
+												<IconButton
+													aria-label="edit"
+													onClick={handleClickOpen.bind(this, record.id, index)}
+												>
 													<Iconify icon={"eva:edit-fill"} />
 												</IconButton>
 											</TableCell>
@@ -140,16 +170,28 @@ export default function OrganizationInfoPage() {
 
 			<Dialog open={open} onClose={handleClose}>
 				<DialogTitle>Edit</DialogTitle>
-				<DialogContent>
-					<DialogContentText>Enter new value.</DialogContentText>
-					<Stack spacing={2} direction="column" sx={{ mt: 2 }}>
-						<TextField id="name" label="Name" type="text" fullWidth />
-					</Stack>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClose}>Cancel</Button>
-					<Button onClick={handleClose}>Save</Button>
-				</DialogActions>
+				<form onSubmit={handleEdit}>
+					<DialogContent>
+						<DialogContentText>Enter new value.</DialogContentText>
+						<Stack spacing={2} direction="column" sx={{ mt: 2 }}>
+							<TextField
+								required
+								id="name"
+								label="Name"
+								type="text"
+								fullWidth
+								value={editValue}
+								onChange={(e) => {
+									setEditValue(e.target.value);
+								}}
+							/>
+						</Stack>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose}>Cancel</Button>
+						<Button type="submit">Save</Button>
+					</DialogActions>
+				</form>
 			</Dialog>
 		</>
 	);
