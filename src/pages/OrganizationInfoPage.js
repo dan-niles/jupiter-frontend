@@ -51,9 +51,11 @@ export default function OrganizationInfoPage() {
 	const [open, setOpen] = useState(false);
 	const [orgRecords, setOrgRecords] = useState([]);
 	const [editId, setEditId] = useState(null);
+	const [editName, setEditName] = useState("");
 	const [editValue, setEditValue] = useState("");
 
 	const handleClickOpen = (id, idx) => {
+		setEditName(orgRecords[idx].alias);
 		setEditValue(orgRecords[idx].value);
 		setEditId(id);
 		setOpen(true);
@@ -174,11 +176,12 @@ export default function OrganizationInfoPage() {
 				<form onSubmit={handleEdit}>
 					<DialogContent>
 						<DialogContentText>Enter new value.</DialogContentText>
-						<Stack spacing={2} direction="column" sx={{ mt: 2 }}>
+						<Stack spacing={2} direction="column" sx={{ mt: 3 }}>
 							<TextField
+								sx={{ width: "30ch" }}
 								required
 								id="name"
-								label="Name"
+								label={editName}
 								type="text"
 								fullWidth
 								value={editValue}
