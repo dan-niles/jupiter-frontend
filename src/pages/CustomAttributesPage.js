@@ -56,6 +56,7 @@ export default function CustomAttributesPage() {
 
 	const [deleteId, setDeleteId] = useState(null);
 	const [deleteAlias, setDeleteAlias] = useState(null);
+	const [deleteColumnName, setDeleteColumnName] = useState(null);
 
 	const { state } = useLocation();
 
@@ -128,9 +129,11 @@ export default function CustomAttributesPage() {
 				{
 					headers: {
 						"access-token": `${accessToken}`,
+						attr_name: deleteColumnName,
 					},
 					data: {
 						attr_id: deleteId,
+						attr_name: deleteColumnName,
 					},
 				}
 			)
@@ -146,6 +149,7 @@ export default function CustomAttributesPage() {
 
 	const handleDeleteOpen = (id, idx) => {
 		setDeleteAlias(customAttributes[idx].alias);
+		setDeleteColumnName(customAttributes[idx].attr_name);
 		setDeleteId(id);
 		setOpenDeleteDialog(true);
 	};

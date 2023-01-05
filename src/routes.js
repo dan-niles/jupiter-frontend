@@ -5,6 +5,8 @@ import DashboardLayout from "./layouts/dashboard";
 import LoginPage from "./pages/LoginPage";
 import DashboardAppPage from "./pages/DashboardAppPage";
 import UserPage from "./pages/UserPage";
+import UserAddPage from "./pages/UserAddPage";
+import UserEditPage from "./pages/UserEditPage";
 
 import EmployeePage from "./pages/EmployeePage";
 import EmployeeAddPage from "./pages/EmployeeAddPage";
@@ -25,7 +27,7 @@ import BranchesPage from "./pages/BranchesPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
 import PersonalInfoPage from "./pages/PersonalInfoPage";
 import LeaveHistoryPage from "./pages/LeaveHistoryPage";
-import UserAddPage from "./pages/UserAddPage";
+
 import ApproveLeavesPage from "./pages/ApproveLeavesPage";
 
 export default function Router() {
@@ -46,6 +48,7 @@ export default function Router() {
 						{ path: "app", element: <DashboardAppPage /> },
 						{ path: "user", element: <UserPage /> },
 						{ path: "user/add", element: <UserAddPage /> },
+						{ path: "user/edit/:id", element: <UserEditPage /> },
 						{ path: "employee", element: <EmployeePage /> },
 						{ path: "employee/add", element: <EmployeeAddPage /> },
 						{ path: "employee/edit/:id", element: <EmployeeEditPage /> },
