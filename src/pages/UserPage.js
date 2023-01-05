@@ -29,6 +29,11 @@ import {
 import Label from "../components/label";
 import Iconify from "../components/iconify";
 import Scrollbar from "../components/scrollbar";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 // sections
 import { UserListHead, UserListToolbar } from "../sections/@dashboard/user";
 // mock
@@ -87,6 +92,7 @@ const accessToken = sessionStorage.getItem("access-token");
 
 export default function UserPage(props) {
 	const [open, setOpen] = useState(null);
+	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
 	const [users, setUsers] = useState([]);
 
@@ -104,9 +110,11 @@ export default function UserPage(props) {
 
 	const { state } = useLocation();
 
+	const [selcId, setSelcId] = useState(null);
+	const [selcName, setSelcName] = useState(null);
+
 	useEffect(() => {
 		getUsers();
-
 		if (
 			state != null &&
 			state.showToast !== undefined &&
@@ -129,7 +137,8 @@ export default function UserPage(props) {
 			});
 	};
 
-	const handleOpenMenu = (event) => {
+	const handleOpenMenu = (id, event) => {
+		setSelcId(id);
 		setOpen(event.currentTarget);
 	};
 
@@ -195,6 +204,38 @@ export default function UserPage(props) {
 
 	const isNotFound = !filteredUsers.length && !!filterName;
 
+	const handleDelete = (e) => {
+		e.preventDefault();
+		axios
+			.delete(process.env.REACT_APP_BACKEND_URL + "/api/user/" + selcId, {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+				data: {
+					user_id: selcId,
+				},
+			})
+			.then((res) => {
+				toast.success("Deleted successfully!");
+			})
+			.catch((err) => {
+				toast.error("Error deleting user!");
+			});
+		handleDeleteClose();
+		getUsers();
+	};
+
+	const handleDeleteOpen = () => {
+		handleCloseMenu();
+		let selcUser = users.find((user) => user.user_id === selcId);
+		setSelcName(selcUser.username);
+		setOpenDeleteDialog(true);
+	};
+
+	const handleDeleteClose = () => {
+		setOpenDeleteDialog(false);
+	};
+
 	return (
 		<>
 			<Helmet>
@@ -247,6 +288,7 @@ export default function UserPage(props) {
 										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 										.map((row, index) => {
 											const {
+												user_id,
 												emp_id,
 												first_name,
 												last_name,
@@ -302,7 +344,7 @@ export default function UserPage(props) {
 														<IconButton
 															size="large"
 															color="inherit"
-															onClick={handleOpenMenu}
+															onClick={handleOpenMenu.bind(this, user_id)}
 														>
 															<Iconify icon={"eva:more-vertical-fill"} />
 														</IconButton>
@@ -375,16 +417,40 @@ export default function UserPage(props) {
 					},
 				}}
 			>
-				<MenuItem>
+				<MenuItem component={RouterLink} to={"edit/" + selcId}>
 					<Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
 					Edit
 				</MenuItem>
 
-				<MenuItem sx={{ color: "error.main" }}>
+				<MenuItem sx={{ color: "error.main" }} onClick={handleDeleteOpen}>
 					<Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
 					Delete
 				</MenuItem>
 			</Popover>
+
+			{/* Delete confirmation dialog */}
+			<Dialog
+				open={openDeleteDialog}
+				onClose={handleDeleteClose}
+				aria-labelledby="alert-dialog-title"
+				aria-describedby="alert-dialog-description"
+			>
+				<DialogTitle id="alert-dialog-title">{"Delete this user?"}</DialogTitle>
+				<DialogContent>
+					<DialogContentText id="alert-dialog-description">
+						Are you sure you want to delete the user with username "
+						<b>{selcName}</b>"?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<form onSubmit={handleDelete}>
+						<Button onClick={handleDeleteClose}>Cancel</Button>
+						<Button color="error" type="submit">
+							Confirm
+						</Button>
+					</form>
+				</DialogActions>
+			</Dialog>
 		</>
 	);
 }
