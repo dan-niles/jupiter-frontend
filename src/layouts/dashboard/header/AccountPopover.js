@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { NavLink as RouterLink } from "react-router-dom";
 // @mui
 import { alpha } from "@mui/material/styles";
 import {
@@ -19,16 +20,14 @@ import account_temp from "../../../_mock/account";
 
 const MENU_OPTIONS = [
 	{
-		label: "Home",
+		label: "Dashboard",
 		icon: "eva:home-fill",
+		link: "/dashboard/app",
 	},
 	{
-		label: "Profile",
+		label: "Change Password",
 		icon: "eva:person-fill",
-	},
-	{
-		label: "Settings",
-		icon: "eva:settings-2-fill",
+		link: "/dashboard/change-password",
 	},
 ];
 
@@ -121,7 +120,12 @@ export default function AccountPopover({ userData }) {
 
 				<Stack sx={{ p: 1 }}>
 					{MENU_OPTIONS.map((option) => (
-						<MenuItem key={option.label} onClick={handleClose}>
+						<MenuItem
+							key={option.label}
+							onClick={handleClose}
+							component={RouterLink}
+							to={option.link}
+						>
 							{option.label}
 						</MenuItem>
 					))}
