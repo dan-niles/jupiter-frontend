@@ -38,6 +38,11 @@ export default function EmployeeAddPage() {
 		setDateRange(ranges.selection);
 	};
 
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		console.log(dateRange);
+	};
+
 	return (
 		<>
 			<Helmet>
@@ -85,7 +90,7 @@ export default function EmployeeAddPage() {
 								Apply for Leave
 							</Typography>
 						</Stack>
-						<form>
+						<form onSubmit={handleSubmit}>
 							<Grid container spacing={2}>
 								<Grid item xs={5}>
 									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
