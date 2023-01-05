@@ -47,23 +47,41 @@ const accessToken = sessionStorage.getItem("access-token");
 
 export default function CustomAttributesPage() {
 	const [open, setOpen] = useState(false);
+	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
 	const [customAttributes, setCustomAttributes] = useState([]);
 
 	const [editId, setEditId] = useState(null);
 	const [editAlias, setEditAlias] = useState("");
 
+	const [deleteId, setDeleteId] = useState(null);
+	const [deleteAlias, setDeleteAlias] = useState(null);
+
 	const { state } = useLocation();
 
-	const handleClickOpen = (id, idx) => {
-		setEditAlias(customAttributes[idx].alias);
-		setEditId(id);
-		setOpen(true);
+	const getCustomAttributes = () => {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data);
+				setCustomAttributes(res.data);
+			});
 	};
 
-	const handleClose = () => {
-		setOpen(false);
-	};
+	useEffect(() => {
+		getCustomAttributes();
+		if (
+			state != null &&
+			state.showToast !== undefined &&
+			state.showToast === true
+		) {
+			toast.success(state.toastMessage);
+		}
+	}, []);
 
 	const handleEdit = (e) => {
 		e.preventDefault();
@@ -90,42 +108,14 @@ export default function CustomAttributesPage() {
 		getCustomAttributes();
 	};
 
-	useEffect(() => {
-		getCustomAttributes();
-		if (
-			state != null &&
-			state.showToast !== undefined &&
-			state.showToast === true
-		) {
-			toast.success(state.toastMessage);
-		}
-	}, []);
-
-	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-	const [deleteId, setDeleteId] = useState(null);
-	const [deleteAlias, setDeleteAlias] = useState(null);
-
-	const handleDeleteOpen = (id, idx) => {
-		setDeleteAlias(customAttributes[idx].alias);
-		setDeleteId(id);
-		setOpenDeleteDialog(true);
+	const handleClickOpen = (id, idx) => {
+		setEditAlias(customAttributes[idx].alias);
+		setEditId(id);
+		setOpen(true);
 	};
 
-	const handleDeleteClose = () => {
-		setOpenDeleteDialog(false);
-	};
-
-	const getCustomAttributes = () => {
-		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-			})
-			.then((res) => {
-				console.log(res.data);
-				setCustomAttributes(res.data);
-			});
+	const handleClose = () => {
+		setOpen(false);
 	};
 
 	const handleDelete = (e) => {
@@ -152,6 +142,16 @@ export default function CustomAttributesPage() {
 			});
 		handleDeleteClose();
 		getCustomAttributes();
+	};
+
+	const handleDeleteOpen = (id, idx) => {
+		setDeleteAlias(customAttributes[idx].alias);
+		setDeleteId(id);
+		setOpenDeleteDialog(true);
+	};
+
+	const handleDeleteClose = () => {
+		setOpenDeleteDialog(false);
 	};
 
 	return (
