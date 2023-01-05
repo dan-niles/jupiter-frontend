@@ -2,6 +2,7 @@
 import PropTypes from "prop-types";
 import { alpha, styled } from "@mui/material/styles";
 import { Card, CircularProgress, Typography } from "@mui/material";
+import { useState, useEffect } from "react";
 // utils
 import { fShortenNumber } from "../../../utils/formatNumber";
 // components
@@ -41,6 +42,20 @@ export default function AppLeaveSummary({
 	sx,
 	...other
 }) {
+	const balanceProgress = (balance / total) * 100;
+	const [progress, setProgress] = useState(0);
+
+	useEffect(() => {
+		const timer = setInterval(() => {
+			setProgress((prevProgress) =>
+				prevProgress >= balanceProgress ? balanceProgress : prevProgress + 10
+			);
+		}, 10);
+		return () => {
+			clearInterval(timer);
+		};
+	}, []);
+
 	return (
 		<Card
 			sx={{
@@ -66,7 +81,7 @@ export default function AppLeaveSummary({
 				<Box sx={{ position: "relative", display: "inline-flex" }}>
 					<CircularProgress
 						variant="determinate"
-						value={(balance / total) * 100}
+						value={progress}
 						color={color}
 						size="lg"
 						sx={{ width: "60px", height: "60px" }}
