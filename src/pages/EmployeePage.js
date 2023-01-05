@@ -1,7 +1,10 @@
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
 import { NavLink as RouterLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 // @mui
 import {
 	Card,
@@ -24,20 +27,21 @@ import {
 // components
 import Iconify from "../components/iconify";
 import Scrollbar from "../components/scrollbar";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 // sections
 import { EmpListHead, EmpListToolbar } from "../sections/@dashboard/employee";
-// mock
-import USERLIST from "../_mock/user";
-
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-	{ id: "name", label: "Name", alignRight: false },
-	{ id: "company", label: "Branch", alignRight: false },
-	{ id: "status", label: "Department", alignRight: false },
-	{ id: "role", label: "Title", alignRight: false },
+	{ id: "emp_id", label: "Employee ID", alignRight: false },
+	{ id: "emp_name", label: "Name", alignRight: false },
+	{ id: "department", label: "Department", alignRight: false },
+	{ id: "title", label: "Title", alignRight: false },
 	{ id: "email", label: "Email", alignRight: false },
-
 	{ id: "" },
 ];
 
@@ -75,25 +79,52 @@ function applySortFilter(array, comparator, query) {
 	return stabilizedThis.map((el) => el[0]);
 }
 
+const accessToken = sessionStorage.getItem("access-token");
+
 export default function EmployeePage() {
 	const [open, setOpen] = useState(null);
+	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+	const [employees, setEmployees] = useState([]);
 
 	const [page, setPage] = useState(0);
-
 	const [order, setOrder] = useState("asc");
-
 	const [selected, setSelected] = useState([]);
-
 	const [orderBy, setOrderBy] = useState("name");
-
 	const [filterName, setFilterName] = useState("");
-
 	const [rowsPerPage, setRowsPerPage] = useState(25);
 
-	const [editId, setEditId] = useState(null);
+	const [selcId, setSelcId] = useState(null);
+	const [selcName, setSelcName] = useState(null);
+
+	const { state } = useLocation();
+
+	const getEmployees = () => {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + "/api/employee/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data);
+				setEmployees(res.data);
+			});
+	};
+
+	useEffect(() => {
+		getEmployees();
+
+		if (
+			state != null &&
+			state.showToast !== undefined &&
+			state.showToast === true
+		) {
+			toast.success(state.toastMessage);
+		}
+	}, []);
 
 	const handleOpenMenu = (id, event) => {
-		setEditId(id);
+		setSelcId(id);
 		setOpen(event.currentTarget);
 	};
 
@@ -109,13 +140,12 @@ export default function EmployeePage() {
 
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
-			const newSelecteds = USERLIST.map((n) => n.name);
+			const newSelecteds = employees.map((n) => n.name);
 			setSelected(newSelecteds);
 			return;
 		}
 		setSelected([]);
 	};
-
 	const handleClick = (event, name) => {
 		const selectedIndex = selected.indexOf(name);
 		let newSelected = [];
@@ -149,21 +179,55 @@ export default function EmployeePage() {
 	};
 
 	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - employees.length) : 0;
 
 	const filteredUsers = applySortFilter(
-		USERLIST,
+		employees,
 		getComparator(order, orderBy),
 		filterName
 	);
 
 	const isNotFound = !filteredUsers.length && !!filterName;
 
+	const handleDelete = (e) => {
+		e.preventDefault();
+		axios
+			.delete(process.env.REACT_APP_BACKEND_URL + "/api/employee/" + selcId, {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+				data: {
+					user_id: selcId,
+				},
+			})
+			.then((res) => {
+				toast.success("Deleted successfully!");
+			})
+			.catch((err) => {
+				toast.error("Error deleting employee!");
+			});
+		handleDeleteClose();
+		getEmployees();
+	};
+
+	const handleDeleteOpen = () => {
+		handleCloseMenu();
+		const selcEmp = employees.find((emp) => emp.emp_id === selcId);
+		setSelcName(`${selcEmp.first_name} ${selcEmp.last_name}`);
+		setOpenDeleteDialog(true);
+	};
+
+	const handleDeleteClose = () => {
+		setOpenDeleteDialog(false);
+	};
+
 	return (
 		<>
 			<Helmet>
 				<title> Employees | Jupiter HRM </title>
 			</Helmet>
+
+			<Toaster position="top-right" reverseOrder={true} />
 
 			<Container>
 				<Stack
@@ -199,7 +263,7 @@ export default function EmployeePage() {
 									order={order}
 									orderBy={orderBy}
 									headLabel={TABLE_HEAD}
-									rowCount={USERLIST.length}
+									rowCount={employees.length}
 									numSelected={selected.length}
 									onRequestSort={handleRequestSort}
 									onSelectAllClick={handleSelectAllClick}
@@ -208,14 +272,21 @@ export default function EmployeePage() {
 									{filteredUsers
 										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 										.map((row) => {
-											const { id, name, role, department, company, email } =
-												row;
+											const {
+												emp_id,
+												first_name,
+												last_name,
+												dept_name,
+												job_title,
+												email,
+											} = row;
+											const name = `${first_name} ${last_name}`;
 											const selectedUser = selected.indexOf(name) !== -1;
 
 											return (
 												<TableRow
 													hover
-													key={id}
+													key={emp_id}
 													tabIndex={-1}
 													role="checkbox"
 													selected={selectedUser}
@@ -229,15 +300,15 @@ export default function EmployeePage() {
 
 													<TableCell component="th" scope="row" padding="none">
 														<Typography variant="subtitle2" noWrap>
-															{name}
+															{emp_id}
 														</Typography>
 													</TableCell>
 
-													<TableCell align="left">{company}</TableCell>
+													<TableCell align="left">{name}</TableCell>
 
-													<TableCell align="left">{department}</TableCell>
+													<TableCell align="left">{dept_name}</TableCell>
 
-													<TableCell align="left">{role}</TableCell>
+													<TableCell align="left">{job_title}</TableCell>
 
 													<TableCell align="left">{email}</TableCell>
 
@@ -245,7 +316,7 @@ export default function EmployeePage() {
 														<IconButton
 															size="large"
 															color="inherit"
-															onClick={handleOpenMenu.bind(this, id)}
+															onClick={handleOpenMenu.bind(this, emp_id)}
 														>
 															<Iconify icon={"eva:more-vertical-fill"} />
 														</IconButton>
@@ -291,7 +362,7 @@ export default function EmployeePage() {
 					<TablePagination
 						rowsPerPageOptions={[25, 50, 100]}
 						component="div"
-						count={USERLIST.length}
+						count={employees.length}
 						rowsPerPage={rowsPerPage}
 						page={page}
 						onPageChange={handleChangePage}
@@ -318,16 +389,42 @@ export default function EmployeePage() {
 					},
 				}}
 			>
-				<MenuItem component={RouterLink} to={"edit/" + editId}>
+				<MenuItem component={RouterLink} to={"edit/" + selcId}>
 					<Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
 					Edit
 				</MenuItem>
 
-				<MenuItem sx={{ color: "error.main" }}>
+				<MenuItem sx={{ color: "error.main" }} onClick={handleDeleteOpen}>
 					<Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
 					Delete
 				</MenuItem>
 			</Popover>
+
+			{/* Delete confirmation dialog */}
+			<Dialog
+				open={openDeleteDialog}
+				onClose={handleDeleteClose}
+				aria-labelledby="alert-dialog-title"
+				aria-describedby="alert-dialog-description"
+			>
+				<DialogTitle id="alert-dialog-title">
+					{"Delete this employee?"}
+				</DialogTitle>
+				<DialogContent>
+					<DialogContentText id="alert-dialog-description">
+						Are you sure you want to delete the employee (<b>{selcName}</b>)
+						with employee ID "<b>{selcId}</b>"?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<form onSubmit={handleDelete}>
+						<Button onClick={handleDeleteClose}>Cancel</Button>
+						<Button color="error" type="submit">
+							Confirm
+						</Button>
+					</form>
+				</DialogActions>
+			</Dialog>
 		</>
 	);
 }
