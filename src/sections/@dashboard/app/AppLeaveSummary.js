@@ -45,16 +45,19 @@ export default function AppLeaveSummary({
 	const balanceProgress = (balance / total) * 100;
 	const [progress, setProgress] = useState(0);
 
-	useEffect(() => {
-		const timer = setInterval(() => {
-			setProgress((prevProgress) =>
-				prevProgress >= balanceProgress ? balanceProgress : prevProgress + 10
-			);
-		}, 10);
-		return () => {
-			clearInterval(timer);
-		};
-	}, []);
+	// useEffect(() => {
+	// 	const timer = setInterval(() => {
+	// 		setProgress((prevProgress) =>
+	// 			prevProgress >= balanceProgress ? balanceProgress : prevProgress + 10
+	// 		);
+	// 		clearInterval(timer, 10000);
+	// 		console.log("running...");
+	// 	}, 10);
+	// 	return () => {
+	// 		console.log("unmounting...");
+	// 		clearInterval(timer);
+	// 	};
+	// }, []);
 
 	return (
 		<Card

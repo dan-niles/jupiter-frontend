@@ -254,7 +254,7 @@ export default function UserEditPage() {
 
 							<Stack alignItems="end">
 								<Button type="submit" variant="contained">
-									Edit User
+									Save Changes
 								</Button>
 							</Stack>
 						</form>
