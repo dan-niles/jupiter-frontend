@@ -69,12 +69,7 @@ export default function UserEditPage() {
 				},
 			})
 			.then((res) => {
-				console.log(res.data);
 				setUser(res.data);
-				// setEmpID(user.emp_id);
-				// setEmpName(user.first_name + " " + user.last_name);
-				// setUsername(user.username);
-				// setRole(user.role);
 			});
 	};
 
@@ -97,7 +92,6 @@ export default function UserEditPage() {
 					},
 				})
 				.then((res) => {
-					console.log(res);
 					navigate("/dashboard/user/", {
 						state: {
 							showToast: true,

@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink as RouterLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -30,10 +30,29 @@ export default function UserAddPage() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const [departmentID, setDepartmentID] = useState(null);
+	const [departments, setDepartments] = useState([]);
 
 	const [usrnameConflictError, setUsrnameConflictError] = useState(false);
 
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		getDepartments();
+	}, []);
+
+	const getDepartments = () => {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + "/api/department/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data);
+				setDepartments(res.data);
+			});
+	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -155,15 +174,19 @@ export default function UserAddPage() {
 											select
 											label="Department"
 											sx={{ width: "25ch" }}
-											// value={currency}
-											// onChange={handleChange}
+											value={departmentID}
+											onChange={(e) => {
+												setDepartmentID(e.target.value);
+											}}
 										>
-											<MenuItem key="1" value="1">
-												ICT
-											</MenuItem>
-											<MenuItem key="2" value="2">
-												HR
-											</MenuItem>
+											{departments.map((department) => (
+												<MenuItem
+													key={department.dept_id}
+													value={department.dept_id}
+												>
+													{department.dept_name}
+												</MenuItem>
+											))}
 										</TextField>
 
 										<TextField
