@@ -275,6 +275,7 @@ export default function EmployeeAddPage() {
 										<LocalizationProvider dateAdapter={AdapterDateFns}>
 											<DatePicker
 												required
+												inputFormat="dd/MM/yyyy"
 												label="Birthdate"
 												value={birthdate}
 												onChange={(newValue) => {
