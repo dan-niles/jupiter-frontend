@@ -23,8 +23,8 @@ const ApiDeleteUser = (userId) => {
     return http.delete(`${apiEndPoint}/${userId}`)
 }
 
-
 export {
-    ApiLogin
+    ApiGetAllUsers,
+    ApiGetUserById,
+    ApiDeleteUser
 }
-
