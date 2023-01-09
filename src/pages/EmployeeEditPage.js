@@ -9,7 +9,6 @@ import {
 import {
 	Card,
 	Stack,
-	Paper,
 	Button,
 	Container,
 	Typography,
@@ -27,6 +26,12 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import axios from "axios";
+import { ApiGetTitles } from "../services/titleService";
+import { ApiGetAllEmployee, ApiGetEmployeeById } from "../services/employeeService";
+import { ApiGetStatus } from "../services/statusService";
+import { ApiGetPaygrade } from "../services/paygradeService";
+import { ApiGetContract } from "../services/contractService";
+import { ApiGetAllDepartments } from "../services/departmentService";
 
 // ----------------------------------------------------------------------
 
@@ -72,11 +77,11 @@ export default function EmployeeAddPage() {
 
 	useEffect(() => {
 		if (
-			Object.keys(employee).length != 0 &&
-			employee != undefined &&
-			employee != {} &&
-			employee != "" &&
-			employee != null
+			Object.keys(employee).length !== 0 &&
+			employee !== undefined &&
+			employee !== {} &&
+			employee !== "" &&
+			employee !== null
 		) {
 			setEmpID(employee.emp_id);
 			setFullName(employee.full_name);
@@ -96,84 +101,50 @@ export default function EmployeeAddPage() {
 	}, [employee]);
 
 	const getEmployee = () => {
-		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/employee/" + id, {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-			})
+		ApiGetEmployeeById(id)
 			.then((res) => {
 				setEmployee(res.data);
 			});
 	};
 
 	const getPaygrades = () => {
-		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/paygrade/", {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-			})
+		ApiGetPaygrade()
 			.then((res) => {
 				setPaygrades(res.data);
 			});
 	};
 
 	const getContracts = () => {
-		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/contract/", {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-			})
+		ApiGetContract()
 			.then((res) => {
 				setContracts(res.data);
 			});
 	};
 
 	const getTitles = () => {
-		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/title/", {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-			})
+		ApiGetTitles()
 			.then((res) => {
+				console.log(res.data)
 				setTitles(res.data);
 			});
 	};
 
 	const getStatuses = () => {
-		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/status/", {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-			})
+		ApiGetStatus()
 			.then((res) => {
 				setStatuses(res.data);
 			});
 	};
 
 	const getDepartments = () => {
-		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/department/", {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-			})
+		ApiGetAllDepartments()
 			.then((res) => {
 				setDepartments(res.data);
 			});
 	};
 
 	const getSupervisors = () => {
-		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/employee/", {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-			})
+		ApiGetAllEmployee()
 			.then((res) => {
 				setSupervisors(res.data);
 			});

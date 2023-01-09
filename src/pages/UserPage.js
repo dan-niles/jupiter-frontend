@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { NavLink as RouterLink } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+
 // @mui
 import {
 	Card,
@@ -36,6 +36,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 // sections
 import { UserListHead, UserListToolbar } from "../sections/@dashboard/user";
+import { ApiDeleteUser, ApiGetAllUsers } from "../services/userService";
 // mock
 // import USERLIST from "../_mock/user";
 
@@ -88,8 +89,6 @@ function applySortFilter(array, comparator, query) {
 	return stabilizedThis.map((el) => el[0]);
 }
 
-const accessToken = sessionStorage.getItem("access-token");
-
 export default function UserPage(props) {
 	const [open, setOpen] = useState(null);
 	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -125,16 +124,12 @@ export default function UserPage(props) {
 	}, []);
 
 	const getUsers = () => {
-		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/user/", {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-			})
+		ApiGetAllUsers()
 			.then((res) => {
 				console.log(res.data);
 				setUsers(res.data);
-			});
+			})
+			.catch(e => console.log(e))
 	};
 
 	const handleOpenMenu = (id, event) => {
@@ -206,15 +201,7 @@ export default function UserPage(props) {
 
 	const handleDelete = (e) => {
 		e.preventDefault();
-		axios
-			.delete(process.env.REACT_APP_BACKEND_URL + "/api/user/" + selcId, {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-				data: {
-					user_id: selcId,
-				},
-			})
+		ApiDeleteUser(selcId)
 			.then((res) => {
 				toast.success("Deleted successfully!");
 			})
@@ -326,8 +313,8 @@ export default function UserPage(props) {
 														{role === "admin"
 															? "Administrator"
 															: role === "manager"
-															? "HR-Manager"
-															: "User"}
+																? "HR-Manager"
+																: "User"}
 													</TableCell>
 
 													<TableCell align="center">

@@ -24,6 +24,7 @@ import NavSection from "../../../components/nav-section";
 import navAdminConfig from "./config-admin";
 import navUserConfig from "./config-user";
 import navManagerConfig from "./config-manager";
+import { useAuth } from "../../../context/auth-context";
 
 // ----------------------------------------------------------------------
 
@@ -44,23 +45,23 @@ Nav.propTypes = {
 	onCloseNav: PropTypes.func,
 };
 
-export default function Nav({ userData, openNav, onCloseNav }) {
+export default function Nav({ openNav, onCloseNav }) {
 	const { pathname } = useLocation();
 
 	const isDesktop = useResponsive("up", "lg");
 
-	const user_data = userData;
+	const { user } = useAuth();
 	let account = {};
 
-	if (user_data != null) {
+	if (user != null) {
 		account = {
-			displayName: user_data.first_name + " " + user_data.last_name,
-			email: user_data.email,
+			displayName: user.first_name + " " + user.last_name,
+			email: user.email,
 			photoURL: "/assets/images/avatars/avatar_default.png",
-			role: user_data.job_title,
+			role: user.job_title,
 		};
 
-		if (user_data.role === "admin") {
+		if (user.role === "admin") {
 			account.role = "Administrator";
 		}
 	} else {
@@ -121,11 +122,11 @@ export default function Nav({ userData, openNav, onCloseNav }) {
 
 			<NavSection
 				data={
-					user_data.role === "admin"
+					user.role === "admin"
 						? navAdminConfig
-						: user_data.role === "manager"
-						? navManagerConfig
-						: navUserConfig
+						: user.role === "manager"
+							? navManagerConfig
+							: navUserConfig
 				}
 			/>
 

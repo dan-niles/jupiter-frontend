@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
-import { NavLink as RouterLink } from "react-router-dom";
+import { Navigate, NavLink as RouterLink, useNavigate } from "react-router-dom";
 // @mui
 import {
 	Card,
@@ -22,25 +22,44 @@ import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 
 import { DateRangePicker } from "react-date-range";
+import { ApiApplyLeave } from "../services/leaveService";
+import { toast, Toaster } from "react-hot-toast";
 
 // ----------------------------------------------------------------------
 
 export default function EmployeeAddPage() {
-	const selectionRange = {
+
+	const navigate = useNavigate();
+
+	const [leaveFormValues, setLeaveFormValues] = useState({
 		startDate: new Date(),
 		endDate: new Date(),
-		key: "selection",
+		reason: "",
+		leave_type: "",
+		key: "selection"
+	})
+
+	const handleLeaveSelect = (ranges) => {
+		setLeaveFormValues(ranges.selection);
 	};
 
-	const [dateRange, setDateRange] = useState(selectionRange);
+	const handleFormValueChange = (e) => {
+		setLeaveFormValues({
+			...leaveFormValues,
+			[e.target.name]: e.target.value
+		})
+	}
 
-	const handleSelect = (ranges) => {
-		setDateRange(ranges.selection);
-	};
-
-	const handleSubmit = (event) => {
-		event.preventDefault();
-		console.log(dateRange);
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		ApiApplyLeave(leaveFormValues)
+			.then(res => {
+				toast.success("Successfully applied for leave.")
+				navigate("/dashboard")
+			})
+			.catch(err => {
+				toast.error("Something went wrong.")
+			})
 	};
 
 	return (
@@ -48,6 +67,8 @@ export default function EmployeeAddPage() {
 			<Helmet>
 				<title> Apply Leave | Jupiter HRM </title>
 			</Helmet>
+
+			<Toaster position="top-right" reverseOrder={true} />
 
 			<Container>
 				<Stack
@@ -95,34 +116,40 @@ export default function EmployeeAddPage() {
 								<Grid item xs={5}>
 									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
 										<TextField
+											required
 											id="leave_type"
 											select
 											label="Leave Type"
+											name="leave_type"
 											sx={{ width: "25ch" }}
-											// value={currency}
-											// onChange={handleChange}
+											value={leaveFormValues.leave_type}
+											onChange={handleFormValueChange}
 										>
-											<MenuItem key="Annual" value="Annual">
+											<MenuItem key="Annual" value="annual">
 												Annual
 											</MenuItem>
-											<MenuItem key="Casual" value="Casual">
+											<MenuItem key="Casual" value="casual">
 												Casual
 											</MenuItem>
-											<MenuItem key="Maternity" value="Maternity">
+											<MenuItem key="Maternity" value="maternity">
 												Maternity
 											</MenuItem>
-											<MenuItem key="No Pay" value="No Pay">
+											<MenuItem key="No Pay" value="no_pay">
 												No Pay
 											</MenuItem>
 										</TextField>
 									</Stack>
 									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
 										<TextField
+											required
 											id="reason"
 											fullWidth
 											label="Reason"
 											multiline
 											rows={10}
+											name="reason"
+											value={leaveFormValues.reason}
+											onChange={handleFormValueChange}
 										/>
 									</Stack>
 								</Grid>
@@ -134,8 +161,8 @@ export default function EmployeeAddPage() {
 										justifyContent="center"
 									>
 										<DateRangePicker
-											ranges={[dateRange]}
-											onChange={handleSelect}
+											ranges={[leaveFormValues]}
+											onChange={handleLeaveSelect}
 										/>
 									</Stack>
 								</Grid>
