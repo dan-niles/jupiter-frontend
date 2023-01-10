@@ -509,7 +509,7 @@ export default function EmployeeAddPage() {
 
 							<Stack alignItems="end">
 								<Button type="submit" variant="contained">
-									Edit Employee
+									Save Changes
 								</Button>
 							</Stack>
 						</form>

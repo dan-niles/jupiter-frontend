@@ -29,20 +29,21 @@ import axios from "axios";
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function EmployeeAddPage() {
-	const [empID, setEmpID] = useState(null);
-	const [fullName, setFullName] = useState(null);
-	const [firstName, setFirstName] = useState(null);
-	const [lastName, setLastName] = useState(null);
-	const [email, setEmail] = useState(null);
-	const [nic, setNIC] = useState(null);
+	const [empID, setEmpID] = useState("");
+	const [fullName, setFullName] = useState("");
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [email, setEmail] = useState("");
+	const [nic, setNIC] = useState("");
 	const [birthdate, setBirthDate] = useState(null);
-	const [paygradeID, setPaygradeID] = useState(null);
-	const [contractID, setContractID] = useState(null);
-	const [departmentID, setDepartmentID] = useState(null);
-	const [titleID, setTitleID] = useState(null);
-	const [statusID, setStatusID] = useState(null);
-	const [maritalStatus, setMaritalStatus] = useState(null);
-	const [supervisorID, setSupervisorID] = useState(null);
+	const [paygradeID, setPaygradeID] = useState("");
+	const [contractID, setContractID] = useState("");
+	const [departmentID, setDepartmentID] = useState("");
+	const [titleID, setTitleID] = useState("");
+	const [statusID, setStatusID] = useState("");
+	const [maritalStatus, setMaritalStatus] = useState("");
+	const [supervisorID, setSupervisorID] = useState("");
+	const [customAttributeData, setCustomAttributeData] = useState({});
 
 	const [paygrades, setPaygrades] = useState([]);
 	const [contracts, setContracts] = useState([]);
@@ -50,6 +51,7 @@ export default function EmployeeAddPage() {
 	const [titles, setTitles] = useState([]);
 	const [departments, setDepartments] = useState([]);
 	const [supervisors, setSupervisors] = useState([]);
+	const [customAttributes, setCustomAttributes] = useState([]);
 
 	const navigate = useNavigate();
 
@@ -60,7 +62,29 @@ export default function EmployeeAddPage() {
 		getStatuses();
 		getDepartments();
 		getSupervisors();
+		getCustomAttributes();
 	}, []);
+
+	const getCustomAttributes = () => {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data);
+				setCustomAttributes(res.data);
+				customAttributes.forEach((row) => {
+					setCustomAttributeData((prev) => {
+						return {
+							...prev,
+							[row.attr_name]: "",
+						};
+					});
+				});
+			});
+	};
 
 	const getPaygrades = () => {
 		axios
@@ -464,6 +488,32 @@ export default function EmployeeAddPage() {
 												);
 											})}
 										</TextField>
+									</Stack>
+								</Grid>
+							</Grid>
+							<Grid container spacing={2}>
+								<Grid item xs={6}>
+									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+										{customAttributes.map((row) => {
+											return (
+												<TextField
+													key={row.attr_name}
+													id={row.attr_name}
+													label={row.alias}
+													sx={{ width: "25ch" }}
+													value={customAttributeData[row.attr_name]}
+													onChange={(e) => {
+														console.log(customAttributeData);
+														setCustomAttributeData((prev) => {
+															return {
+																...prev,
+																[row.attr_name]: e.target.value,
+															};
+														});
+													}}
+												/>
+											);
+										})}
 									</Stack>
 								</Grid>
 							</Grid>
