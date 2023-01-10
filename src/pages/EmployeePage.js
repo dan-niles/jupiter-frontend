@@ -4,7 +4,7 @@ import { NavLink as RouterLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+
 // @mui
 import {
 	Card,
@@ -34,6 +34,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 // sections
 import { EmpListHead, EmpListToolbar } from "../sections/@dashboard/employee";
+import { ApiDeleteEmployee, ApiGetAllEmployee } from "../services/employeeService";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -79,8 +80,6 @@ function applySortFilter(array, comparator, query) {
 	return stabilizedThis.map((el) => el[0]);
 }
 
-const accessToken = sessionStorage.getItem("access-token");
-
 export default function EmployeePage() {
 	const [open, setOpen] = useState(null);
 	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -99,14 +98,8 @@ export default function EmployeePage() {
 	const { state } = useLocation();
 
 	const getEmployees = () => {
-		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/employee/", {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-			})
+		ApiGetAllEmployee()
 			.then((res) => {
-				console.log(res.data);
 				setEmployees(res.data);
 			});
 	};
@@ -191,15 +184,7 @@ export default function EmployeePage() {
 
 	const handleDelete = (e) => {
 		e.preventDefault();
-		axios
-			.delete(process.env.REACT_APP_BACKEND_URL + "/api/employee/" + selcId, {
-				headers: {
-					"access-token": `${accessToken}`,
-				},
-				data: {
-					user_id: selcId,
-				},
-			})
+		ApiDeleteEmployee(selcId)
 			.then((res) => {
 				toast.success("Deleted successfully!");
 			})

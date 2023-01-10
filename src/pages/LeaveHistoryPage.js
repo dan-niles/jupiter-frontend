@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { NavLink as RouterLink } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // @mui
 import {
 	Card,
@@ -30,6 +30,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import Iconify from "../components/iconify";
 import Label from "../components/label";
+import axios from "axios";
+import { ApiDeletePendingLeave, ApiGetLeavesOfUser } from "../services/leaveService";
 
 // ----------------------------------------------------------------------
 
@@ -44,16 +46,38 @@ const rows = [
 	createData("07-08-2022", "No Pay", "Personal Reasons", "Approved"),
 ];
 
-export default function LeaveHistoryPage() {
-	const [open, setOpen] = useState(false);
+const accessToken = sessionStorage.getItem("access-token")
 
-	const handleClickOpen = () => {
-		setOpen(true);
-	};
+export default function LeaveHistoryPage() {
+
+	const [open, setOpen] = useState(false);
+	const [leaveData, setLeaveData] = useState([])
+
+	useEffect(() => {
+		fetchData()
+	}, [])
+
+	const fetchData = () => {
+		ApiGetLeavesOfUser()
+			.then(res => {
+				setLeaveData(res.data)
+			})
+			.catch(e => console.error(e))
+	}
 
 	const handleClose = () => {
 		setOpen(false);
 	};
+
+	const deleteLeave = (leave_id) => {
+
+		ApiDeletePendingLeave(leave_id)
+			.then(res => {
+				fetchData()
+				console.log(res.data)
+			})
+			.catch(err => console.error(err))
+	}
 
 	return (
 		<>
@@ -93,35 +117,35 @@ export default function LeaveHistoryPage() {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{rows.map((row) => (
+									{leaveData.map((leave, i) => (
 										<TableRow
-											key={row.name}
+											key={leave.leave_id}
 											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 										>
 											<TableCell component="th" scope="row">
-												{row.date}
+												{leave.date}
 											</TableCell>
-											<TableCell align="left">{row.type}</TableCell>
-											<TableCell align="left">{row.reason}</TableCell>
+											<TableCell align="left">{leave.leave_type}</TableCell>
+											<TableCell align="left">{leave.reason}</TableCell>
 											<TableCell align="center">
 												<Label
 													color={
-														row.status === "Pending"
+														leave.status === "pending"
 															? "warning"
-															: row.status === "Declined"
-															? "error"
-															: "success"
+															: leave.status === "declined"
+																? "error"
+																: "success"
 													}
 												>
-													{row.status}
+													{leave.status}
 												</Label>
 											</TableCell>
 											<TableCell align="center">
-												{row.status === "Pending" ? (
+												{leave.status === "pending" ? (
 													<IconButton
 														sx={{ color: "error.main" }}
 														aria-label="delete"
-														onClick={handleClickOpen}
+														onClick={() => deleteLeave(leave.leave_id)}
 													>
 														<Iconify icon={"eva:trash-2-outline"} />
 													</IconButton>
@@ -136,42 +160,17 @@ export default function LeaveHistoryPage() {
 				</Card>
 			</Container>
 
+
 			<Dialog open={open} onClose={handleClose}>
-				<DialogTitle>Edit</DialogTitle>
+				<DialogTitle>Delete Pending Leave</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						Enter the new values for the selected attribute.
+						Are you sure to delete the pending leave?
 					</DialogContentText>
-					<Stack spacing={2} direction="column" sx={{ mt: 2 }}>
-						<TextField
-							id="column_name"
-							label="Column Name"
-							type="text"
-							fullWidth
-							// sx={{ mb: 1 }}
-						/>
-						<TextField
-							id="type"
-							select
-							label="Data Type"
-							sx={{ width: "25ch" }}
-						>
-							<MenuItem key="varchar" value="varchar">
-								VARCHAR
-							</MenuItem>
-							<MenuItem key="int" value="int">
-								INTEGER
-							</MenuItem>
-							<MenuItem key="date" value="date">
-								DATE
-							</MenuItem>
-						</TextField>
-						<TextField id="alias" label="Alias" type="text" fullWidth />
-					</Stack>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={handleClose}>Cancel</Button>
-					<Button onClick={handleClose}>Save</Button>
+					<Button onClick={handleClose}>NO</Button>
+					<Button color="error" onClick={deleteLeave}>YES</Button>
 				</DialogActions>
 			</Dialog>
 		</>

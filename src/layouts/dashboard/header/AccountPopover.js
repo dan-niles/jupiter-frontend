@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 // mocks_
 import account_temp from "../../../_mock/account";
+import { useAuth } from "../../../context/auth-context";
 
 // ----------------------------------------------------------------------
 
@@ -33,19 +34,19 @@ const MENU_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function AccountPopover({ userData }) {
+export default function AccountPopover() {
 	const [open, setOpen] = useState(null);
 	const navigate = useNavigate();
 
-	const user_data = userData;
+	const { user, logout } = useAuth();
 	let account = {};
 
-	if (user_data != null) {
+	if (user != null) {
 		account = {
-			displayName: user_data.first_name + " " + user_data.last_name,
-			email: user_data.email,
+			displayName: user.first_name + " " + user.last_name,
+			email: user.email,
 			photoURL: "/assets/images/avatars/avatar_default.png",
-			role: user_data.job_title,
+			role: user.job_title,
 		};
 	} else {
 		account = account_temp;
@@ -63,6 +64,7 @@ export default function AccountPopover({ userData }) {
 		handleClose();
 		sessionStorage.removeItem("user-data");
 		sessionStorage.removeItem("access-token");
+		logout()
 		navigate("/login");
 	};
 

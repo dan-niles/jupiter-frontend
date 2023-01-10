@@ -21,6 +21,7 @@ import { LoadingButton } from "@mui/lab";
 
 // components
 import Iconify from "../components/iconify";
+import { useAuth } from "../context/auth-context";
 
 const StyledRoot = styled("div")(({ theme }) => ({
 	[theme.breakpoints.up("xs")]: {
@@ -53,6 +54,8 @@ export default function LoginPage() {
 	const navigate = useNavigate();
 	const userContext = useContext(UserContext);
 
+	const { login } = useAuth()
+
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
@@ -61,13 +64,21 @@ export default function LoginPage() {
 	const onFormSubmit = (e) => {
 		e.preventDefault();
 
+		console.log("loggin in")
+		login(username, password)
+			.then(res => {
+				console.log(res.data)
+				navigate("/dashboard", { replace: true });
+			})
+			.catch(err => console.log(err))
+
 		axios
 			.post(process.env.REACT_APP_BACKEND_URL + "/api/login/", {
 				username: username,
 				password: password,
 			})
 			.then((response) => {
-				if (response.data.username == username) {
+				if (response.data.username === username) {
 					delete response.data.password;
 					sessionStorage.setItem("user-data", JSON.stringify(response.data));
 					sessionStorage.setItem("access-token", response.data.token);

@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { NavLink as RouterLink } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // @mui
 import {
 	Card,
@@ -28,56 +28,35 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import Iconify from "../components/iconify";
 import Label from "../components/label";
+import { ApiGetLeavesToApprove, ApiTakeLeaveAction } from "../services/leaveService";
 
 // ----------------------------------------------------------------------
-
-function createData(emp_no, name, date, type, reason, status) {
-	return { emp_no, name, date, type, reason, status };
-}
-
-const rows = [
-	createData(
-		"00001",
-		"John Doe",
-		"23-12-2022",
-		"Annual",
-		"Christmas Holidays",
-		"Pending"
-	),
-	createData(
-		"00001",
-		"John Doe",
-		"12-11-2022",
-		"Casual",
-		"Vacation",
-		"Declined"
-	),
-	createData(
-		"00001",
-		"John Doe",
-		"06-11-2022",
-		"Casual",
-		"Vacation",
-		"Approved"
-	),
-	createData(
-		"00001",
-		"John Doe",
-		"07-08-2022",
-		"No Pay",
-		"Personal Reasons",
-		"Approved"
-	),
-];
 
 export default function ApproveLeavesPage() {
 	const [open, setOpen] = useState(false);
 
-	const handleClickOpen = () => {
-		setOpen(true);
-	};
+	const [leavesToApprove, setLeavesToApprove] = useState([])
+
+	useEffect(() => {
+		fetchData()
+	}, [])
+
+	const fetchData = () => {
+		ApiGetLeavesToApprove()
+			.then(res => {
+				setLeavesToApprove(res.data)
+			})
+			.catch(err => console.error(err))
+	}
+
+	const takeLeaveAction = (leave_id, action) => {
+		ApiTakeLeaveAction({ action, leave_id })
+			.then(res => {
+				fetchData()
+			})
+			.catch(err => console.error(err))
+	}
 
 	const handleClose = () => {
 		setOpen(false);
@@ -123,37 +102,37 @@ export default function ApproveLeavesPage() {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{rows.map((row) => (
+									{leavesToApprove.map((leave, i) => (
 										<TableRow
-											key={row.name}
+											key={i}
 											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 										>
 											<TableCell component="th" scope="row">
-												{row.emp_no}
+												{leave.emp_id}
 											</TableCell>
 											<TableCell component="th" scope="row">
-												{row.name}
+												{leave.first_name} {leave.last_name}
 											</TableCell>
 											<TableCell component="th" scope="row">
-												{row.date}
+												{leave.date}
 											</TableCell>
-											<TableCell align="left">{row.type}</TableCell>
-											<TableCell align="left">{row.reason}</TableCell>
+											<TableCell align="left">{leave.leave_type}</TableCell>
+											<TableCell align="left">{leave.reason}</TableCell>
 											<TableCell align="center">
 												<Label
 													color={
-														row.status === "Pending"
+														leave.status === "pending"
 															? "warning"
-															: row.status === "Declined"
-															? "error"
-															: "success"
+															: leave.status === "declined"
+																? "error"
+																: "success"
 													}
 												>
-													{row.status}
+													{leave.status}
 												</Label>
 											</TableCell>
 											<TableCell align="center">
-												{row.status === "Pending" ? (
+												{leave.status === "pending" ? (
 													<Stack
 														direction="row"
 														spacing={1}
@@ -163,6 +142,7 @@ export default function ApproveLeavesPage() {
 															variant="outlined"
 															startIcon={<CheckIcon />}
 															color="primary"
+															onClick={() => takeLeaveAction(leave.leave_id, "approved")}
 														>
 															Approve
 														</Button>
@@ -170,6 +150,7 @@ export default function ApproveLeavesPage() {
 															variant="outlined"
 															startIcon={<ClearIcon />}
 															color="error"
+															onClick={() => takeLeaveAction(leave.leave_id, "declined")}
 														>
 															Decline
 														</Button>
@@ -197,7 +178,7 @@ export default function ApproveLeavesPage() {
 							label="Column Name"
 							type="text"
 							fullWidth
-							// sx={{ mb: 1 }}
+						// sx={{ mb: 1 }}
 						/>
 						<TextField
 							id="type"
