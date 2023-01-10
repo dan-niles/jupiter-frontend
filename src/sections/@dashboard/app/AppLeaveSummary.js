@@ -8,6 +8,9 @@ import { fShortenNumber } from "../../../utils/formatNumber";
 // components
 import Iconify from "../../../components/iconify";
 import { Box, Stack } from "@mui/system";
+import axios from "axios";
+import { useContext } from "react";
+import UserContext from "../../../context/user-context";
 
 // ----------------------------------------------------------------------
 
@@ -33,17 +36,71 @@ AppLeaveSummary.propTypes = {
 	sx: PropTypes.object,
 };
 
+const accessToken = sessionStorage.getItem("access-token");
+
 export default function AppLeaveSummary({
 	title,
-	total,
+	type,
 	icon,
-	balance,
 	color = "primary",
 	sx,
 	...other
 }) {
-	const balanceProgress = (balance / total) * 100;
-	const [progress, setProgress] = useState(0);
+	const [balance, setBalance] = useState(0);
+	const [total, setTotal] = useState(1);
+
+	const [progress, setProgress] = useState((balance / total) * 100);
+	const { userData } = useContext(UserContext);
+
+	useEffect(() => {
+		console.log("balance", balance);
+		console.log("total", total);
+		setProgress((balance / total) * 100);
+	}, [balance, total]);
+
+	const getBalance = () => {
+		axios
+			.post(
+				process.env.REACT_APP_BACKEND_URL + "/api/leave/balance",
+				{
+					emp_id: userData.emp_id,
+					leave_type: type,
+				},
+				{
+					headers: {
+						"access-token": `${accessToken}`,
+					},
+				}
+			)
+			.then((res) => {
+				setBalance(res.data[0]["FN_no_of_leaves"]);
+			});
+	};
+
+	const getTotal = () => {
+		axios
+			.post(
+				process.env.REACT_APP_BACKEND_URL + "/api/leave/total",
+				{
+					emp_id: userData.emp_id,
+					leave_type: type,
+				},
+				{
+					headers: {
+						"access-token": `${accessToken}`,
+					},
+				}
+			)
+			.then((res) => {
+				console.log(res.data[0]["FN_alloc_leaves"]);
+				setTotal(res.data[0]["FN_alloc_leaves"]);
+			});
+	};
+
+	useEffect(() => {
+		getTotal();
+		getBalance();
+	}, []);
 
 	// useEffect(() => {
 	// 	const timer = setInterval(() => {

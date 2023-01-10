@@ -32,6 +32,7 @@ export default function UserDashboard() {
 					<Grid item xs={12} sm={6} md={3}>
 						<AppLeaveSummary
 							title="Annual"
+							type="annual"
 							balance={10}
 							total={14}
 							color="warning"
@@ -42,6 +43,7 @@ export default function UserDashboard() {
 					<Grid item xs={12} sm={6} md={3}>
 						<AppLeaveSummary
 							title="Casual"
+							type="casual"
 							balance={8}
 							total={12}
 							color="success"
@@ -52,6 +54,7 @@ export default function UserDashboard() {
 					<Grid item xs={12} sm={6} md={3}>
 						<AppLeaveSummary
 							title="Maternity"
+							type="maternity"
 							balance={10}
 							total={10}
 							color="info"
@@ -62,6 +65,7 @@ export default function UserDashboard() {
 					<Grid item xs={12} sm={6} md={3}>
 						<AppLeaveSummary
 							title="No Pay"
+							type="no_pay"
 							balance={32}
 							total={50}
 							icon={"ant-design:fullscreen-exit-outlined"}
