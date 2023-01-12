@@ -18,6 +18,7 @@ import EmpByDept from "./reports/EmpByDept";
 import LeavesByDept from "./reports/LeavesByDept";
 import GroupedEmp from "./reports/GroupedEmp";
 import CustomReport from "./reports/CustomReport";
+import LeaveBalance from "./reports/LeaveBalance";
 
 import "../theme/print.css";
 
@@ -107,17 +108,24 @@ export default function ReportsPage() {
 							/>
 							<Tab
 								key="t2"
-								label="Grouped Employee Report"
+								label="Leave Balance Report"
 								id="tab-2"
 								component={RouterLink}
 								to="?tab=2"
 							/>
 							<Tab
 								key="t3"
-								label="Custom Report"
+								label="Grouped Employee Report"
 								id="tab-3"
 								component={RouterLink}
 								to="?tab=3"
+							/>
+							<Tab
+								key="t4"
+								label="Custom Report"
+								id="tab-4"
+								component={RouterLink}
+								to="?tab=4"
 							/>
 						</Tabs>
 					</Box>
@@ -128,9 +136,12 @@ export default function ReportsPage() {
 						<LeavesByDept />
 					</TabPanel>
 					<TabPanel value={value} index={2}>
-						<GroupedEmp />
+						<LeaveBalance />
 					</TabPanel>
 					<TabPanel value={value} index={3}>
+						<GroupedEmp />
+					</TabPanel>
+					<TabPanel value={value} index={4}>
 						<CustomReport />
 					</TabPanel>
 				</Box>
