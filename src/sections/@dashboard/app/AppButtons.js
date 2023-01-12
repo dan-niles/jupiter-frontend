@@ -42,6 +42,8 @@ export default function AppButtons({ title, subheader, ...other }) {
 						size="large"
 						color="error"
 						endIcon={<EventBusyIcon />}
+						component={RouterLink}
+						to="/dashboard/leave-history"
 						fullWidth
 					>
 						Cancel Leave

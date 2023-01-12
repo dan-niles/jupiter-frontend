@@ -31,7 +31,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Iconify from "../components/iconify";
 import Label from "../components/label";
 import axios from "axios";
-import { ApiDeletePendingLeave, ApiGetLeavesOfUser } from "../services/leaveService";
+import {
+	ApiDeletePendingLeave,
+	ApiGetLeavesOfUser,
+} from "../services/leaveService";
 
 // ----------------------------------------------------------------------
 
@@ -46,38 +49,36 @@ const rows = [
 	createData("07-08-2022", "No Pay", "Personal Reasons", "Approved"),
 ];
 
-const accessToken = sessionStorage.getItem("access-token")
+const accessToken = sessionStorage.getItem("access-token");
 
 export default function LeaveHistoryPage() {
-
 	const [open, setOpen] = useState(false);
-	const [leaveData, setLeaveData] = useState([])
+	const [leaveData, setLeaveData] = useState([]);
 
 	useEffect(() => {
-		fetchData()
-	}, [])
+		fetchData();
+	}, []);
 
 	const fetchData = () => {
 		ApiGetLeavesOfUser()
-			.then(res => {
-				setLeaveData(res.data)
+			.then((res) => {
+				setLeaveData(res.data);
 			})
-			.catch(e => console.error(e))
-	}
+			.catch((e) => console.error(e));
+	};
 
 	const handleClose = () => {
 		setOpen(false);
 	};
 
 	const deleteLeave = (leave_id) => {
-
 		ApiDeletePendingLeave(leave_id)
-			.then(res => {
-				fetchData()
-				console.log(res.data)
+			.then((res) => {
+				fetchData();
+				console.log(res.data);
 			})
-			.catch(err => console.error(err))
-	}
+			.catch((err) => console.error(err));
+	};
 
 	return (
 		<>
@@ -98,6 +99,8 @@ export default function LeaveHistoryPage() {
 					<Button
 						variant="contained"
 						startIcon={<Iconify icon="eva:plus-fill" />}
+						component={RouterLink}
+						to="/dashboard/leave/apply"
 					>
 						Apply Leave
 					</Button>
@@ -133,8 +136,8 @@ export default function LeaveHistoryPage() {
 														leave.status === "pending"
 															? "warning"
 															: leave.status === "declined"
-																? "error"
-																: "success"
+															? "error"
+															: "success"
 													}
 												>
 													{leave.status}
@@ -160,7 +163,6 @@ export default function LeaveHistoryPage() {
 				</Card>
 			</Container>
 
-
 			<Dialog open={open} onClose={handleClose}>
 				<DialogTitle>Delete Pending Leave</DialogTitle>
 				<DialogContent>
@@ -170,7 +172,9 @@ export default function LeaveHistoryPage() {
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>NO</Button>
-					<Button color="error" onClick={deleteLeave}>YES</Button>
+					<Button color="error" onClick={deleteLeave}>
+						YES
+					</Button>
 				</DialogActions>
 			</Dialog>
 		</>
