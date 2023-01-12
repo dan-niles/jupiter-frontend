@@ -24,6 +24,7 @@ import DepartmentPage from "./pages/DepartmentPage";
 import DepartmentAddPage from "./pages/DepartmentAddPage";
 import OrganizationInfoPage from "./pages/OrganizationInfoPage";
 import BranchesPage from "./pages/BranchesPage";
+import BranchAddPage from "./pages/BranchAddPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
 import PersonalInfoPage from "./pages/PersonalInfoPage";
 import LeaveHistoryPage from "./pages/LeaveHistoryPage";
@@ -64,6 +65,7 @@ export default function Router() {
 						{ path: "department/add", element: <DepartmentAddPage /> },
 						{ path: "organization", element: <OrganizationInfoPage /> },
 						{ path: "branches", element: <BranchesPage /> },
+						{ path: "branches/add", element: <BranchAddPage /> },
 						{ path: "change-password", element: <ChangePasswordPage /> },
 						{ path: "personal-info", element: <PersonalInfoPage /> },
 						{ path: "leave-history", element: <LeaveHistoryPage /> },
