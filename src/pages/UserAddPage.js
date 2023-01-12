@@ -30,8 +30,9 @@ export default function UserAddPage() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
-	const [departmentID, setDepartmentID] = useState(null);
+	const [departmentID, setDepartmentID] = useState("");
 	const [departments, setDepartments] = useState([]);
+	const [employees, setEmployees] = useState([]);
 
 	const [usrnameConflictError, setUsrnameConflictError] = useState(false);
 
@@ -90,6 +91,28 @@ export default function UserAddPage() {
 					}
 				});
 		}
+	};
+
+	const handleDepartmentChange = (e) => {
+		setDepartmentID(e.target.value);
+		setEmpID("");
+		axios
+			.get(
+				process.env.REACT_APP_BACKEND_URL +
+					"/api/employee/department/" +
+					e.target.value,
+				{
+					headers: {
+						"access-token": `${accessToken}`,
+					},
+					data: {
+						dept_id: e.target.value,
+					},
+				}
+			)
+			.then((res) => {
+				setEmployees(res.data);
+			});
 	};
 
 	return (
@@ -175,9 +198,7 @@ export default function UserAddPage() {
 											label="Department"
 											sx={{ width: "25ch" }}
 											value={departmentID}
-											onChange={(e) => {
-												setDepartmentID(e.target.value);
-											}}
+											onChange={handleDepartmentChange}
 										>
 											{departments.map((department) => (
 												<MenuItem
@@ -200,15 +221,12 @@ export default function UserAddPage() {
 												setEmpID(e.target.value);
 											}}
 										>
-											<MenuItem key="00001" value="00001">
-												00001 - John Doe
-											</MenuItem>
-											<MenuItem key="00002" value="00002">
-												00002 - Tim Allen
-											</MenuItem>
-											<MenuItem key="00003" value="00003">
-												00003 - Paul Blake
-											</MenuItem>
+											{employees.map((employee) => (
+												<MenuItem key={employee.emp_id} value={employee.emp_id}>
+													{employee.emp_id} -{" "}
+													{employee.first_name + " " + employee.last_name}
+												</MenuItem>
+											))}
 										</TextField>
 									</Stack>
 									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
