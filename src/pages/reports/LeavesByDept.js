@@ -16,6 +16,11 @@ import {
 
 import Scrollbar from "../../components/scrollbar";
 import { Box } from "@mui/system";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { format } from "date-fns";
+
+import "../../theme/print.css";
 
 // ----------------------------------------------------------------------
 
@@ -23,17 +28,67 @@ function createData(paygrade, annual, casual, maternity, nopay) {
 	return { paygrade, annual, casual, maternity, nopay };
 }
 
-const rows = [
-	createData("Level 1", 14, 12, 10, 50),
-	createData("Level 2", 14, 12, 10, 50),
-	createData("Level 3", 14, 12, 10, 50),
-	createData("Level 4", 14, 12, 10, 50),
-];
+const leaveTypes = {
+	All: "All",
+	annual: "Annual",
+	casual: "Casual",
+	maternity: "Maternity",
+	no_pay: "No Pay",
+};
+
+const accessToken = sessionStorage.getItem("access-token");
 
 const LeavesByDept = () => {
+	const [departments, setDepartments] = useState([]);
+	const [records, setRecords] = useState([]);
+
+	const [deptName, setDeptName] = useState("All");
+	const [leaveType, setLeaveType] = useState("All");
+
+	const [showTable, setShowTable] = useState(false);
+
+	const getDepartments = () => {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + "/api/department/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data);
+				setDepartments(res.data);
+			});
+	};
+
+	useEffect(() => {
+		getDepartments();
+	}, []);
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		axios
+			.post(
+				process.env.REACT_APP_BACKEND_URL + "/api/reports/leaves-by-department",
+				{
+					dept_name: deptName === "All" ? null : deptName,
+					leave_type: leaveType === "All" ? null : leaveType,
+				},
+				{
+					headers: {
+						"access-token": `${accessToken}`,
+					},
+				}
+			)
+			.then((res) => {
+				console.log(res.data);
+				setRecords(res.data);
+				setShowTable(true);
+			});
+	};
+
 	return (
 		<>
-			<Card sx={{ mb: 3 }}>
+			<Card className="no-print" sx={{ mb: 3 }}>
 				<Box
 					sx={{
 						p: 2,
@@ -44,92 +99,142 @@ const LeavesByDept = () => {
 				>
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
-							<Stack direction="row" spacing={2}>
-								<TextField
-									id="department"
-									select
-									label="Department"
-									sx={{ width: "25ch" }}
-									value={"All"}
-								>
-									<MenuItem key="All" value="All">
-										All
-									</MenuItem>
-									<MenuItem key="ICT" value="ICT">
-										ICT
-									</MenuItem>
-									<MenuItem key="HR" value="HR">
-										HR
-									</MenuItem>
-									<MenuItem key="Finance" value="Finance">
-										Finance
-									</MenuItem>
-								</TextField>
-								<TextField
-									id="leave_type"
-									select
-									label="Leave Type"
-									sx={{ width: "25ch" }}
-									value={"All"}
-								>
-									<MenuItem key="All" value="All">
-										All
-									</MenuItem>
-									<MenuItem key="annual" value="annual">
-										Annual
-									</MenuItem>
-									<MenuItem key="casual" value="casual">
-										Casual
-									</MenuItem>
-									<MenuItem key="maternity" value="maternity">
-										Maternity
-									</MenuItem>
-									<MenuItem key="no_pay" value="no_pay">
-										No Pay
-									</MenuItem>
-								</TextField>
-								<Button type="submit" variant="contained" color="secondary">
-									Generate
-								</Button>
+							<form onSubmit={handleSubmit}>
+								<Stack direction="row" spacing={2}>
+									<TextField
+										id="department"
+										select
+										label="Department"
+										sx={{ width: "25ch" }}
+										value={deptName}
+										onChange={(e) => setDeptName(e.target.value)}
+									>
+										<MenuItem key="All" value="All">
+											All
+										</MenuItem>
+										{departments.map((row, idx) => {
+											return (
+												<MenuItem key={idx} value={row.dept_name}>
+													{row.dept_name}
+												</MenuItem>
+											);
+										})}
+									</TextField>
+									<TextField
+										id="leave_type"
+										select
+										label="Leave Type"
+										sx={{ width: "25ch" }}
+										value={leaveType}
+										onChange={(e) => setLeaveType(e.target.value)}
+									>
+										<MenuItem key="All" value="All">
+											All
+										</MenuItem>
+										<MenuItem key="annual" value="annual">
+											Annual
+										</MenuItem>
+										<MenuItem key="casual" value="casual">
+											Casual
+										</MenuItem>
+										<MenuItem key="maternity" value="maternity">
+											Maternity
+										</MenuItem>
+										<MenuItem key="no_pay" value="no_pay">
+											No Pay
+										</MenuItem>
+									</TextField>
+									<Button type="submit" variant="contained" color="secondary">
+										Generate
+									</Button>
+								</Stack>
+							</form>
+							<Stack>
+								{showTable && (
+									<h5 style={{ margin: 0, marginTop: "1em" }}>
+										{records.length} record{records.length > 1 && "s"} found
+									</h5>
+								)}
 							</Stack>
 						</Grid>
 					</Grid>
 				</Box>
 			</Card>
 
-			<Card>
-				<Scrollbar>
-					<TableContainer>
-						<Table sx={{ minWidth: 650 }} aria-label="simple table">
-							<TableHead>
-								<TableRow>
-									<TableCell>Department</TableCell>
-									<TableCell align="right">Employee</TableCell>
-									<TableCell align="right">Department</TableCell>
-									<TableCell align="right">Date</TableCell>
-									<TableCell align="right">Leave Type</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{rows.map((row) => (
-									<TableRow
-										key={row.name}
-										sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-									>
-										<TableCell component="th" scope="row">
-											{row.paygrade}
-										</TableCell>
-										<TableCell align="right">{row.annual}</TableCell>
-										<TableCell align="right">{row.casual}</TableCell>
-										<TableCell align="right">{row.maternity}</TableCell>
-										<TableCell align="right">{row.nopay}</TableCell>
+			<h3
+				style={{
+					textAlign: "center",
+					marginTop: "2em",
+					marginBottom: "0.25em",
+				}}
+				className="only-print"
+			>
+				Employee Leave Report for {deptName} Department
+				{deptName === "All" && "s"}
+			</h3>
+			<h4
+				style={{
+					textAlign: "center",
+					marginTop: "0.25em",
+					marginBottom: "1em",
+				}}
+				className="only-print"
+			>
+				{leaveTypes[leaveType]} Leave{leaveType === "All" && "s"}{" "}
+				{leaveType !== "All" && "Only"}
+			</h4>
+
+			{showTable && (
+				<Card>
+					<Scrollbar>
+						<TableContainer>
+							<Table sx={{ minWidth: 650 }} aria-label="simple table">
+								<TableHead>
+									<TableRow>
+										<TableCell>Department</TableCell>
+										<TableCell align="left">Employee ID</TableCell>
+										<TableCell align="left">Name</TableCell>
+										<TableCell align="left">Leave Type</TableCell>
+										<TableCell align="left">Date</TableCell>
+										<TableCell align="left">Status</TableCell>
 									</TableRow>
-								))}
-							</TableBody>
-						</Table>
-					</TableContainer>
-				</Scrollbar>
-			</Card>
+								</TableHead>
+								<TableBody>
+									{records.map((row, idx) => (
+										<TableRow
+											key={idx}
+											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+										>
+											<TableCell component="th" scope="row">
+												{row.dept_name}
+											</TableCell>
+											<TableCell align="left">{row.emp_id}</TableCell>
+											<TableCell align="left">
+												{row.first_name + " " + row.last_name}
+											</TableCell>
+											<TableCell
+												align="left"
+												sx={{ textTransform: "capitalize" }}
+											>
+												{row.leave_type}
+											</TableCell>
+											<TableCell align="left">
+												{format(new Date(row.date), "dd/MM/yyyy")}
+											</TableCell>
+											<TableCell
+												align="left"
+												sx={{ textTransform: "capitalize" }}
+											>
+												{row.status}
+											</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</Scrollbar>
+				</Card>
+			)}
 		</>
 	);
 };

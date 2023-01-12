@@ -1,0 +1,35 @@
+.only-print {
+	visibility: hidden !important;
+	display: none !important;
+}
+
+@media print {
+	.no-print {
+		visibility: hidden !important;
+		display: none !important;
+	}
+
+	.only-print {
+		visibility: visible !important;
+		display: block !important;
+	}
+
+	header {
+		display: none !important;
+	}
+
+	div {
+		box-shadow: none !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	body,
+	table {
+		margin: 0 !important;
+	}
+
+	table td {
+		padding: 0px 15px !important;
+	}
+}

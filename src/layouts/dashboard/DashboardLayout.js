@@ -6,6 +6,8 @@ import { styled } from "@mui/material/styles";
 import Header from "./header";
 import Nav from "./nav";
 
+import "../../theme/print.css";
+
 // ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 64;
@@ -37,9 +39,10 @@ export default function DashboardLayout() {
 
 	return (
 		<StyledRoot>
-			<Header onOpenNav={() => setOpen(true)} />
+			<Header className="no-print" onOpenNav={() => setOpen(true)} />
 
 			<Nav
+				className="no-print"
 				openNav={open}
 				onCloseNav={() => setOpen(false)}
 			/>

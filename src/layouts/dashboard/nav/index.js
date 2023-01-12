@@ -77,6 +77,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
 	const renderContent = (
 		<Scrollbar
+			className="no-print"
 			sx={{
 				height: 1,
 				"& .simplebar-content": {
@@ -87,6 +88,7 @@ export default function Nav({ openNav, onCloseNav }) {
 			}}
 		>
 			<Box
+				className="no-print"
 				sx={{
 					mb: 1,
 					pb: 2,
@@ -99,7 +101,7 @@ export default function Nav({ openNav, onCloseNav }) {
 				<Logo sx={{ mx: 2 }} />
 			</Box>
 
-			<Box sx={{ mb: 3, py: 1, mx: 2.5 }}>
+			<Box className="no-print" sx={{ mb: 3, py: 1, mx: 2.5 }}>
 				<Link underline="none">
 					<StyledAccount>
 						<Avatar src={account.photoURL} alt="photoURL" />
@@ -121,12 +123,13 @@ export default function Nav({ openNav, onCloseNav }) {
 			</Box>
 
 			<NavSection
+				className="no-print"
 				data={
 					user.role === "admin"
 						? navAdminConfig
 						: user.role === "manager"
-							? navManagerConfig
-							: navUserConfig
+						? navManagerConfig
+						: navUserConfig
 				}
 			/>
 
@@ -136,6 +139,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
 	return (
 		<Box
+			className="no-print"
 			component="nav"
 			sx={{
 				flexShrink: { lg: 0 },
@@ -144,6 +148,7 @@ export default function Nav({ openNav, onCloseNav }) {
 		>
 			{isDesktop ? (
 				<Drawer
+					className="no-print"
 					open
 					variant="permanent"
 					PaperProps={{
@@ -158,6 +163,7 @@ export default function Nav({ openNav, onCloseNav }) {
 				</Drawer>
 			) : (
 				<Drawer
+					className="no-print"
 					open={openNav}
 					onClose={onCloseNav}
 					ModalProps={{

@@ -12,6 +12,8 @@ import AccountPopover from "./AccountPopover";
 import NotificationsPopover from "./NotificationsPopover";
 import Logo from "../../../components/logo/Logo";
 
+import "../../../theme/print.css";
+
 // ----------------------------------------------------------------------
 
 const NAV_WIDTH = 280;
@@ -44,7 +46,7 @@ Header.propTypes = {
 
 export default function Header({ onOpenNav }) {
 	return (
-		<StyledRoot>
+		<StyledRoot className="no-print">
 			<StyledToolbar>
 				<IconButton
 					onClick={onOpenNav}

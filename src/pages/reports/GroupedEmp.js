@@ -20,6 +20,11 @@ import FormLabel from "@mui/material/FormLabel";
 import Scrollbar from "../../components/scrollbar";
 import { Box } from "@mui/system";
 
+import axios from "axios";
+import { useState, useEffect } from "react";
+
+import "../../theme/print.css";
+
 // ----------------------------------------------------------------------
 
 function createData(paygrade, annual, casual, maternity, nopay) {
@@ -33,10 +38,41 @@ const rows = [
 	createData("Level 4", 14, 12, 10, 50),
 ];
 
+const accessToken = sessionStorage.getItem("access-token");
+
 const GroupedEmp = () => {
+	const [selectedOption, setSelectedOption] = useState("Job Title");
+	const [tableKey, setTableKey] = useState("");
+
+	const [records, setRecords] = useState([]);
+
+	const [showTable, setShowTable] = useState(false);
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		axios
+			.post(
+				process.env.REACT_APP_BACKEND_URL + "/api/reports/grouped-emp",
+				{
+					key: selectedOption,
+				},
+				{
+					headers: {
+						"access-token": `${accessToken}`,
+					},
+				}
+			)
+			.then((res) => {
+				console.log(res.data);
+				setRecords(res.data);
+				setTableKey(selectedOption);
+				setShowTable(true);
+			});
+	};
+
 	return (
 		<>
-			<Card sx={{ mb: 3 }}>
+			<Card className="no-print" sx={{ mb: 3 }}>
 				<Box
 					sx={{
 						p: 2,
@@ -47,86 +83,108 @@ const GroupedEmp = () => {
 				>
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
-							<Stack direction="row" spacing={2}>
-								<FormControl>
-									<FormLabel id="demo-row-radio-buttons-group-label">
-										Group By
-									</FormLabel>
-									<RadioGroup
-										row
-										aria-labelledby="demo-row-radio-buttons-group-label"
-										name="row-radio-buttons-group"
-										defaultValue="job_title"
-									>
-										<FormControlLabel
-											value="job_title"
-											control={<Radio />}
-											label="Job Title"
-										/>
-										<FormControlLabel
-											value="department"
-											control={<Radio />}
-											label="Department"
-										/>
-										<FormControlLabel
-											value="pay_grade"
-											control={<Radio />}
-											label="Pay Grade"
-										/>
-										<FormControlLabel
-											value="status"
-											control={<Radio />}
-											label="Status"
-										/>
-										<FormControlLabel
-											value="contract"
-											control={<Radio />}
-											label="Contract"
-										/>
-									</RadioGroup>
-								</FormControl>
-								<Button type="submit" variant="contained" color="secondary">
-									Generate
-								</Button>
+							<form onSubmit={handleSubmit}>
+								<Stack direction="row" spacing={2}>
+									<FormControl>
+										<FormLabel id="demo-row-radio-buttons-group-label">
+											Group By
+										</FormLabel>
+										<RadioGroup
+											row
+											name="row-radio-buttons-group"
+											defaultValue="Job Title"
+											value={selectedOption}
+											onChange={(e) => setSelectedOption(e.target.value)}
+										>
+											<FormControlLabel
+												value="Job Title"
+												control={<Radio />}
+												label="Job Title"
+											/>
+											<FormControlLabel
+												value="Pay Grade"
+												control={<Radio />}
+												label="Pay Grade"
+											/>
+											<FormControlLabel
+												value="Status"
+												control={<Radio />}
+												label="Status"
+											/>
+											<FormControlLabel
+												value="Contract"
+												control={<Radio />}
+												label="Contract"
+											/>
+										</RadioGroup>
+									</FormControl>
+									<Button type="submit" variant="contained" color="secondary">
+										Generate
+									</Button>
+								</Stack>
+							</form>
+							<Stack>
+								{showTable && (
+									<h5 style={{ margin: 0, marginTop: "1em" }}>
+										{records.length} record{records.length > 1 && "s"} found
+									</h5>
+								)}
 							</Stack>
 						</Grid>
 					</Grid>
 				</Box>
 			</Card>
 
-			<Card>
-				<Scrollbar>
-					<TableContainer>
-						<Table sx={{ minWidth: 650 }} aria-label="simple table">
-							<TableHead>
-								<TableRow>
-									<TableCell>Employee</TableCell>
-									<TableCell align="right">Title</TableCell>
-									<TableCell align="right">Department</TableCell>
-									<TableCell align="right">Status</TableCell>
-									<TableCell align="right">Contract</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{rows.map((row) => (
-									<TableRow
-										key={row.name}
-										sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-									>
-										<TableCell component="th" scope="row">
-											{row.paygrade}
-										</TableCell>
-										<TableCell align="right">{row.annual}</TableCell>
-										<TableCell align="right">{row.casual}</TableCell>
-										<TableCell align="right">{row.maternity}</TableCell>
-										<TableCell align="right">{row.nopay}</TableCell>
+			<h3
+				style={{ textAlign: "center", marginTop: "2em", marginBottom: "1em" }}
+				className="only-print"
+			>
+				Employee Report Grouped by {tableKey}
+			</h3>
+
+			{showTable && (
+				<Card>
+					<Scrollbar>
+						<TableContainer>
+							<Table sx={{ minWidth: 650 }} aria-label="simple table">
+								<TableHead>
+									<TableRow>
+										<TableCell>{tableKey}</TableCell>
+										<TableCell align="left">Employee ID</TableCell>
+										<TableCell align="left">Name</TableCell>
+										<TableCell align="left">Department</TableCell>
+										{/* <TableCell align="left">Contract</TableCell> */}
 									</TableRow>
-								))}
-							</TableBody>
-						</Table>
-					</TableContainer>
-				</Scrollbar>
-			</Card>
+								</TableHead>
+								<TableBody>
+									{records.map((row, idx) => (
+										<TableRow
+											key={idx}
+											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+										>
+											<TableCell component="th" scope="row">
+												{tableKey === "Job Title"
+													? row.job_title
+													: tableKey === "Pay Grade"
+													? row.paygrade_level
+													: tableKey === "Status"
+													? row.status_type
+													: row.contract_type}
+											</TableCell>
+											<TableCell align="left">{row.emp_id}</TableCell>
+											<TableCell align="left">
+												{row.first_name + " " + row.last_name}
+											</TableCell>
+											<TableCell align="left">{row.dept_name}</TableCell>
+											{/* <TableCell align="left">{row.nopay}</TableCell> */}
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</Scrollbar>
+				</Card>
+			)}
 		</>
 	);
 };

@@ -20,6 +20,8 @@ import { Box } from "@mui/system";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
+import "../../theme/print.css";
+
 // ----------------------------------------------------------------------
 
 function createData(paygrade, annual, casual, maternity, nopay) {
@@ -39,7 +41,7 @@ const EmpByDept = () => {
 	const [departments, setDepartments] = useState([]);
 	const [records, setRecords] = useState([]);
 
-	const [deptName, setDeptName] = useState("");
+	const [deptName, setDeptName] = useState("All");
 
 	const [showTable, setShowTable] = useState(false);
 
@@ -83,7 +85,7 @@ const EmpByDept = () => {
 
 	return (
 		<>
-			<Card sx={{ mb: 3 }}>
+			<Card className="no-print" sx={{ mb: 3 }}>
 				<Box
 					sx={{
 						p: 2,
@@ -122,10 +124,24 @@ const EmpByDept = () => {
 									</Button>
 								</Stack>
 							</form>
+							<Stack>
+								{showTable && (
+									<h5 style={{ margin: 0, marginTop: "1em" }}>
+										{records.length} record{records.length > 1 && "s"} found
+									</h5>
+								)}
+							</Stack>
 						</Grid>
 					</Grid>
 				</Box>
 			</Card>
+
+			<h3
+				style={{ textAlign: "center", marginTop: "2em", marginBottom: "1em" }}
+				className="only-print"
+			>
+				Employee Report for {deptName} Department{deptName === "All" && "s"}
+			</h3>
 
 			{showTable && (
 				<Card>
