@@ -181,6 +181,7 @@ export default function EmployeeAddPage() {
 			status_id: statusID,
 			supervisor_id: supervisorID,
 			marital_status: maritalStatus,
+			custom_attributes: customAttributeData,
 		};
 		console.log(data);
 		axios
@@ -492,18 +493,23 @@ export default function EmployeeAddPage() {
 								</Grid>
 							</Grid>
 							<Grid container spacing={2}>
-								<Grid item xs={6}>
-									<Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+								<Grid item xs={12}>
+									<Stack
+										direction="row"
+										spacing={2}
+										sx={{ mb: 4 }}
+										flexWrap="wrap"
+									>
 										{customAttributes.map((row) => {
 											return (
 												<TextField
+													type={row.data_type === "INT" ? "number" : "text"}
 													key={row.attr_name}
 													id={row.attr_name}
 													label={row.alias}
-													sx={{ width: "25ch" }}
+													sx={{ width: "25ch", mb: 1 }}
 													value={customAttributeData[row.attr_name]}
 													onChange={(e) => {
-														console.log(customAttributeData);
 														setCustomAttributeData((prev) => {
 															return {
 																...prev,

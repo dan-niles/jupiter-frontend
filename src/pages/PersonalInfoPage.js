@@ -12,19 +12,59 @@ import {
 // components
 import Scrollbar from "../components/scrollbar";
 import { Box } from "@mui/system";
-
+import axios from "axios";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
+import { ApiGetEmployeeById } from "../services/employeeService";
 
 import { useAuth } from "../context/auth-context";
+import { useState, useEffect } from "react";
 
 // ----------------------------------------------------------------------
 
-export default function PersonalInfoPage() {
+const accessToken = sessionStorage.getItem("access-token");
 
-	const { user } = useAuth()
+export default function PersonalInfoPage() {
+	const { user } = useAuth();
+	const [employee, setEmployee] = useState({});
+	const [customAttributeData, setCustomAttributeData] = useState({});
+	const [customAttributes, setCustomAttributes] = useState([]);
+
+	useEffect(() => {
+		getEmployee();
+		getCustomAttributes();
+	}, []);
+
+	const getEmployee = () => {
+		ApiGetEmployeeById(user.emp_id).then((res) => {
+			setEmployee(res.data[0]);
+		});
+	};
+
+	const getCustomAttributes = () => {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data);
+				setCustomAttributes(res.data);
+			});
+	};
+
+	useEffect(() => {
+		customAttributes.forEach((row) => {
+			setCustomAttributeData((prev) => {
+				return {
+					...prev,
+					[row.attr_name]: employee[row.attr_name],
+				};
+			});
+		});
+	}, [customAttributes]);
 
 	return (
 		<>
@@ -33,27 +73,6 @@ export default function PersonalInfoPage() {
 			</Helmet>
 
 			<Container>
-				{/* <Stack
-					direction="row"
-					alignItems="center"
-					justifyContent="space-between"
-					mb={5}
-				>
-					<Typography variant="h4" gutterBottom>
-						Employee
-					</Typography>
-
-					<Button
-						color="error"
-						variant="outlined"
-						startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
-						component={RouterLink}
-						to="/dashboard/employee"
-					>
-						Go Back
-					</Button>
-				</Stack> */}
-
 				<Card>
 					<Box
 						sx={{
@@ -116,7 +135,7 @@ export default function PersonalInfoPage() {
 												inputFormat="dd/MM/yyyy"
 												label="Birthdate"
 												value={user.birthdate}
-												onChange={() => { }}
+												onChange={() => {}}
 												renderInput={(params) => <TextField {...params} />}
 											/>
 										</LocalizationProvider>
@@ -217,12 +236,30 @@ export default function PersonalInfoPage() {
 									</Stack>
 								</Grid>
 							</Grid>
-
-							{/* <Stack alignItems="end">
-								<Button type="submit" variant="contained">
-									Edit Employee
-								</Button>
-							</Stack> */}
+							<Grid container spacing={2}>
+								<Grid item xs={12}>
+									<Stack
+										direction="row"
+										spacing={2}
+										sx={{ mb: 4 }}
+										flexWrap="wrap"
+									>
+										{customAttributes.map((row) => {
+											return (
+												<TextField
+													type={row.data_type === "INT" ? "number" : "text"}
+													inputProps={{ readOnly: true }}
+													key={row.attr_name}
+													id={row.attr_name}
+													label={row.alias}
+													sx={{ width: "25ch", mb: 1 }}
+													value={customAttributeData[row.attr_name]}
+												/>
+											);
+										})}
+									</Stack>
+								</Grid>
+							</Grid>
 						</form>
 					</Box>
 					<Scrollbar></Scrollbar>

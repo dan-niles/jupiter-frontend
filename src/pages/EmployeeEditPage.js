@@ -27,7 +27,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import axios from "axios";
 import { ApiGetTitles } from "../services/titleService";
-import { ApiGetAllEmployee, ApiGetEmployeeById } from "../services/employeeService";
+import {
+	ApiGetAllEmployee,
+	ApiGetEmployeeById,
+} from "../services/employeeService";
 import { ApiGetStatus } from "../services/statusService";
 import { ApiGetPaygrade } from "../services/paygradeService";
 import { ApiGetContract } from "../services/contractService";
@@ -55,6 +58,7 @@ export default function EmployeeAddPage() {
 	const [statusID, setStatusID] = useState("");
 	const [maritalStatus, setMaritalStatus] = useState("");
 	const [supervisorID, setSupervisorID] = useState("");
+	const [customAttributeData, setCustomAttributeData] = useState({});
 
 	const [paygrades, setPaygrades] = useState([]);
 	const [contracts, setContracts] = useState([]);
@@ -62,6 +66,7 @@ export default function EmployeeAddPage() {
 	const [titles, setTitles] = useState([]);
 	const [departments, setDepartments] = useState([]);
 	const [supervisors, setSupervisors] = useState([]);
+	const [customAttributes, setCustomAttributes] = useState([]);
 
 	const navigate = useNavigate();
 
@@ -73,6 +78,7 @@ export default function EmployeeAddPage() {
 		getDepartments();
 		getSupervisors();
 		getEmployee();
+		getCustomAttributes();
 	}, []);
 
 	useEffect(() => {
@@ -101,54 +107,71 @@ export default function EmployeeAddPage() {
 	}, [employee]);
 
 	const getEmployee = () => {
-		ApiGetEmployeeById(id)
-			.then((res) => {
-				setEmployee(res.data);
-			});
+		ApiGetEmployeeById(id).then((res) => {
+			setEmployee(res.data[0]);
+		});
 	};
 
 	const getPaygrades = () => {
-		ApiGetPaygrade()
-			.then((res) => {
-				setPaygrades(res.data);
-			});
+		ApiGetPaygrade().then((res) => {
+			setPaygrades(res.data);
+		});
 	};
 
 	const getContracts = () => {
-		ApiGetContract()
-			.then((res) => {
-				setContracts(res.data);
-			});
+		ApiGetContract().then((res) => {
+			setContracts(res.data);
+		});
 	};
 
 	const getTitles = () => {
-		ApiGetTitles()
-			.then((res) => {
-				console.log(res.data)
-				setTitles(res.data);
-			});
+		ApiGetTitles().then((res) => {
+			console.log(res.data);
+			setTitles(res.data);
+		});
 	};
 
 	const getStatuses = () => {
-		ApiGetStatus()
-			.then((res) => {
-				setStatuses(res.data);
-			});
+		ApiGetStatus().then((res) => {
+			setStatuses(res.data);
+		});
 	};
 
 	const getDepartments = () => {
-		ApiGetAllDepartments()
-			.then((res) => {
-				setDepartments(res.data);
-			});
+		ApiGetAllDepartments().then((res) => {
+			setDepartments(res.data);
+		});
 	};
 
 	const getSupervisors = () => {
-		ApiGetAllEmployee()
+		ApiGetAllEmployee().then((res) => {
+			setSupervisors(res.data);
+		});
+	};
+
+	const getCustomAttributes = () => {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
 			.then((res) => {
-				setSupervisors(res.data);
+				console.log(res.data);
+				setCustomAttributes(res.data);
 			});
 	};
+
+	useEffect(() => {
+		customAttributes.forEach((row) => {
+			setCustomAttributeData((prev) => {
+				return {
+					...prev,
+					[row.attr_name]: employee[row.attr_name],
+				};
+			});
+		});
+	}, [customAttributes]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -167,6 +190,7 @@ export default function EmployeeAddPage() {
 			status_id: statusID,
 			supervisor_id: supervisorID,
 			marital_status: maritalStatus,
+			custom_attributes: customAttributeData,
 		};
 		console.log(data);
 		axios
@@ -474,6 +498,37 @@ export default function EmployeeAddPage() {
 												);
 											})}
 										</TextField>
+									</Stack>
+								</Grid>
+							</Grid>
+							<Grid container spacing={2}>
+								<Grid item xs={12}>
+									<Stack
+										direction="row"
+										spacing={2}
+										sx={{ mb: 4 }}
+										flexWrap="wrap"
+									>
+										{customAttributes.map((row) => {
+											return (
+												<TextField
+													type={row.data_type === "INT" ? "number" : "text"}
+													key={row.attr_name}
+													id={row.attr_name}
+													label={row.alias}
+													sx={{ width: "25ch", mb: 1 }}
+													value={customAttributeData[row.attr_name]}
+													onChange={(e) => {
+														setCustomAttributeData((prev) => {
+															return {
+																...prev,
+																[row.attr_name]: e.target.value,
+															};
+														});
+													}}
+												/>
+											);
+										})}
 									</Stack>
 								</Grid>
 							</Grid>

@@ -155,9 +155,6 @@ export default function CustomAttributesAddPage() {
 											<MenuItem key="INT" value="INT">
 												INTEGER
 											</MenuItem>
-											<MenuItem key="DATE" value="DATE">
-												DATE
-											</MenuItem>
 										</TextField>
 									</Stack>
 								</Grid>
