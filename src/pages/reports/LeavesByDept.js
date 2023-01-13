@@ -19,6 +19,9 @@ import { Box } from "@mui/system";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import "../../theme/print.css";
 
@@ -44,6 +47,11 @@ const LeavesByDept = () => {
 
 	const [deptName, setDeptName] = useState("All");
 	const [leaveType, setLeaveType] = useState("All");
+
+	const currentYear = new Date().getFullYear();
+
+	const [startDate, setStartDate] = useState(new Date(currentYear, 0, 1));
+	const [endDate, setEndDate] = useState(new Date(currentYear, 11, 31));
 
 	const [showTable, setShowTable] = useState(false);
 
@@ -144,18 +152,42 @@ const LeavesByDept = () => {
 											No Pay
 										</MenuItem>
 									</TextField>
+									<LocalizationProvider dateAdapter={AdapterDateFns}>
+										<DatePicker
+											required
+											inputFormat="dd/MM/yyyy"
+											label="Start Date"
+											value={startDate}
+											onChange={(newValue) => {
+												setStartDate(newValue);
+											}}
+											renderInput={(params) => <TextField {...params} />}
+										/>
+									</LocalizationProvider>
+									<LocalizationProvider dateAdapter={AdapterDateFns}>
+										<DatePicker
+											required
+											inputFormat="dd/MM/yyyy"
+											label="End Date"
+											value={endDate}
+											onChange={(newValue) => {
+												setEndDate(newValue);
+											}}
+											renderInput={(params) => <TextField {...params} />}
+										/>
+									</LocalizationProvider>
 									<Button type="submit" variant="contained" color="secondary">
 										Generate
 									</Button>
 								</Stack>
 							</form>
-							<Stack>
+							{/* <Stack>
 								{showTable && (
 									<h5 style={{ margin: 0, marginTop: "1em" }}>
 										{records.length} record{records.length > 1 && "s"} found
 									</h5>
 								)}
-							</Stack>
+							</Stack> */}
 						</Grid>
 					</Grid>
 				</Box>
@@ -181,7 +213,8 @@ const LeavesByDept = () => {
 				className="only-print"
 			>
 				{leaveTypes[leaveType]} Leave{leaveType === "All" && "s"}{" "}
-				{leaveType !== "All" && "Only"}
+				{leaveType !== "All" && "Only"} - From {startDate.toDateString()} to{" "}
+				{endDate.toDateString()}
 			</h4>
 
 			{showTable && (
@@ -200,35 +233,42 @@ const LeavesByDept = () => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{records.map((row, idx) => (
-										<TableRow
-											key={idx}
-											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-										>
-											<TableCell component="th" scope="row">
-												{row.dept_name}
-											</TableCell>
-											<TableCell align="left">{row.emp_id}</TableCell>
-											<TableCell align="left">
-												{row.first_name + " " + row.last_name}
-											</TableCell>
-											<TableCell
-												align="left"
-												sx={{ textTransform: "capitalize" }}
-											>
-												{row.leave_type}
-											</TableCell>
-											<TableCell align="left">
-												{format(new Date(row.date), "dd/MM/yyyy")}
-											</TableCell>
-											<TableCell
-												align="left"
-												sx={{ textTransform: "capitalize" }}
-											>
-												{row.status}
-											</TableCell>
-										</TableRow>
-									))}
+									{records.map((row, idx) => {
+										let rec_date = new Date(row.date);
+										if (rec_date >= startDate && rec_date <= endDate) {
+											return (
+												<TableRow
+													key={idx}
+													sx={{
+														"&:last-child td, &:last-child th": { border: 0 },
+													}}
+												>
+													<TableCell component="th" scope="row">
+														{row.dept_name}
+													</TableCell>
+													<TableCell align="left">{row.emp_id}</TableCell>
+													<TableCell align="left">
+														{row.first_name + " " + row.last_name}
+													</TableCell>
+													<TableCell
+														align="left"
+														sx={{ textTransform: "capitalize" }}
+													>
+														{row.leave_type}
+													</TableCell>
+													<TableCell align="left">
+														{format(rec_date, "dd/MM/yyyy")}
+													</TableCell>
+													<TableCell
+														align="left"
+														sx={{ textTransform: "capitalize" }}
+													>
+														{row.status}
+													</TableCell>
+												</TableRow>
+											);
+										}
+									})}
 								</TableBody>
 							</Table>
 						</TableContainer>
