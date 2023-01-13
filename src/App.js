@@ -5,11 +5,13 @@ import ThemeProvider from "./theme";
 
 function App() {
 	return (
-		<UserContextProvider>
-			<ThemeProvider>
-				<Router />
-			</ThemeProvider>
-		</UserContextProvider>
+		<AuthProvider>
+			<UserContextProvider>
+				<ThemeProvider>
+					<Router />
+				</ThemeProvider>
+			</UserContextProvider>
+		</AuthProvider>
 	);
 }
 

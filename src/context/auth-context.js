@@ -2,14 +2,6 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 import axios from '../http-common';
 import { ApiLogin } from '../services/authService';
 
-const loading = (
-    <div className="pt-3 text-center min-vh-100">
-        <div className="sk-spinner sk-spinner-pulse">
-            <div className="lds-ripple"><div></div><div></div></div>
-        </div>
-    </div>
-)
-
 const AuthContext = createContext();
 
 export function useAuth() {
@@ -27,7 +19,6 @@ export function AuthProvider({ children }) {
     }, [user]);
 
     useEffect(() => {
-        console.log("Hi")
         localStorage.setItem('token', token || '');
         axios.defaults.headers.common['authorization'] = `Bearer ${token}`
         if (token) {
@@ -74,7 +65,7 @@ export function AuthProvider({ children }) {
 
     return (
         <AuthContext.Provider value={value} >
-            {isLoading ? loading : children}
+            {children}
         </AuthContext.Provider>
     )
 }

@@ -14,11 +14,14 @@ import {
 	Typography,
 	IconButton,
 	TableContainer,
+	TextField,
 	TableHead,
 	MenuItem,
 } from "@mui/material";
 // components
 import Scrollbar from "../components/scrollbar";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -27,9 +30,26 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import Iconify from "../components/iconify";
 import Label from "../components/label";
-import { ApiDeletePendingLeave, ApiGetLeavesOfUser } from "../services/leaveService";
+import axios from "axios";
+import {
+	ApiDeletePendingLeave,
+	ApiGetLeavesOfUser,
+} from "../services/leaveService";
 
 // ----------------------------------------------------------------------
+
+function createData(date, type, reason, status) {
+	return { date, type, reason, status };
+}
+
+const rows = [
+	createData("23-12-2022", "Annual", "Christmas Holidays", "Pending"),
+	createData("12-11-2022", "Casual", "Vacation", "Declined"),
+	createData("06-11-2022", "Casual", "Vacation", "Approved"),
+	createData("07-08-2022", "No Pay", "Personal Reasons", "Approved"),
+];
+
+const accessToken = sessionStorage.getItem("access-token");
 
 export default function LeaveHistoryPage() {
 	const [open, setOpen] = useState(false);
@@ -116,8 +136,8 @@ export default function LeaveHistoryPage() {
 														leave.status === "pending"
 															? "warning"
 															: leave.status === "declined"
-																? "error"
-																: "success"
+															? "error"
+															: "success"
 													}
 												>
 													{leave.status}
