@@ -44,6 +44,30 @@ export default function EmployeeAddPage() {
 	const [maritalStatus, setMaritalStatus] = useState("");
 	const [supervisorID, setSupervisorID] = useState("");
 	const [customAttributeData, setCustomAttributeData] = useState({});
+	const [dependants, setDependants] = useState({
+		1: {
+			name: "",
+			relationship: "",
+			birthdate: null,
+		},
+		2: {
+			name: "",
+			relationship: "",
+			birthdate: null,
+		},
+	});
+	const [emergencyContacts, setEmergencyContacts] = useState({
+		1: {
+			name: "",
+			phone: "",
+			address: "",
+		},
+		2: {
+			name: "",
+			phone: "",
+			address: "",
+		},
+	});
 
 	const [paygrades, setPaygrades] = useState([]);
 	const [contracts, setContracts] = useState([]);
@@ -182,6 +206,18 @@ export default function EmployeeAddPage() {
 			supervisor_id: supervisorID,
 			marital_status: maritalStatus,
 			custom_attributes: customAttributeData,
+			dependants: {
+				...dependants,
+				[1]: {
+					...dependants[1],
+					birthdate: format(dependants[1].birthdate, "yyyy-MM-dd"),
+				},
+				[2]: {
+					...dependants[2],
+					birthdate: format(dependants[2].birthdate, "yyyy-MM-dd"),
+				},
+			},
+			emergency_contacts: emergencyContacts,
 		};
 		console.log(data);
 		axios
@@ -494,12 +530,7 @@ export default function EmployeeAddPage() {
 							</Grid>
 							<Grid container spacing={2}>
 								<Grid item xs={12}>
-									<Stack
-										direction="row"
-										spacing={2}
-										sx={{ mb: 4 }}
-										flexWrap="wrap"
-									>
+									<Stack direction="row" spacing={2} flexWrap="wrap">
 										{customAttributes.map((row) => {
 											return (
 												<TextField
@@ -520,6 +551,241 @@ export default function EmployeeAddPage() {
 												/>
 											);
 										})}
+									</Stack>
+								</Grid>
+							</Grid>
+							<Grid container spacing={2}>
+								<Grid item xs={12}>
+									<h4 style={{ marginBottom: "1em" }}>Dependant Details</h4>
+									<Stack direction="row" spacing={2}>
+										<TextField
+											id="dep_name_1"
+											label="Dependant Name"
+											sx={{ width: "24ch" }}
+											value={dependants[1].name}
+											onChange={(e) => {
+												setDependants((prev) => {
+													return {
+														...prev,
+														[1]: {
+															...prev[1],
+															name: e.target.value,
+														},
+													};
+												});
+											}}
+										/>
+										<LocalizationProvider dateAdapter={AdapterDateFns}>
+											<DatePicker
+												required
+												id="dep_birthdate_1"
+												inputFormat="dd/MM/yyyy"
+												label="Dependant Birthdate"
+												value={dependants[1].birthdate}
+												onChange={(e) => {
+													setDependants((prev) => {
+														return {
+															...prev,
+															[1]: {
+																...prev[1],
+																birthdate: e,
+															},
+														};
+													});
+												}}
+												renderInput={(params) => <TextField {...params} />}
+											/>
+										</LocalizationProvider>
+										<TextField
+											id="dep_relation_2"
+											label="Relationship to Employee"
+											sx={{ width: "24ch" }}
+											value={dependants[1].relationship}
+											onChange={(e) => {
+												setDependants((prev) => {
+													return {
+														...prev,
+														[1]: {
+															...prev[1],
+															relationship: e.target.value,
+														},
+													};
+												});
+											}}
+										/>
+									</Stack>
+									<Stack direction="row" spacing={2} sx={{ mt: 1.5 }}>
+										<TextField
+											id="dep_name_2"
+											label="Dependant Name"
+											sx={{ width: "24ch" }}
+											value={dependants[2].name}
+											onChange={(e) => {
+												setDependants((prev) => {
+													return {
+														...prev,
+														[2]: {
+															...prev[2],
+															name: e.target.value,
+														},
+													};
+												});
+											}}
+										/>
+										<LocalizationProvider dateAdapter={AdapterDateFns}>
+											<DatePicker
+												required
+												id="dep_birthdate_2"
+												inputFormat="dd/MM/yyyy"
+												label="Dependant Birthdate"
+												value={dependants[2].birthdate}
+												onChange={(e) => {
+													setDependants((prev) => {
+														return {
+															...prev,
+															[2]: {
+																...prev[2],
+																birthdate: e,
+															},
+														};
+													});
+												}}
+												renderInput={(params) => <TextField {...params} />}
+											/>
+										</LocalizationProvider>
+										<TextField
+											id="dep_relation_2"
+											label="Relationship to Employee"
+											sx={{ width: "24ch" }}
+											value={dependants[2].relationship}
+											onChange={(e) => {
+												setDependants((prev) => {
+													return {
+														...prev,
+														[2]: {
+															...prev[2],
+															relationship: e.target.value,
+														},
+													};
+												});
+											}}
+										/>
+									</Stack>
+								</Grid>
+							</Grid>
+
+							<Grid container spacing={2} sx={{ mb: 4 }}>
+								<Grid item xs={12}>
+									<h4 style={{ marginBottom: "1em" }}>
+										Emergency Contact Details
+									</h4>
+									<Stack direction="row" spacing={2}>
+										<TextField
+											id="contact_name_1"
+											label="Contact Name"
+											sx={{ width: "24ch" }}
+											value={emergencyContacts[1].name}
+											onChange={(e) => {
+												setEmergencyContacts((prev) => {
+													return {
+														...prev,
+														[1]: {
+															...prev[1],
+															name: e.target.value,
+														},
+													};
+												});
+											}}
+										/>
+										<TextField
+											id="contact_phone_1"
+											label="Phone No."
+											type="number"
+											sx={{ width: "24ch" }}
+											value={emergencyContacts[1].phone}
+											onChange={(e) => {
+												setEmergencyContacts((prev) => {
+													return {
+														...prev,
+														[1]: {
+															...prev[1],
+															phone: e.target.value,
+														},
+													};
+												});
+											}}
+										/>
+										<TextField
+											id="contact_address_1"
+											label="Address"
+											sx={{ width: "24ch" }}
+											value={emergencyContacts[1].address}
+											onChange={(e) => {
+												setEmergencyContacts((prev) => {
+													return {
+														...prev,
+														[1]: {
+															...prev[1],
+															address: e.target.value,
+														},
+													};
+												});
+											}}
+										/>
+									</Stack>
+									<Stack direction="row" spacing={2} sx={{ mt: 1.5 }}>
+										<TextField
+											id="contact_name_2"
+											label="Contact Name"
+											sx={{ width: "24ch" }}
+											value={emergencyContacts[2].name}
+											onChange={(e) => {
+												setEmergencyContacts((prev) => {
+													return {
+														...prev,
+														[2]: {
+															...prev[2],
+															name: e.target.value,
+														},
+													};
+												});
+											}}
+										/>
+										<TextField
+											id="contact_phone_2"
+											label="Phone No."
+											type="number"
+											sx={{ width: "24ch" }}
+											value={emergencyContacts[2].phone}
+											onChange={(e) => {
+												setEmergencyContacts((prev) => {
+													return {
+														...prev,
+														[2]: {
+															...prev[2],
+															phone: e.target.value,
+														},
+													};
+												});
+											}}
+										/>
+										<TextField
+											id="contact_address_2"
+											label="Address"
+											sx={{ width: "24ch" }}
+											value={emergencyContacts[2].address}
+											onChange={(e) => {
+												setEmergencyContacts((prev) => {
+													return {
+														...prev,
+														[2]: {
+															...prev[2],
+															address: e.target.value,
+														},
+													};
+												});
+											}}
+										/>
 									</Stack>
 								</Grid>
 							</Grid>
