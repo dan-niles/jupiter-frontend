@@ -718,7 +718,7 @@ export default function EmployeeAddPage() {
 										<TextField
 											id="contact_address_1"
 											label="Address"
-											sx={{ width: "24ch" }}
+											sx={{ width: "34ch" }}
 											value={emergencyContacts[1].address}
 											onChange={(e) => {
 												setEmergencyContacts((prev) => {
@@ -772,7 +772,7 @@ export default function EmployeeAddPage() {
 										<TextField
 											id="contact_address_2"
 											label="Address"
-											sx={{ width: "24ch" }}
+											sx={{ width: "34ch" }}
 											value={emergencyContacts[2].address}
 											onChange={(e) => {
 												setEmergencyContacts((prev) => {
