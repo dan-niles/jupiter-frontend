@@ -24,10 +24,13 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker } from "react-date-range";
 import { ApiApplyLeave } from "../services/leaveService";
 import { toast, Toaster } from "react-hot-toast";
+import { useAuth } from "../context/auth-context";
 
 // ----------------------------------------------------------------------
 
 export default function EmployeeAddPage() {
+
+	const { user } = useAuth()
 
 	const navigate = useNavigate();
 
@@ -52,7 +55,7 @@ export default function EmployeeAddPage() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		ApiApplyLeave(leaveFormValues)
+		ApiApplyLeave(user.emp_id, leaveFormValues)
 			.then(res => {
 				toast.success("Successfully applied for leave.")
 				navigate("/dashboard")

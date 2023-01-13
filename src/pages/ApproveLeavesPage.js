@@ -30,10 +30,14 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import Label from "../components/label";
 import { ApiGetLeavesToApprove, ApiTakeLeaveAction } from "../services/leaveService";
+import { useAuth } from "../context/auth-context";
 
 // ----------------------------------------------------------------------
 
 export default function ApproveLeavesPage() {
+
+	const { user } = useAuth()
+
 	const [open, setOpen] = useState(false);
 
 	const [leavesToApprove, setLeavesToApprove] = useState([])
@@ -43,7 +47,7 @@ export default function ApproveLeavesPage() {
 	}, [])
 
 	const fetchData = () => {
-		ApiGetLeavesToApprove()
+		ApiGetLeavesToApprove(user.emp_id)
 			.then(res => {
 				setLeavesToApprove(res.data)
 			})
@@ -53,6 +57,7 @@ export default function ApproveLeavesPage() {
 	const takeLeaveAction = (leave_id, action) => {
 		ApiTakeLeaveAction({ action, leave_id })
 			.then(res => {
+				console.log(res)
 				fetchData()
 			})
 			.catch(err => console.error(err))

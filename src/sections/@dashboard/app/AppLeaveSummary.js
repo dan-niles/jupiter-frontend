@@ -73,6 +73,7 @@ export default function AppLeaveSummary({
 				}
 			)
 			.then((res) => {
+				console.log(res)
 				setBalance(res.data[0]["FN_no_of_leaves"]);
 			});
 	};

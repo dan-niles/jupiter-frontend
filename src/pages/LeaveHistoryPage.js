@@ -35,6 +35,7 @@ import {
 	ApiDeletePendingLeave,
 	ApiGetLeavesOfUser,
 } from "../services/leaveService";
+import { useAuth } from "../context/auth-context";
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +53,10 @@ const rows = [
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function LeaveHistoryPage() {
+
+	const { user } = useAuth();
+
+
 	const [open, setOpen] = useState(false);
 	const [leaveData, setLeaveData] = useState([]);
 
@@ -60,7 +65,7 @@ export default function LeaveHistoryPage() {
 	}, []);
 
 	const fetchData = () => {
-		ApiGetLeavesOfUser()
+		ApiGetLeavesOfUser(user.emp_id)
 			.then((res) => {
 				setLeaveData(res.data);
 			})
@@ -72,7 +77,7 @@ export default function LeaveHistoryPage() {
 	};
 
 	const deleteLeave = (leave_id) => {
-		ApiDeletePendingLeave(leave_id)
+		ApiDeletePendingLeave(user.emp_id, leave_id)
 			.then((res) => {
 				fetchData();
 				console.log(res.data);
@@ -136,8 +141,8 @@ export default function LeaveHistoryPage() {
 														leave.status === "pending"
 															? "warning"
 															: leave.status === "declined"
-															? "error"
-															: "success"
+																? "error"
+																: "success"
 													}
 												>
 													{leave.status}
