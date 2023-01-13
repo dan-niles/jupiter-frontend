@@ -1,7 +1,9 @@
 import { Helmet } from "react-helmet-async";
 // @mui
+import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Grid, Container, Typography } from "@mui/material";
+import axios from "axios";
 // sections
 import {
 	AppWebsiteVisits,
@@ -11,8 +13,60 @@ import {
 
 // ----------------------------------------------------------------------
 
+const accessToken = sessionStorage.getItem("access-token");
+
 export default function AdminDashboard() {
 	const theme = useTheme();
+	const [departmentCount, setDepartmentCount] = useState(0);
+	const [userCount, setUserCount] = useState(0);
+	const [employeeCount, setEmployeeCount] = useState(0);
+	const [branchCount, setBranchCount] = useState(0);
+
+	useEffect(() => {
+		axios
+			.post(process.env.REACT_APP_BACKEND_URL + "/api/department/count", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data[0][0]["count(*)"]);
+				setDepartmentCount(res.data[0][0]["count(*)"]);
+			});
+
+		axios
+			.post(process.env.REACT_APP_BACKEND_URL + "/api/branch/count", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data[0][0]["count(*)"]);
+				setBranchCount(res.data[0][0]["count(*)"]);
+			});
+
+		axios
+			.post(process.env.REACT_APP_BACKEND_URL + "/api/user/count", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data[0][0]["count(*)"]);
+				setUserCount(res.data[0][0]["count(*)"]);
+			});
+
+		axios
+			.post(process.env.REACT_APP_BACKEND_URL + "/api/employee/count", {
+				headers: {
+					"access-token": `${accessToken}`,
+				},
+			})
+			.then((res) => {
+				console.log(res.data[0][0]["count(*)"]);
+				setEmployeeCount(res.data[0][0]["count(*)"]);
+			});
+	}, []);
 
 	return (
 		<>
@@ -29,7 +83,7 @@ export default function AdminDashboard() {
 					<Grid item xs={12} sm={6} md={3}>
 						<AppWidgetSummary
 							title="Branches"
-							total={16}
+							total={branchCount}
 							icon={"ant-design:cluster-outlined"}
 						/>
 					</Grid>
@@ -37,7 +91,7 @@ export default function AdminDashboard() {
 					<Grid item xs={12} sm={6} md={3}>
 						<AppWidgetSummary
 							title="Departments"
-							total={10}
+							total={departmentCount}
 							color="info"
 							icon={"ant-design:appstore-outlined"}
 						/>
@@ -46,7 +100,7 @@ export default function AdminDashboard() {
 					<Grid item xs={12} sm={6} md={3}>
 						<AppWidgetSummary
 							title="Employees"
-							total={1256}
+							total={employeeCount}
 							color="success"
 							icon={"ant-design:team-outlined"}
 						/>
@@ -55,7 +109,7 @@ export default function AdminDashboard() {
 					<Grid item xs={12} sm={6} md={3}>
 						<AppWidgetSummary
 							title="Users"
-							total={134}
+							total={userCount}
 							color="warning"
 							icon={"ant-design:user-outlined"}
 						/>
