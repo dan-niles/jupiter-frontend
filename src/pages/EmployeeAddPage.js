@@ -195,6 +195,7 @@ export default function EmployeeAddPage() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		console.log(dependants[1].birthdate);
 		const data = {
 			emp_id: empID,
 			full_name: fullName,
@@ -215,11 +216,17 @@ export default function EmployeeAddPage() {
 				...dependants,
 				[1]: {
 					...dependants[1],
-					birthdate: format(dependants[1].birthdate, "yyyy-MM-dd"),
+					birthdate:
+						dependants[1].birthdate !== null
+							? format(dependants[1].birthdate, "yyyy-MM-dd")
+							: "",
 				},
 				[2]: {
 					...dependants[2],
-					birthdate: format(dependants[2].birthdate, "yyyy-MM-dd"),
+					birthdate:
+						dependants[2].birthdate !== null
+							? format(dependants[2].birthdate, "yyyy-MM-dd")
+							: "",
 				},
 			},
 			emergency_contacts: emergencyContacts,

@@ -11,17 +11,34 @@ import {
 	AppButtons,
 } from "../../sections/@dashboard/app";
 import { faker } from "@faker-js/faker";
+import toast, { Toaster } from "react-hot-toast";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 // ----------------------------------------------------------------------
 
 export default function UserDashboard() {
 	const theme = useTheme();
 
+	const { state } = useLocation();
+
+	useEffect(() => {
+		if (
+			state != null &&
+			state.showToast !== undefined &&
+			state.showToast === true
+		) {
+			toast.error(state.toastMessage);
+		}
+	}, []);
+
 	return (
 		<>
 			<Helmet>
 				<title> Dashboard | Jupiter HRM </title>
 			</Helmet>
+
+			<Toaster position="top-right" reverseOrder={true} />
 
 			<Container maxWidth="xl">
 				<Typography variant="h4" sx={{ mb: 5 }}>

@@ -124,12 +124,12 @@ export default function EmployeePage() {
 					<Typography variant="h4" gutterBottom>
 						Leave Configuration
 					</Typography>
-					<Button
+					{/* <Button
 						variant="contained"
 						startIcon={<RestartAltIcon icon="eva:plus-fill" />}
 					>
 						Yearly Reset
-					</Button>
+					</Button> */}
 				</Stack>
 
 				<Card>

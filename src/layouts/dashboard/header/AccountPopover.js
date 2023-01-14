@@ -64,7 +64,8 @@ export default function AccountPopover() {
 		handleClose();
 		sessionStorage.removeItem("user-data");
 		sessionStorage.removeItem("access-token");
-		logout()
+		sessionStorage.removeItem("is-supervisor");
+		logout();
 		navigate("/login");
 	};
 

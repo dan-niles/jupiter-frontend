@@ -5,6 +5,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import HistoryIcon from "@mui/icons-material/History";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +24,11 @@ const navConfig = [
 		title: "personal info",
 		path: "/dashboard/personal-info",
 		icon: <InfoIcon />,
+	},
+	{
+		title: "approve leaves",
+		path: "/dashboard/approve-leaves",
+		icon: <PlaylistAddCheckIcon />,
 	},
 	{
 		title: "leave history",
