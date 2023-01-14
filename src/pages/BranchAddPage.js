@@ -3,6 +3,8 @@ import { useState } from "react";
 import { NavLink as RouterLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import useAccessControl from "../hooks/useAccessControl";
+import { useAuth } from "../context/auth-context";
 // @mui
 import {
 	Card,
@@ -27,6 +29,9 @@ import countries from "../_mock/countries.json";
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function BranchAddPage() {
+	const { user } = useAuth();
+	useAccessControl(user.role, "branches-manage");
+
 	const [branchName, setBranchName] = useState(null);
 	const [branchAddress, setBranchAddress] = useState("");
 	const [branchCountry, setBranchCountry] = useState("");

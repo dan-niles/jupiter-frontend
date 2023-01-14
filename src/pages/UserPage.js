@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { NavLink as RouterLink } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useLocation } from "react-router-dom";
+import useAccessControl from "../hooks/useAccessControl";
+import { useAuth } from "../context/auth-context";
 
 // @mui
 import {
@@ -90,6 +92,9 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserPage(props) {
+	const { user } = useAuth();
+	useAccessControl(user.role, "users-view");
+
 	const [open, setOpen] = useState(null);
 	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
@@ -129,7 +134,7 @@ export default function UserPage(props) {
 				console.log(res.data);
 				setUsers(res.data);
 			})
-			.catch(e => console.log(e))
+			.catch((e) => console.log(e));
 	};
 
 	const handleOpenMenu = (id, event) => {
@@ -313,8 +318,8 @@ export default function UserPage(props) {
 														{role === "admin"
 															? "Administrator"
 															: role === "manager"
-																? "HR-Manager"
-																: "User"}
+															? "HR-Manager"
+															: "User"}
 													</TableCell>
 
 													<TableCell align="center">

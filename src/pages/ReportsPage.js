@@ -2,6 +2,8 @@ import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { NavLink as RouterLink, useNavigate } from "react-router-dom";
+import useAccessControl from "../hooks/useAccessControl";
+import { useAuth } from "../context/auth-context";
 // @mui
 import {
 	Stack,
@@ -40,6 +42,9 @@ function TabPanel(props) {
 }
 
 export default function ReportsPage() {
+	const { user } = useAuth();
+	useAccessControl(user.role, "reports");
+
 	var url_string = window.location;
 	var url = new URL(url_string);
 	var tab_id = parseInt(url.searchParams.get("tab"));

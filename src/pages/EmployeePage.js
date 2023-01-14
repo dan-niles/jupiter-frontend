@@ -4,6 +4,8 @@ import { NavLink as RouterLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useLocation } from "react-router-dom";
+import useAccessControl from "../hooks/useAccessControl";
+import { useAuth } from "../context/auth-context";
 
 // @mui
 import {
@@ -34,7 +36,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 // sections
 import { EmpListHead, EmpListToolbar } from "../sections/@dashboard/employee";
-import { ApiDeleteEmployee, ApiGetAllEmployee } from "../services/employeeService";
+import {
+	ApiDeleteEmployee,
+	ApiGetAllEmployee,
+} from "../services/employeeService";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -81,6 +86,9 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function EmployeePage() {
+	const { user } = useAuth();
+	useAccessControl(user.role, "employees-view");
+
 	const [open, setOpen] = useState(null);
 	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 	const [employees, setEmployees] = useState([]);
@@ -98,10 +106,9 @@ export default function EmployeePage() {
 	const { state } = useLocation();
 
 	const getEmployees = () => {
-		ApiGetAllEmployee()
-			.then((res) => {
-				setEmployees(res.data);
-			});
+		ApiGetAllEmployee().then((res) => {
+			setEmployees(res.data);
+		});
 	};
 
 	useEffect(() => {

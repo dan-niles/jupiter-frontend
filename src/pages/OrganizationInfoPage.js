@@ -2,6 +2,8 @@ import { Helmet } from "react-helmet-async";
 import { NavLink as RouterLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import useAccessControl from "../hooks/useAccessControl";
+import { useAuth } from "../context/auth-context";
 // @mui
 import {
 	Card,
@@ -48,6 +50,9 @@ const rows = [
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function OrganizationInfoPage() {
+	const { user } = useAuth();
+	useAccessControl(user.role, "org-info-manage");
+
 	const [open, setOpen] = useState(false);
 	const [orgRecords, setOrgRecords] = useState([]);
 	const [editId, setEditId] = useState(null);

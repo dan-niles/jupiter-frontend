@@ -3,6 +3,8 @@ import { NavLink as RouterLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import useAccessControl from "../hooks/useAccessControl";
+import { useAuth } from "../context/auth-context";
 // @mui
 import {
 	Card,
@@ -35,6 +37,9 @@ import Iconify from "../components/iconify";
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function EmployeePage() {
+	const { user } = useAuth();
+	useAccessControl(user.role, "leave-config-manage");
+
 	const [open, setOpen] = useState(false);
 
 	const [paygradeRecords, setPaygradeRecords] = useState([]);

@@ -5,6 +5,8 @@ import {
 	useNavigate,
 	useParams,
 } from "react-router-dom";
+import useAccessControl from "../hooks/useAccessControl";
+import { useAuth } from "../context/auth-context";
 // @mui
 import {
 	Card,
@@ -41,6 +43,9 @@ import { ApiGetAllDepartments } from "../services/departmentService";
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function EmployeeAddPage() {
+	const { user } = useAuth();
+	useAccessControl(user.role, "employees-edit");
+
 	const [employee, setEmployee] = useState({});
 	const { id } = useParams();
 
@@ -188,7 +193,7 @@ export default function EmployeeAddPage() {
 			})
 			.then((res) => {
 				console.log(res.data);
-				// setCustomAttributes(res.data);
+				setCustomAttributes(res.data);
 			});
 	};
 
@@ -598,7 +603,7 @@ export default function EmployeeAddPage() {
 									<Stack
 										direction="row"
 										spacing={2}
-										sx={{ mb: 4 }}
+										// sx={{ mb: 4 }}
 										flexWrap="wrap"
 									>
 										{customAttributes.map((row) => {

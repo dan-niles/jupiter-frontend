@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { NavLink as RouterLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import useAccessControl from "../hooks/useAccessControl";
+import { useAuth } from "../context/auth-context";
+
 // @mui
 import {
 	Card,
@@ -25,6 +28,9 @@ import { Box } from "@mui/system";
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function UserAddPage() {
+	const { user } = useAuth();
+	useAccessControl(user.role, "users-add");
+
 	const [empID, setEmpID] = useState("");
 	const [role, setRole] = useState("");
 	const [username, setUsername] = useState("");

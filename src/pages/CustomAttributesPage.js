@@ -4,6 +4,8 @@ import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import useAccessControl from "../hooks/useAccessControl";
+import { useAuth } from "../context/auth-context";
 import {
 	Card,
 	Table,
@@ -46,6 +48,9 @@ const rows = [
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function CustomAttributesPage() {
+	const { user } = useAuth();
+	useAccessControl(user.role, "custom-attributes-manage");
+
 	const [open, setOpen] = useState(false);
 	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 

@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import useAccessControl from "../hooks/useAccessControl";
+import { useAuth } from "../context/auth-context";
 // @mui
 import {
 	Card,
@@ -35,6 +37,9 @@ import countries from "../_mock/countries.json";
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function BranchesPage() {
+	const { user } = useAuth();
+	useAccessControl(user.role, "branches-manage");
+
 	const [open, setOpen] = useState(false);
 	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 

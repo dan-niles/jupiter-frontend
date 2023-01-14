@@ -53,9 +53,7 @@ const rows = [
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function LeaveHistoryPage() {
-
 	const { user } = useAuth();
-
 
 	const [open, setOpen] = useState(false);
 	const [leaveData, setLeaveData] = useState([]);
@@ -133,7 +131,15 @@ export default function LeaveHistoryPage() {
 											<TableCell component="th" scope="row">
 												{leave.date}
 											</TableCell>
-											<TableCell align="left">{leave.leave_type}</TableCell>
+											<TableCell align="left">
+												{leave.leave_type === "annual"
+													? "Annual"
+													: leave.leave_type === "casual"
+													? "Casual"
+													: leave.leave_type === "maternity"
+													? "Maternity"
+													: "No Pay"}
+											</TableCell>
 											<TableCell align="left">{leave.reason}</TableCell>
 											<TableCell align="center">
 												<Label
@@ -141,8 +147,8 @@ export default function LeaveHistoryPage() {
 														leave.status === "pending"
 															? "warning"
 															: leave.status === "declined"
-																? "error"
-																: "success"
+															? "error"
+															: "success"
 													}
 												>
 													{leave.status}

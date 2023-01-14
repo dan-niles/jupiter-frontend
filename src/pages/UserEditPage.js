@@ -7,6 +7,8 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import useAccessControl from "../hooks/useAccessControl";
+import { useAuth } from "../context/auth-context";
 // @mui
 import {
 	Card,
@@ -28,6 +30,9 @@ import { Box } from "@mui/system";
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function UserEditPage() {
+	const { user: user_a } = useAuth();
+	useAccessControl(user_a.role, "users-add");
+
 	const [user, setUser] = useState({});
 	const { id } = useParams();
 

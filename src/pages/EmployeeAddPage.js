@@ -1,6 +1,8 @@
 import { Helmet } from "react-helmet-async";
 import { useState, useEffect } from "react";
 import { NavLink as RouterLink, useNavigate } from "react-router-dom";
+import useAccessControl from "../hooks/useAccessControl";
+import { useAuth } from "../context/auth-context";
 // @mui
 import {
 	Card,
@@ -29,6 +31,9 @@ import axios from "axios";
 const accessToken = sessionStorage.getItem("access-token");
 
 export default function EmployeeAddPage() {
+	const { user } = useAuth();
+	useAccessControl(user.role, "employees-add");
+
 	const [empID, setEmpID] = useState("");
 	const [fullName, setFullName] = useState("");
 	const [firstName, setFirstName] = useState("");
