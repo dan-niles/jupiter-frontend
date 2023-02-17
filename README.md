@@ -1,14 +1,46 @@
-# Jupiter HRM
+# Jupiter HRM - Frontend
 
 ## Background
 
 This application was developed for the group project of CS3043: Database Systems.
+
+Backend of the application can be found [here](https://github.com/dan-niles/jupiter-backend)
 
 ### Problem Statement
 
 Jupiter Apparels is a multinational corporation with over 1000 employees. Currently the branches of Jupiter are at Sri Lanka, Bangladesh and Pakistan. Although they use SAP as the ERP to manage key activities of the organization, the management has felt that SAP is too much of an overheard in a management perspective. On one hand it requires specifically trained SAP engineers to do the slightest change while training management employee to use the system is a hassle. Hence, Jupiter has requested our team come up with a easy to use human resource management system as the initial phase.
 
 Read more [here](project-description.pdf).
+
+## Screenshots
+
+### Login
+
+![Login](screenshots/login_screen.png)
+
+### Admin Dashboard
+
+![Admin Dashboard](screenshots/admin_dashboard.png)
+
+### Employee Dashboard
+
+![Employee Dashboard](screenshots/user_dashboard.png)
+
+### Users Panel
+
+![Users Panel](screenshots/users_panel.png)
+
+### Leave History
+
+![Leave History](screenshots/leave_history.png)
+
+### Leave Application
+
+![Leave Application](screenshots/leave_application.png)
+
+### Reports
+
+![Reports](screenshots/reports.png)
 
 ## The Stack
 
@@ -43,6 +75,7 @@ npm start
 The application runs on **localhost:3000**
 
 ### Environment Variables
+
 Create a `.env` file inside the cloned directory and define the following variable
 
 ```
