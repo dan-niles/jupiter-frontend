@@ -11,7 +11,7 @@ const useAccessControl = (role, access_level) => {
 	useEffect(() => {
 		axios
 			.post(
-				process.env.REACT_APP_BACKEND_URL + "/api/user-access/auth",
+				window.configs.backendUrl + "/api/user-access/auth",
 				{
 					role: role,
 					access_level: access_level,

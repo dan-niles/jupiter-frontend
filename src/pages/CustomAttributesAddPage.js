@@ -40,7 +40,7 @@ export default function CustomAttributesAddPage() {
 		e.preventDefault();
 
 		axios
-			.post(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
+			.post(window.configs.backendUrl + "/api/custom_attributes/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},

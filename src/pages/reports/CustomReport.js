@@ -55,7 +55,7 @@ const CustomReport = () => {
 
 	const getCustomAttributes = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
+			.get(window.configs.backendUrl + "/api/custom_attributes/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -67,7 +67,7 @@ const CustomReport = () => {
 
 	const getDepartments = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/department/", {
+			.get(window.configs.backendUrl + "/api/department/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -103,7 +103,7 @@ const CustomReport = () => {
 		});
 		axios
 			.post(
-				process.env.REACT_APP_BACKEND_URL + "/api/reports/custom-report",
+				window.configs.backendUrl + "/api/reports/custom-report",
 				{
 					options: options.join(", "),
 					dept_name: deptName === "All" ? null : deptName,

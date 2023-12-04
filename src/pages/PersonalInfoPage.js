@@ -74,7 +74,7 @@ export default function PersonalInfoPage() {
 
 	const getCustomAttributes = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
+			.get(window.configs.backendUrl + "/api/custom_attributes/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -99,7 +99,7 @@ export default function PersonalInfoPage() {
 	const getDependants = () => {
 		axios
 			.get(
-				process.env.REACT_APP_BACKEND_URL + "/api/dependant/" + user.emp_id,
+				window.configs.backendUrl + "/api/dependant/" + user.emp_id,
 				{
 					headers: {
 						"access-token": `${accessToken}`,
@@ -127,9 +127,9 @@ export default function PersonalInfoPage() {
 	const getEmergencyContacts = () => {
 		axios
 			.get(
-				process.env.REACT_APP_BACKEND_URL +
-					"/api/emergency-contact/" +
-					user.emp_id,
+				window.configs.backendUrl +
+				"/api/emergency-contact/" +
+				user.emp_id,
 				{
 					headers: {
 						"access-token": `${accessToken}`,
@@ -223,7 +223,7 @@ export default function PersonalInfoPage() {
 												inputFormat="dd/MM/yyyy"
 												label="Birthdate"
 												value={user.birthdate}
-												onChange={() => {}}
+												onChange={() => { }}
 												renderInput={(params) => <TextField {...params} />}
 											/>
 										</LocalizationProvider>

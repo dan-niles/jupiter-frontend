@@ -69,7 +69,7 @@ export default function DepartmentPage() {
 
 	const getDepartments = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/department/", {
+			.get(window.configs.backendUrl + "/api/department/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -94,7 +94,7 @@ export default function DepartmentPage() {
 	const handleEdit = (e) => {
 		e.preventDefault();
 		axios
-			.put(process.env.REACT_APP_BACKEND_URL + "/api/department/" + editId, {
+			.put(window.configs.backendUrl + "/api/department/" + editId, {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -129,7 +129,7 @@ export default function DepartmentPage() {
 		e.preventDefault();
 		axios
 			.delete(
-				process.env.REACT_APP_BACKEND_URL + "/api/department/" + deleteId,
+				window.configs.backendUrl + "/api/department/" + deleteId,
 				{
 					headers: {
 						"access-token": `${accessToken}`,

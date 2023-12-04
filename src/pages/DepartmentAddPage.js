@@ -40,7 +40,7 @@ export default function DepartmentAddPage() {
 		e.preventDefault();
 
 		axios
-			.post(process.env.REACT_APP_BACKEND_URL + "/api/department/", {
+			.post(window.configs.backendUrl + "/api/department/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},

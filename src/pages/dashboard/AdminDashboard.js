@@ -24,7 +24,7 @@ export default function AdminDashboard() {
 
 	useEffect(() => {
 		axios
-			.post(process.env.REACT_APP_BACKEND_URL + "/api/department/count", {
+			.post(window.configs.backendUrl + "/api/department/count", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -35,7 +35,7 @@ export default function AdminDashboard() {
 			});
 
 		axios
-			.post(process.env.REACT_APP_BACKEND_URL + "/api/branch/count", {
+			.post(window.configs.backendUrl + "/api/branch/count", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -46,7 +46,7 @@ export default function AdminDashboard() {
 			});
 
 		axios
-			.post(process.env.REACT_APP_BACKEND_URL + "/api/user/count", {
+			.post(window.configs.backendUrl + "/api/user/count", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -57,7 +57,7 @@ export default function AdminDashboard() {
 			});
 
 		axios
-			.post(process.env.REACT_APP_BACKEND_URL + "/api/employee/count", {
+			.post(window.configs.backendUrl + "/api/employee/count", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},

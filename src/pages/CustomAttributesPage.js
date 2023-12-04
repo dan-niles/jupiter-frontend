@@ -67,7 +67,7 @@ export default function CustomAttributesPage() {
 
 	const getCustomAttributes = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
+			.get(window.configs.backendUrl + "/api/custom_attributes/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -93,7 +93,7 @@ export default function CustomAttributesPage() {
 		e.preventDefault();
 		axios
 			.put(
-				process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/" + editId,
+				window.configs.backendUrl + "/api/custom_attributes/" + editId,
 				{
 					headers: {
 						"access-token": `${accessToken}`,
@@ -128,9 +128,9 @@ export default function CustomAttributesPage() {
 		e.preventDefault();
 		axios
 			.delete(
-				process.env.REACT_APP_BACKEND_URL +
-					"/api/custom_attributes/" +
-					deleteId,
+				window.configs.backendUrl +
+				"/api/custom_attributes/" +
+				deleteId,
 				{
 					headers: {
 						"access-token": `${accessToken}`,

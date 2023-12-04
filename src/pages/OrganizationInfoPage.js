@@ -73,7 +73,7 @@ export default function OrganizationInfoPage() {
 	const handleEdit = (e) => {
 		e.preventDefault();
 		axios
-			.put(process.env.REACT_APP_BACKEND_URL + "/api/org_info/" + editId, {
+			.put(window.configs.backendUrl + "/api/org_info/" + editId, {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -98,7 +98,7 @@ export default function OrganizationInfoPage() {
 
 	const getOrgRecords = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/org_info/", {
+			.get(window.configs.backendUrl + "/api/org_info/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},

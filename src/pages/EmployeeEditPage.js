@@ -186,7 +186,7 @@ export default function EmployeeAddPage() {
 
 	const getCustomAttributes = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
+			.get(window.configs.backendUrl + "/api/custom_attributes/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -210,7 +210,7 @@ export default function EmployeeAddPage() {
 
 	const getDependants = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/dependant/" + id, {
+			.get(window.configs.backendUrl + "/api/dependant/" + id, {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -235,7 +235,7 @@ export default function EmployeeAddPage() {
 
 	const getEmergencyContacts = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/emergency-contact/" + id, {
+			.get(window.configs.backendUrl + "/api/emergency-contact/" + id, {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -291,7 +291,7 @@ export default function EmployeeAddPage() {
 		};
 		console.log(data);
 		axios
-			.put(process.env.REACT_APP_BACKEND_URL + "/api/employee/" + id, data, {
+			.put(window.configs.backendUrl + "/api/employee/" + id, data, {
 				headers: {
 					"access-token": `${accessToken}`,
 				},

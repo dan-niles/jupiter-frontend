@@ -40,9 +40,9 @@ export default function ChangePasswordPage() {
 		} else {
 			axios
 				.put(
-					process.env.REACT_APP_BACKEND_URL +
-						"/api/user/change-password/" +
-						user_id,
+					window.configs.backendUrl +
+					"/api/user/change-password/" +
+					user_id,
 					{
 						headers: {
 							"access-token": `${accessToken}`,

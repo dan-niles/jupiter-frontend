@@ -49,7 +49,7 @@ const LeaveBalance = () => {
 
 	const getDepartments = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/department/", {
+			.get(window.configs.backendUrl + "/api/department/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -68,7 +68,7 @@ const LeaveBalance = () => {
 		e.preventDefault();
 		axios
 			.post(
-				process.env.REACT_APP_BACKEND_URL + "/api/reports/leave-balance",
+				window.configs.backendUrl + "/api/reports/leave-balance",
 				{
 					dept_name: deptName === "All" ? null : deptName,
 				},

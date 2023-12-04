@@ -47,7 +47,7 @@ const EmpByDept = () => {
 
 	const getDepartments = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/department/", {
+			.get(window.configs.backendUrl + "/api/department/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -66,7 +66,7 @@ const EmpByDept = () => {
 		e.preventDefault();
 		axios
 			.post(
-				process.env.REACT_APP_BACKEND_URL + "/api/reports/emp-by-department",
+				window.configs.backendUrl + "/api/reports/emp-by-department",
 				{
 					dept_name: deptName === "All" ? null : deptName,
 				},

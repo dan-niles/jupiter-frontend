@@ -61,7 +61,7 @@ export default function AppLeaveSummary({
 	const getBalance = () => {
 		axios
 			.post(
-				process.env.REACT_APP_BACKEND_URL + "/api/leave/balance",
+				window.configs.backendUrl + "/api/leave/balance",
 				{
 					emp_id: userData.emp_id,
 					leave_type: type,
@@ -81,7 +81,7 @@ export default function AppLeaveSummary({
 	const getTotal = () => {
 		axios
 			.post(
-				process.env.REACT_APP_BACKEND_URL + "/api/leave/total",
+				window.configs.backendUrl + "/api/leave/total",
 				{
 					emp_id: userData.emp_id,
 					leave_type: type,

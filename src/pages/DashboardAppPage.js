@@ -11,9 +11,9 @@ export default function DashboardAppPage({ userData }) {
 
 	axios
 		.get(
-			process.env.REACT_APP_BACKEND_URL +
-				"/api/user/supervisor/" +
-				userContext.userData.emp_id
+			window.configs.backendUrl +
+			"/api/user/supervisor/" +
+			userContext.userData.emp_id
 		)
 		.then((res) => {
 			if (res.data.length > 0) {

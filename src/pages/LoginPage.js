@@ -75,10 +75,10 @@ export default function LoginPage() {
 			.catch(err => console.log(err))
 
 		const backendUrl = config.url.BASE_URL;
-		const backendUrl2 = process.env.REACT_APP_BACKEND_URL;
+		const backendUrl2 = window.configs.backendUrl;
 
 		axios
-			.post(backendUrl + "/api/login/", {
+			.post(window.configs.backendUrl + "/api/login/", {
 				username: username,
 				password: password,
 			})
@@ -137,8 +137,6 @@ export default function LoginPage() {
 						>
 							Use your Jupiter Account
 						</Typography>
-
-						<h1>{process.env.REACT_APP_BACKEND_URL}</h1>
 
 						<form onSubmit={onFormSubmit}>
 							<Stack spacing={3}>

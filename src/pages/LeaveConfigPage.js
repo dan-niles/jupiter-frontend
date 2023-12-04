@@ -63,7 +63,7 @@ export default function EmployeePage() {
 		e.preventDefault();
 		console.log(editAnnual, editCasual, editMaternity, editNoPay, editId);
 		axios
-			.put(process.env.REACT_APP_BACKEND_URL + "/api/paygrade/" + editId, {
+			.put(window.configs.backendUrl + "/api/paygrade/" + editId, {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -95,7 +95,7 @@ export default function EmployeePage() {
 
 	const getPaygradeRecords = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/paygrade/", {
+			.get(window.configs.backendUrl + "/api/paygrade/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},

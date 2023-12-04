@@ -52,7 +52,7 @@ const GroupedEmp = () => {
 		e.preventDefault();
 		axios
 			.post(
-				process.env.REACT_APP_BACKEND_URL + "/api/reports/grouped-emp",
+				window.configs.backendUrl + "/api/reports/grouped-emp",
 				{
 					key: selectedOption,
 				},
@@ -166,10 +166,10 @@ const GroupedEmp = () => {
 												{tableKey === "Job Title"
 													? row.job_title
 													: tableKey === "Pay Grade"
-													? row.paygrade_level
-													: tableKey === "Status"
-													? row.status_type
-													: row.contract_type}
+														? row.paygrade_level
+														: tableKey === "Status"
+															? row.status_type
+															: row.contract_type}
 											</TableCell>
 											<TableCell align="left">{row.emp_id}</TableCell>
 											<TableCell align="left">

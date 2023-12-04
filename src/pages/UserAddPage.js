@@ -50,7 +50,7 @@ export default function UserAddPage() {
 
 	const getDepartments = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/department/", {
+			.get(window.configs.backendUrl + "/api/department/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -68,7 +68,7 @@ export default function UserAddPage() {
 			toast.error("Passwords do not match!");
 		} else {
 			axios
-				.post(process.env.REACT_APP_BACKEND_URL + "/api/user/", {
+				.post(window.configs.backendUrl + "/api/user/", {
 					headers: {
 						"access-token": `${accessToken}`,
 					},
@@ -104,9 +104,9 @@ export default function UserAddPage() {
 		setEmpID("");
 		axios
 			.get(
-				process.env.REACT_APP_BACKEND_URL +
-					"/api/employee/department/" +
-					e.target.value,
+				window.configs.backendUrl +
+				"/api/employee/department/" +
+				e.target.value,
 				{
 					headers: {
 						"access-token": `${accessToken}`,

@@ -42,7 +42,7 @@ export default function BranchAddPage() {
 		e.preventDefault();
 
 		axios
-			.post(process.env.REACT_APP_BACKEND_URL + "/api/branch/", {
+			.post(window.configs.backendUrl + "/api/branch/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},

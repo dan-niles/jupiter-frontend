@@ -68,7 +68,7 @@ export default function UserEditPage() {
 
 	const getUser = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/user/" + id, {
+			.get(window.configs.backendUrl + "/api/user/" + id, {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -85,7 +85,7 @@ export default function UserEditPage() {
 			toast.error("Passwords do not match!");
 		} else {
 			axios
-				.put(process.env.REACT_APP_BACKEND_URL + "/api/user/" + id, {
+				.put(window.configs.backendUrl + "/api/user/" + id, {
 					headers: {
 						"access-token": `${accessToken}`,
 					},

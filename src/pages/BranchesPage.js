@@ -57,7 +57,7 @@ export default function BranchesPage() {
 
 	const getBranches = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/branch/", {
+			.get(window.configs.backendUrl + "/api/branch/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -83,7 +83,7 @@ export default function BranchesPage() {
 		e.preventDefault();
 		console.log(editId);
 		axios
-			.put(process.env.REACT_APP_BACKEND_URL + "/api/branch/" + editId, {
+			.put(window.configs.backendUrl + "/api/branch/" + editId, {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -119,7 +119,7 @@ export default function BranchesPage() {
 	const handleDelete = (e) => {
 		e.preventDefault();
 		axios
-			.delete(process.env.REACT_APP_BACKEND_URL + "/api/branch/" + deleteId, {
+			.delete(window.configs.backendUrl + "/api/branch/" + deleteId, {
 				headers: {
 					"access-token": `${accessToken}`,
 				},

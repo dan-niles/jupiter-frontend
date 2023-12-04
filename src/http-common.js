@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const BASE_URL = process.env.REACT_APP_BACKEND_URL
+const BASE_URL = window.configs.backendUrl
 export const API_V1 = "api"
 
 export default axios.create({

@@ -96,7 +96,7 @@ export default function EmployeeAddPage() {
 
 	const getCustomAttributes = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/custom_attributes/", {
+			.get(window.configs.backendUrl + "/api/custom_attributes/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -117,7 +117,7 @@ export default function EmployeeAddPage() {
 
 	const getPaygrades = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/paygrade/", {
+			.get(window.configs.backendUrl + "/api/paygrade/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -130,7 +130,7 @@ export default function EmployeeAddPage() {
 
 	const getContracts = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/contract/", {
+			.get(window.configs.backendUrl + "/api/contract/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -143,7 +143,7 @@ export default function EmployeeAddPage() {
 
 	const getTitles = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/title/", {
+			.get(window.configs.backendUrl + "/api/title/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -156,7 +156,7 @@ export default function EmployeeAddPage() {
 
 	const getStatuses = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/status/", {
+			.get(window.configs.backendUrl + "/api/status/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -169,7 +169,7 @@ export default function EmployeeAddPage() {
 
 	const getDepartments = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/department/", {
+			.get(window.configs.backendUrl + "/api/department/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -182,7 +182,7 @@ export default function EmployeeAddPage() {
 
 	const getSupervisors = () => {
 		axios
-			.get(process.env.REACT_APP_BACKEND_URL + "/api/employee/", {
+			.get(window.configs.backendUrl + "/api/employee/", {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
@@ -233,7 +233,7 @@ export default function EmployeeAddPage() {
 		};
 		console.log(data);
 		axios
-			.post(process.env.REACT_APP_BACKEND_URL + "/api/employee/", data, {
+			.post(window.configs.backendUrl + "/api/employee/", data, {
 				headers: {
 					"access-token": `${accessToken}`,
 				},
