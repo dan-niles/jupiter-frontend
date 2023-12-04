@@ -9,6 +9,8 @@ import { useContext } from "react";
 import UserContext from "../context/user-context";
 import toast, { Toaster } from "react-hot-toast";
 
+import { config } from "../../public/config";
+
 // @mui
 import {
 	Link,
@@ -72,8 +74,11 @@ export default function LoginPage() {
 			})
 			.catch(err => console.log(err))
 
+		const backendUrl = config.url.BASE_URL;
+		const backendUrl2 = process.env.REACT_APP_BACKEND_URL;
+
 		axios
-			.post(process.env.REACT_APP_BACKEND_URL + "/api/login/", {
+			.post(backendUrl + "/api/login/", {
 				username: username,
 				password: password,
 			})
@@ -132,6 +137,8 @@ export default function LoginPage() {
 						>
 							Use your Jupiter Account
 						</Typography>
+
+						<h1>{process.env.REACT_APP_BACKEND_URL}</h1>
 
 						<form onSubmit={onFormSubmit}>
 							<Stack spacing={3}>
