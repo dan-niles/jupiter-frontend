@@ -9,7 +9,7 @@ import { useContext } from "react";
 import UserContext from "../context/user-context";
 import toast, { Toaster } from "react-hot-toast";
 
-import { config } from "../../public/config";
+import { config } from "../config";
 
 // @mui
 import {
